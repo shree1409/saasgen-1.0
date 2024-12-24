@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Laptop, ShoppingBag, Users, Palette, Target } from "lucide-react";
+import { Laptop, ShoppingBag, Users, Palette, Briefcase, Utensils, Dumbbell, Newspaper, Camera, Calendar } from "lucide-react";
 import CategoryCard from "./CategoryCard";
 import StepIndicator from "./StepIndicator";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,42 @@ const categories = [
     title: "Portfolio",
     description: "Showcase your work and skills",
     icon: <Palette className="w-6 h-6" />,
+  },
+  {
+    id: "business",
+    title: "Business Website",
+    description: "Professional company presence",
+    icon: <Briefcase className="w-6 h-6" />,
+  },
+  {
+    id: "restaurant",
+    title: "Restaurant Site",
+    description: "Menu and online ordering",
+    icon: <Utensils className="w-6 h-6" />,
+  },
+  {
+    id: "fitness",
+    title: "Fitness & Health",
+    description: "Workouts and wellness content",
+    icon: <Dumbbell className="w-6 h-6" />,
+  },
+  {
+    id: "news",
+    title: "News & Magazine",
+    description: "Articles and media content",
+    icon: <Newspaper className="w-6 h-6" />,
+  },
+  {
+    id: "photography",
+    title: "Photography",
+    description: "Visual gallery and services",
+    icon: <Camera className="w-6 h-6" />,
+  },
+  {
+    id: "events",
+    title: "Events Platform",
+    description: "Event listings and bookings",
+    icon: <Calendar className="w-6 h-6" />,
   },
 ];
 
