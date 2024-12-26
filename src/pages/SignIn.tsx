@@ -58,12 +58,13 @@ const SignIn = () => {
           }}
           theme="light"
           providers={[]}
-          onError={(error) => {
-            toast({
-              variant: "destructive",
-              title: "Authentication Error",
-              description: error.message,
-            });
+          localization={{
+            variables: {
+              sign_in: {
+                email_label: 'Email',
+                password_label: 'Password',
+              },
+            },
           }}
         />
       </div>
