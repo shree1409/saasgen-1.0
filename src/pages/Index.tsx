@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import GeneratorForm from "@/components/GeneratorForm";
-import { Sparkles, CheckCircle2 } from "lucide-react";
+import { Sparkles, CheckCircle2, Target } from "lucide-react";
 
 const Index = () => {
   return (
@@ -18,9 +18,12 @@ const Index = () => {
               Website Idea Generator
             </span>
           </div>
-          <h1 className="text-5xl font-bold mb-6">
-            Transform Your Vision into Reality
-          </h1>
+          <div className="flex items-center justify-center space-x-6">
+            <Target className="w-16 h-16 text-primary/70" />
+            <h1 className="text-5xl font-bold mb-6">
+              Transform Your Vision into Reality
+            </h1>
+          </div>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Generate unique and actionable website ideas tailored to your goals and audience
           </p>
