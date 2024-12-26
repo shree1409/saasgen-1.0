@@ -1,28 +1,11 @@
 import { motion } from "framer-motion";
 import GeneratorForm from "@/components/GeneratorForm";
-import { Sparkles, CheckCircle2, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { Sparkles, CheckCircle2 } from "lucide-react";
 
 const Index = () => {
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/signin");
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <div className="container px-4 py-12">
-        <div className="flex justify-end mb-8">
-          <Button variant="ghost" onClick={handleSignOut}>
-            <LogOut className="w-4 h-4 mr-2" />
-            Sign Out
-          </Button>
-        </div>
-
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
