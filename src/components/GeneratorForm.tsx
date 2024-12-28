@@ -1,34 +1,26 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import StepIndicator from "./StepIndicator";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import RevenueInput from "./form/RevenueInput";
+import TimelineInput from "./form/TimelineInput";
 import NicheInput from "./form/NicheInput";
 import PreferencesInput from "./form/PreferencesInput";
 import KnowledgeAssessment from "./form/KnowledgeAssessment";
 import { supabase } from "@/integrations/supabase/client";
 
-interface GeneratedIdea {
-  websiteName: string;
-  description: string;
-  keyFeatures: string[];
-  monetizationStrategy: string[];
-  techStack: string;
-  timelineBreakdown: string;
-  marketPotential: string;
-}
-
 const GeneratorForm = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [noCodeKnowledge, setNoCodeKnowledge] = useState("");
   const [codingKnowledge, setCodingKnowledge] = useState("");
-  const [targetMonths, setTargetMonths] = useState("");
   const [revenue, setRevenue] = useState("");
+  const [targetMonths, setTargetMonths] = useState("");
   const [niche, setNiche] = useState("");
   const [preferences, setPreferences] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedIdea, setGeneratedIdea] = useState<GeneratedIdea | null>(null);
   const { toast } = useToast();
 
   const handleNext = () => {
@@ -46,7 +38,14 @@ const GeneratorForm = () => {
       });
       return;
     }
-    if (step < 4) {
+    if (step === 3 && !targetMonths) {
+      toast({
+        title: "Please select a timeline",
+        description: "Choose your target timeline to continue",
+      });
+      return;
+    }
+    if (step < 5) {
       setStep(step + 1);
     }
   };
@@ -78,7 +77,8 @@ const GeneratorForm = () => {
 
       if (error) throw error;
 
-      setGeneratedIdea(data.idea);
+      navigate('/generated-idea', { state: { generatedIdea: data.idea } });
+      
       toast({
         title: "Idea generated successfully!",
         description: "Here's your personalized website concept.",
@@ -97,7 +97,7 @@ const GeneratorForm = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
-      <StepIndicator currentStep={step} totalSteps={4} />
+      <StepIndicator currentStep={step} totalSteps={5} />
       
       <AnimatePresence mode="wait">
         {step === 1 && (
@@ -139,7 +139,7 @@ const GeneratorForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <NicheInput value={niche} onChange={setNiche} />
+            <TimelineInput value={targetMonths} onChange={setTargetMonths} />
           </motion.div>
         )}
 
@@ -151,52 +151,19 @@ const GeneratorForm = () => {
             exit={{ opacity: 0, x: -20 }}
             className="space-y-6"
           >
-            <PreferencesInput value={preferences} onChange={setPreferences} />
+            <NicheInput value={niche} onChange={setNiche} />
           </motion.div>
         )}
 
-        {generatedIdea && (
+        {step === 5 && (
           <motion.div
-            key="result"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-8 p-6 bg-secondary/30 rounded-lg space-y-4"
+            key="step5"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-6"
           >
-            <h2 className="text-2xl font-bold">{generatedIdea.websiteName}</h2>
-            <p className="text-muted-foreground">{generatedIdea.description}</p>
-            
-            <div>
-              <h3 className="font-semibold mb-2">Key Features:</h3>
-              <ul className="list-disc list-inside space-y-1">
-                {generatedIdea.keyFeatures.map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Monetization Strategy:</h3>
-              <ul className="list-disc list-inside space-y-1">
-                {generatedIdea.monetizationStrategy.map((strategy, index) => (
-                  <li key={index}>{strategy}</li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Recommended Tech Stack:</h3>
-              <p>{generatedIdea.techStack}</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Timeline Breakdown:</h3>
-              <p>{generatedIdea.timelineBreakdown}</p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-2">Market Potential:</h3>
-              <p>{generatedIdea.marketPotential}</p>
-            </div>
+            <PreferencesInput value={preferences} onChange={setPreferences} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -210,10 +177,10 @@ const GeneratorForm = () => {
           Back
         </Button>
         <Button
-          onClick={step === 4 ? handleSubmit : handleNext}
+          onClick={step === 5 ? handleSubmit : handleNext}
           disabled={isGenerating}
         >
-          {step === 4 ? (isGenerating ? "Generating..." : "Generate Idea") : "Next"}
+          {step === 5 ? (isGenerating ? "Generating..." : "Generate Idea") : "Next"}
         </Button>
       </div>
     </div>
