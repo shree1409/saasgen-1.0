@@ -113,8 +113,6 @@ const GeneratorForm = () => {
               setNoCodeKnowledge={setNoCodeKnowledge}
               codingKnowledge={codingKnowledge}
               setCodingKnowledge={setCodingKnowledge}
-              targetMonths={targetMonths}
-              setTargetMonths={setTargetMonths}
             />
           </motion.div>
         )}

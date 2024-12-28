@@ -28,8 +28,16 @@ const TimelineInput = ({ value, onChange }: TimelineInputProps) => {
           <Label htmlFor="3-6">3-6 months</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="6+" id="6+" />
-          <Label htmlFor="6+">6+ months</Label>
+          <RadioGroupItem value="6-8" id="6-8" />
+          <Label htmlFor="6-8">6-8 months</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="8-12" id="8-12" />
+          <Label htmlFor="8-12">8-12 months</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="12+" id="12+" />
+          <Label htmlFor="12+">12+ months</Label>
         </div>
       </RadioGroup>
     </div>
