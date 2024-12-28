@@ -1,14 +1,11 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Input } from "@/components/ui/input";
 
 interface KnowledgeAssessmentProps {
   noCodeKnowledge: string;
   setNoCodeKnowledge: (value: string) => void;
   codingKnowledge: string;
   setCodingKnowledge: (value: string) => void;
-  targetMonths: string;
-  setTargetMonths: (value: string) => void;
 }
 
 const KnowledgeAssessment = ({
@@ -16,8 +13,6 @@ const KnowledgeAssessment = ({
   setNoCodeKnowledge,
   codingKnowledge,
   setCodingKnowledge,
-  targetMonths,
-  setTargetMonths,
 }: KnowledgeAssessmentProps) => {
   return (
     <div className="space-y-6">
@@ -69,18 +64,6 @@ const KnowledgeAssessment = ({
               <Label htmlFor="code-expert">I excel at it</Label>
             </div>
           </RadioGroup>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="target-months">Target Time Period (months)</Label>
-          <Input
-            id="target-months"
-            type="number"
-            min="1"
-            placeholder="e.g., 6"
-            value={targetMonths}
-            onChange={(e) => setTargetMonths(e.target.value)}
-          />
         </div>
       </div>
     </div>
