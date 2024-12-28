@@ -30,6 +30,18 @@ export type Database = {
         }
         Relationships: []
       }
+      "project 1": {
+        Row: {
+          Type: string | null
+        }
+        Insert: {
+          Type?: string | null
+        }
+        Update: {
+          Type?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
