@@ -9,14 +9,21 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key is not configured');
+    }
+
     const { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences } = await req.json();
 
-    const systemPrompt = `You are a website idea generator that creates unique, actionable website concepts based on user inputs. Focus on modern, profitable ideas that match the user's experience level and timeline. Format your response in JSON with the following structure:
+    console.log('Received inputs:', { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences });
+
+    const systemPrompt = `You are a website idea generator that creates unique, actionable website concepts based on user inputs. Generate ideas that are modern, profitable, and match the user's experience level and timeline. Your response must be valid JSON with this exact structure:
     {
       "websiteName": "Name of the website",
       "description": "2-3 sentence description",
@@ -31,9 +38,13 @@ serve(async (req) => {
     - No-code experience: ${noCodeKnowledge}
     - Coding experience: ${codingKnowledge}
     - Timeline: ${targetMonths} months
-    - Target monthly revenue: ${revenue}
+    - Target monthly revenue: $${revenue}
     - Preferred niche: ${niche || 'Open to suggestions'}
-    - Additional preferences: ${preferences || 'None specified'}`;
+    - Additional preferences: ${preferences || 'None specified'}
+    
+    Consider the user's experience level when suggesting the tech stack and timeline. The idea should be realistic for their skills and timeline.`;
+
+    console.log('Sending request to OpenAI...');
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -51,17 +62,54 @@ serve(async (req) => {
       }),
     });
 
-    const data = await response.json();
-    const generatedIdea = data.choices[0].message.content;
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenAI API error:', errorData);
+      throw new Error(`OpenAI API error: ${response.status} ${errorData}`);
+    }
 
-    return new Response(JSON.stringify({ idea: JSON.parse(generatedIdea) }), {
+    const data = await response.json();
+    console.log('OpenAI response:', data);
+
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Unexpected OpenAI response format:', data);
+      throw new Error('Invalid response format from OpenAI');
+    }
+
+    const generatedContent = data.choices[0].message.content;
+    console.log('Generated content:', generatedContent);
+
+    // Parse the JSON response and validate its structure
+    let parsedIdea;
+    try {
+      parsedIdea = JSON.parse(generatedContent);
+      
+      // Validate required fields
+      const requiredFields = ['websiteName', 'description', 'keyFeatures', 'monetizationStrategy', 'techStack', 'timelineBreakdown', 'marketPotential'];
+      for (const field of requiredFields) {
+        if (!parsedIdea[field]) {
+          throw new Error(`Missing required field: ${field}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing generated content:', error);
+      throw new Error('Failed to parse generated website idea');
+    }
+
+    return new Response(JSON.stringify({ idea: parsedIdea }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
+
   } catch (error) {
     console.error('Error in generate-website-idea function:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ 
+        error: error.message,
+        details: 'Check the function logs for more information'
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
   }
 });
