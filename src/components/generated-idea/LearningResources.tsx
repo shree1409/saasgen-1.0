@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Youtube, ExternalLink } from "lucide-react";
+import { Youtube, ExternalLink, Info } from "lucide-react";
 
 interface TechStackVideo {
   title: string;
