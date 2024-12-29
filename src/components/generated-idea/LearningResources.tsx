@@ -22,6 +22,8 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
     return videos;
   };
 
+  const videos = getRelevantVideos(techStack);
+
   return (
     <Card>
       <CardHeader>
@@ -30,12 +32,17 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
           Learning Resources
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {getRelevantVideos(techStack).map((video, index) => (
+      <CardContent className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {videos.map((video, index) => (
             <VideoCard key={index} video={video} />
           ))}
         </div>
+        {videos.length === 0 && (
+          <p className="text-muted-foreground text-center py-4">
+            No learning resources found for the specified tech stack.
+          </p>
+        )}
         <ProTip />
       </CardContent>
     </Card>
