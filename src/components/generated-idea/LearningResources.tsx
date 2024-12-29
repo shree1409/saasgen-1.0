@@ -80,7 +80,7 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Youtube className="w-5 h-5 text-red-500" />
+          <Youtube className="w-6 h-6 text-red-500" />
           Learning Resources
         </CardTitle>
       </CardHeader>
@@ -92,18 +92,31 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
               href={video.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-4 rounded-lg border hover:shadow-lg transition-shadow duration-200 flex flex-col gap-2"
+              className="p-4 rounded-lg border hover:shadow-lg transition-shadow bg-card/50 flex flex-col gap-2"
             >
               <div className="flex items-center gap-2">
-                <Youtube className="w-4 h-4 text-red-500" />
-                <h3 className="font-semibold">{video.title}</h3>
-                <ExternalLink className="w-4 h-4 ml-auto text-gray-400" />
+                <Youtube className="w-5 h-5 text-red-500" />
+                <h3 className="font-semibold flex-1">{video.title}</h3>
+                <ExternalLink className="w-4 h-4 text-gray-400" />
               </div>
               <p className="text-sm text-muted-foreground">
                 {video.description}
               </p>
+              <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1">
+                <Youtube className="w-3 h-3" />
+                <span>Click to watch on YouTube</span>
+              </div>
             </a>
           ))}
+        </div>
+        <div className="mt-6 p-4 border rounded-lg bg-blue-50 dark:bg-blue-950">
+          <h4 className="font-medium mb-2 flex items-center gap-2">
+            <Info className="w-4 h-4 text-blue-500" />
+            Pro Tip
+          </h4>
+          <p className="text-sm text-muted-foreground">
+            Watch these tutorials in the suggested order for the best learning experience. Start with crash courses for quick overview, then dive into full courses for in-depth understanding.
+          </p>
         </div>
       </CardContent>
     </Card>
