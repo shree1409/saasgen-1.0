@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { CircuitBoard, ArrowRight, Sparkles, Zap, Target, Coins } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       {/* Header */}
@@ -13,11 +15,28 @@ const Index = () => {
           <span className="font-semibold text-lg">WebsiteGuru</span>
         </div>
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm text-muted-foreground hover:text-primary">Features</a>
-          <a href="#how-it-works" className="text-sm text-muted-foreground hover:text-primary">How it Works</a>
+          <Button 
+            variant="ghost"
+            onClick={() => navigate('/features')}
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            Features
+          </Button>
+          <Button 
+            variant="ghost"
+            onClick={() => navigate('/how-it-works')}
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            How it Works
+          </Button>
           <a href="#generator" className="text-sm text-muted-foreground hover:text-primary">Generator</a>
         </nav>
-        <Button variant="default" size="sm">
+        <Button 
+          variant="default" 
+          size="sm"
+          className="text-white"
+          onClick={() => navigate('#generator')}
+        >
           Get Started
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
@@ -48,7 +67,14 @@ const Index = () => {
             <p className="text-xl text-muted-foreground">
               Generate unique and actionable website ideas tailored to your goals and audience
             </p>
-            <Button size="lg" className="rounded-full">
+            <Button 
+              size="lg" 
+              className="rounded-full text-white"
+              onClick={() => {
+                const element = document.getElementById('generator');
+                element?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               Start Generating
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
@@ -127,7 +153,14 @@ const Index = () => {
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             Start generating your perfect website idea now and turn your vision into reality
           </p>
-          <Button size="lg" className="rounded-full">
+          <Button 
+            size="lg" 
+            className="rounded-full text-white"
+            onClick={() => {
+              const element = document.getElementById('generator');
+              element?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
             Generate Your Idea
             <ArrowRight className="w-5 h-5 ml-2" />
           </Button>
