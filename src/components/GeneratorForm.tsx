@@ -1,59 +1,71 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import StepIndicator from "./StepIndicator";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import RevenueInput from "./form/RevenueInput";
 import TimelineInput from "./form/TimelineInput";
 import NicheInput from "./form/NicheInput";
 import PreferencesInput from "./form/PreferencesInput";
 import KnowledgeAssessment from "./form/KnowledgeAssessment";
+import FormButtons from "./form/FormButtons";
+import FormStep from "./form/FormStep";
 import { supabase } from "@/integrations/supabase/client";
 
 const GeneratorForm = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [noCodeKnowledge, setNoCodeKnowledge] = useState("");
-  const [codingKnowledge, setCodingKnowledge] = useState("");
-  const [revenue, setRevenue] = useState("");
-  const [targetMonths, setTargetMonths] = useState("");
-  const [niche, setNiche] = useState("");
-  const [preferences, setPreferences] = useState("");
+  const [formData, setFormData] = useState({
+    noCodeKnowledge: "",
+    codingKnowledge: "",
+    revenue: "",
+    targetMonths: "",
+    niche: "",
+    preferences: "",
+  });
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
+  const validateStep = () => {
+    switch (step) {
+      case 1:
+        if (!formData.noCodeKnowledge && !formData.codingKnowledge) {
+          toast({
+            title: "Please complete the knowledge assessment",
+            description: "Tell us about your experience level to continue",
+          });
+          return false;
+        }
+        break;
+      case 2:
+        if (!formData.revenue) {
+          toast({
+            title: "Please set a revenue target",
+            description: "Enter your desired monthly recurring revenue to continue",
+          });
+          return false;
+        }
+        break;
+      case 3:
+        if (!formData.targetMonths) {
+          toast({
+            title: "Please select a timeline",
+            description: "Choose your target timeline to continue",
+          });
+          return false;
+        }
+        break;
+    }
+    return true;
+  };
+
   const handleNext = () => {
-    if (step === 1 && !noCodeKnowledge && !codingKnowledge) {
-      toast({
-        title: "Please complete the knowledge assessment",
-        description: "Tell us about your experience level to continue",
-      });
-      return;
-    }
-    if (step === 2 && !revenue) {
-      toast({
-        title: "Please set a revenue target",
-        description: "Enter your desired monthly recurring revenue to continue",
-      });
-      return;
-    }
-    if (step === 3 && !targetMonths) {
-      toast({
-        title: "Please select a timeline",
-        description: "Choose your target timeline to continue",
-      });
-      return;
-    }
-    if (step < 5) {
-      setStep(step + 1);
-    }
+    if (!validateStep()) return;
+    if (step < 5) setStep(step + 1);
   };
 
   const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    }
+    if (step > 1) setStep(step - 1);
   };
 
   const handleSubmit = async () => {
@@ -65,14 +77,7 @@ const GeneratorForm = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke('generate-website-idea', {
-        body: {
-          noCodeKnowledge,
-          codingKnowledge,
-          targetMonths,
-          revenue,
-          niche,
-          preferences,
-        },
+        body: formData,
       });
 
       if (error) throw error;
@@ -95,96 +100,62 @@ const GeneratorForm = () => {
     }
   };
 
+  const updateFormData = (field: keyof typeof formData) => (value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
       <StepIndicator currentStep={step} totalSteps={5} />
       
-      <div className="min-h-[400px] mb-8"> {/* Added fixed minimum height container */}
+      <div className="min-h-[400px] mb-8">
         <AnimatePresence mode="wait">
-          {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              <KnowledgeAssessment
-                noCodeKnowledge={noCodeKnowledge}
-                setNoCodeKnowledge={setNoCodeKnowledge}
-                codingKnowledge={codingKnowledge}
-                setCodingKnowledge={setCodingKnowledge}
-              />
-            </motion.div>
-          )}
+          <FormStep step={1} currentStep={step}>
+            <KnowledgeAssessment
+              noCodeKnowledge={formData.noCodeKnowledge}
+              setNoCodeKnowledge={updateFormData("noCodeKnowledge")}
+              codingKnowledge={formData.codingKnowledge}
+              setCodingKnowledge={updateFormData("codingKnowledge")}
+            />
+          </FormStep>
 
-          {step === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              <RevenueInput value={revenue} onChange={setRevenue} />
-            </motion.div>
-          )}
+          <FormStep step={2} currentStep={step}>
+            <RevenueInput 
+              value={formData.revenue} 
+              onChange={updateFormData("revenue")} 
+            />
+          </FormStep>
 
-          {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              <TimelineInput value={targetMonths} onChange={setTargetMonths} />
-            </motion.div>
-          )}
+          <FormStep step={3} currentStep={step}>
+            <TimelineInput 
+              value={formData.targetMonths} 
+              onChange={updateFormData("targetMonths")} 
+            />
+          </FormStep>
 
-          {step === 4 && (
-            <motion.div
-              key="step4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              <NicheInput value={niche} onChange={setNiche} />
-            </motion.div>
-          )}
+          <FormStep step={4} currentStep={step}>
+            <NicheInput 
+              value={formData.niche} 
+              onChange={updateFormData("niche")} 
+            />
+          </FormStep>
 
-          {step === 5 && (
-            <motion.div
-              key="step5"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="space-y-6"
-            >
-              <PreferencesInput value={preferences} onChange={setPreferences} />
-            </motion.div>
-          )}
+          <FormStep step={5} currentStep={step}>
+            <PreferencesInput 
+              value={formData.preferences} 
+              onChange={updateFormData("preferences")} 
+            />
+          </FormStep>
         </AnimatePresence>
       </div>
 
-      <div className="flex justify-between mt-8">
-        <Button
-          variant="outline"
-          onClick={handleBack}
-          disabled={step === 1}
-          className="text-foreground"
-        >
-          Back
-        </Button>
-        <Button
-          onClick={step === 5 ? handleSubmit : handleNext}
-          disabled={isGenerating}
-          className="text-white" // Added white text color
-        >
-          {step === 5 ? (isGenerating ? "Generating..." : "Generate Idea") : "Next"}
-        </Button>
-      </div>
+      <FormButtons
+        step={step}
+        isGenerating={isGenerating}
+        onBack={handleBack}
+        onNext={handleNext}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 };
