@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import GeneratorForm from "@/components/GeneratorForm";
 import { Button } from "@/components/ui/button";
 import { CircuitBoard, ArrowRight, Sparkles, Zap, Target, Coins } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const navigate = useNavigate();
