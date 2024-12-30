@@ -1,13 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowLeft, Download, Share2 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 import KeyFeatures from "@/components/generated-idea/KeyFeatures";
 import MonetizationStrategy from "@/components/generated-idea/MonetizationStrategy";
 import TechnicalImplementation from "@/components/generated-idea/TechnicalImplementation";
 import MarketingSection from "@/components/generated-idea/MarketingSection";
 import LearningResources from "@/components/generated-idea/LearningResources";
-import { useToast } from "@/components/ui/use-toast";
+import PageHeader from "@/components/generated-idea/header/PageHeader";
+import IdeaTitle from "@/components/generated-idea/header/IdeaTitle";
 
 interface GeneratedIdea {
   websiteName: string;
@@ -61,31 +61,11 @@ const GeneratedIdea = () => {
 
   return (
     <div className="container px-4 py-8 max-w-6xl">
-      <div className="flex items-center justify-between mb-6">
-        <Button 
-          variant="outline" 
-          onClick={() => navigate('/')}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Generator
-        </Button>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={handleShare}
-          >
-            <Share2 className="w-4 h-4 mr-2" />
-            Share
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleDownload}
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Download
-          </Button>
-        </div>
-      </div>
+      <PageHeader 
+        onBack={() => navigate('/')}
+        onShare={handleShare}
+        onDownload={handleDownload}
+      />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -93,23 +73,10 @@ const GeneratedIdea = () => {
         className="space-y-8"
       >
         <div className="glass-panel rounded-2xl p-8 space-y-8">
-          <div className="space-y-4">
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
-            >
-              {generatedIdea.websiteName}
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-xl text-muted-foreground leading-relaxed"
-            >
-              {generatedIdea.description}
-            </motion.p>
-          </div>
+          <IdeaTitle 
+            websiteName={generatedIdea.websiteName}
+            description={generatedIdea.description}
+          />
 
           <div className="grid gap-8">
             <motion.div
