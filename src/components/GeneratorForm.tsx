@@ -99,84 +99,88 @@ const GeneratorForm = () => {
     <div className="w-full max-w-3xl mx-auto p-6">
       <StepIndicator currentStep={step} totalSteps={5} />
       
-      <AnimatePresence mode="wait">
-        {step === 1 && (
-          <motion.div
-            key="step1"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <KnowledgeAssessment
-              noCodeKnowledge={noCodeKnowledge}
-              setNoCodeKnowledge={setNoCodeKnowledge}
-              codingKnowledge={codingKnowledge}
-              setCodingKnowledge={setCodingKnowledge}
-            />
-          </motion.div>
-        )}
+      <div className="min-h-[400px] mb-8"> {/* Added fixed minimum height container */}
+        <AnimatePresence mode="wait">
+          {step === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <KnowledgeAssessment
+                noCodeKnowledge={noCodeKnowledge}
+                setNoCodeKnowledge={setNoCodeKnowledge}
+                codingKnowledge={codingKnowledge}
+                setCodingKnowledge={setCodingKnowledge}
+              />
+            </motion.div>
+          )}
 
-        {step === 2 && (
-          <motion.div
-            key="step2"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <RevenueInput value={revenue} onChange={setRevenue} />
-          </motion.div>
-        )}
+          {step === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <RevenueInput value={revenue} onChange={setRevenue} />
+            </motion.div>
+          )}
 
-        {step === 3 && (
-          <motion.div
-            key="step3"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <TimelineInput value={targetMonths} onChange={setTargetMonths} />
-          </motion.div>
-        )}
+          {step === 3 && (
+            <motion.div
+              key="step3"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <TimelineInput value={targetMonths} onChange={setTargetMonths} />
+            </motion.div>
+          )}
 
-        {step === 4 && (
-          <motion.div
-            key="step4"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <NicheInput value={niche} onChange={setNiche} />
-          </motion.div>
-        )}
+          {step === 4 && (
+            <motion.div
+              key="step4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <NicheInput value={niche} onChange={setNiche} />
+            </motion.div>
+          )}
 
-        {step === 5 && (
-          <motion.div
-            key="step5"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="space-y-6"
-          >
-            <PreferencesInput value={preferences} onChange={setPreferences} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {step === 5 && (
+            <motion.div
+              key="step5"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <PreferencesInput value={preferences} onChange={setPreferences} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <div className="flex justify-between mt-8">
         <Button
           variant="outline"
           onClick={handleBack}
           disabled={step === 1}
+          className="text-foreground"
         >
           Back
         </Button>
         <Button
           onClick={step === 5 ? handleSubmit : handleNext}
           disabled={isGenerating}
+          className="text-white" // Added white text color
         >
           {step === 5 ? (isGenerating ? "Generating..." : "Generate Idea") : "Next"}
         </Button>
