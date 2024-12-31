@@ -10,13 +10,25 @@ const VideoCard = ({ video }: VideoCardProps) => {
   const [imageError, setImageError] = useState(false);
 
   const getVideoId = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? match[2] : null;
+    try {
+      // Handle both youtube.com and youtu.be URLs
+      const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+      const match = url.match(regExp);
+      return match && match[7].length === 11 ? match[7] : null;
+    } catch (error) {
+      console.error("Error extracting video ID:", error);
+      return null;
+    }
+  };
+
+  const getThumbnailUrl = (videoId: string | null) => {
+    if (!videoId) return null;
+    // Use https explicitly and ensure proper URL formatting
+    return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
   };
 
   const videoId = getVideoId(video.url);
-  const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : null;
+  const thumbnailUrl = getThumbnailUrl(videoId);
 
   const handleImageError = () => {
     console.error("Failed to load thumbnail for video:", video.url);
@@ -50,12 +62,12 @@ const VideoCard = ({ video }: VideoCardProps) => {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Youtube className="w-5 h-5 text-red-500 flex-shrink-0" />
-          <h3 className="font-semibold flex-1 group-hover:text-primary transition-colors">
+          <h3 className="font-semibold flex-1 group-hover:text-primary transition-colors line-clamp-2">
             {video.title}
           </h3>
           <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" />
         </div>
-        <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80 transition-colors">
+        <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80 transition-colors line-clamp-2">
           {video.description}
         </p>
       </div>

@@ -8,36 +8,47 @@ export const useVideoMatcher = (techStack: string) => {
 
   useEffect(() => {
     const findRelevantVideos = () => {
-      if (!techStack) {
-        setVideos([]);
-        setIsLoading(false);
-        return;
-      }
+      try {
+        if (!techStack) {
+          console.log('No tech stack provided');
+          setVideos([]);
+          setIsLoading(false);
+          return;
+        }
 
-      const technologies = techStack.toLowerCase().split(/[,\s]+/).map(t => t.trim());
-      const foundVideos: TechStackVideo[] = [];
+        const technologies = techStack.toLowerCase().split(/[,\s]+/).map(t => t.trim());
+        const foundVideos: TechStackVideo[] = [];
+        const processedTechs = new Set(); // To avoid duplicates
 
-      technologies.forEach(tech => {
-        // Try exact match first
-        let matchingTech = Object.keys(techStackVideos).find(
-          t => t.toLowerCase() === tech
-        );
+        technologies.forEach(tech => {
+          if (!tech || processedTechs.has(tech)) return;
+          processedTechs.add(tech);
 
-        // If no exact match, try partial match
-        if (!matchingTech) {
-          matchingTech = Object.keys(techStackVideos).find(
-            t => t.toLowerCase().includes(tech) || tech.includes(t.toLowerCase())
+          // Try exact match first
+          let matchingTech = Object.keys(techStackVideos).find(
+            t => t.toLowerCase() === tech
           );
-        }
 
-        if (matchingTech && techStackVideos[matchingTech]) {
-          foundVideos.push(...techStackVideos[matchingTech]);
-        }
-      });
+          // If no exact match, try partial match
+          if (!matchingTech) {
+            matchingTech = Object.keys(techStackVideos).find(
+              t => t.toLowerCase().includes(tech) || tech.includes(t.toLowerCase())
+            );
+          }
 
-      console.log('Found videos for tech stack:', techStack, foundVideos);
-      setVideos(foundVideos);
-      setIsLoading(false);
+          if (matchingTech && techStackVideos[matchingTech]) {
+            foundVideos.push(...techStackVideos[matchingTech]);
+          }
+        });
+
+        console.log('Found videos for tech stack:', techStack, foundVideos);
+        setVideos(foundVideos);
+      } catch (error) {
+        console.error('Error finding videos:', error);
+        setVideos([]);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     setIsLoading(true);
