@@ -1,13 +1,14 @@
-import { TechStackVideo } from "./types";
+import { TechStackVideo } from "./video-types";
 import VideoCard from "./VideoCard";
-import { Youtube, AlertCircle } from "lucide-react";
+import { Youtube, AlertCircle, Loader2 } from "lucide-react";
 
 interface VideoListProps {
   videos: TechStackVideo[];
   techStack: string;
+  isLoading: boolean;
 }
 
-const VideoList = ({ videos, techStack }: VideoListProps) => {
+const VideoList = ({ videos, techStack, isLoading }: VideoListProps) => {
   if (!techStack) {
     return (
       <div className="text-center py-8 space-y-3">
@@ -19,12 +20,23 @@ const VideoList = ({ videos, techStack }: VideoListProps) => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="text-center py-8 space-y-3">
+        <Loader2 className="w-12 h-12 text-blue-500 mx-auto animate-spin" />
+        <p className="text-muted-foreground">
+          Loading learning resources...
+        </p>
+      </div>
+    );
+  }
+
   if (videos.length === 0) {
     return (
       <div className="text-center py-8 space-y-3">
-        <Youtube className="w-12 h-12 text-red-500 mx-auto animate-pulse" />
+        <Youtube className="w-12 h-12 text-red-500 mx-auto" />
         <p className="text-muted-foreground">
-          Loading learning resources for {techStack}...
+          No videos found for {techStack}. Please try a different tech stack.
         </p>
       </div>
     );

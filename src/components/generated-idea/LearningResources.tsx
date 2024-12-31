@@ -9,11 +9,7 @@ interface LearningResourcesProps {
 }
 
 const LearningResources = ({ techStack }: LearningResourcesProps) => {
-  const { getRelevantVideos } = useVideoMatcher(techStack);
-  const videos = getRelevantVideos();
-
-  console.log("Tech Stack:", techStack); // Debug log
-  console.log("Found Videos:", videos); // Debug log
+  const { videos, isLoading } = useVideoMatcher(techStack);
 
   return (
     <Card>
@@ -24,7 +20,11 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <VideoList videos={videos} techStack={techStack} />
+        <VideoList 
+          videos={videos} 
+          techStack={techStack} 
+          isLoading={isLoading} 
+        />
         <ProTip />
       </CardContent>
     </Card>
