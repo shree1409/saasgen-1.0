@@ -12,6 +12,9 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
   const { getRelevantVideos } = useVideoMatcher(techStack);
   const videos = getRelevantVideos();
 
+  console.log("Tech Stack:", techStack); // Debug log
+  console.log("Found Videos:", videos); // Debug log
+
   return (
     <Card>
       <CardHeader>

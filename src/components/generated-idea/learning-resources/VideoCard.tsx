@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Youtube, ExternalLink } from "lucide-react";
 import { TechStackVideo } from "./types";
 
@@ -6,7 +7,8 @@ interface VideoCardProps {
 }
 
 const VideoCard = ({ video }: VideoCardProps) => {
-  // Extract video ID from YouTube URL
+  const [imageError, setImageError] = useState(false);
+
   const getVideoId = (url: string) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
@@ -16,6 +18,11 @@ const VideoCard = ({ video }: VideoCardProps) => {
   const videoId = getVideoId(video.url);
   const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : null;
 
+  const handleImageError = () => {
+    console.error("Failed to load thumbnail for video:", video.url);
+    setImageError(true);
+  };
+
   return (
     <a
       href={video.url}
@@ -23,16 +30,21 @@ const VideoCard = ({ video }: VideoCardProps) => {
       rel="noopener noreferrer"
       className="block p-4 rounded-lg border hover:shadow-lg transition-all bg-card/50 space-y-3"
     >
-      {thumbnailUrl && (
+      {thumbnailUrl && !imageError ? (
         <div className="relative aspect-video rounded-lg overflow-hidden group">
           <img 
             src={thumbnailUrl} 
             alt={video.title}
+            onError={handleImageError}
             className="w-full h-full object-cover transition-transform group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
             <Youtube className="w-12 h-12 text-red-500" />
           </div>
+        </div>
+      ) : (
+        <div className="aspect-video rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+          <Youtube className="w-12 h-12 text-red-500" />
         </div>
       )}
       <div className="space-y-2">
