@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import Header from "@/components/landing/Header";
 import Hero from "@/components/landing/Hero";
 import Benefits from "@/components/landing/Benefits";
+import Features from "@/components/landing/Features";
 
 const Index = () => {
   return (
@@ -13,6 +14,7 @@ const Index = () => {
       
       <div className="container px-4 py-12">
         <Hero />
+        <Features />
         <Benefits />
 
         {/* Generator Interface */}
