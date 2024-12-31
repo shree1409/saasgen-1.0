@@ -41,7 +41,7 @@ export const techStackVideos: Record<string, TechStackVideo[]> = {
       description: "Learn TypeScript specifically for React development"
     }
   ],
-  "Tailwind CSS": [
+  "Tailwind": [
     {
       title: "Tailwind CSS Full Course 2024",
       url: "https://www.youtube.com/watch?v=lCxcTsOHrjo",
@@ -53,7 +53,7 @@ export const techStackVideos: Record<string, TechStackVideo[]> = {
       description: "Quick introduction to Tailwind CSS fundamentals"
     }
   ],
-  "Node.js": [
+  "Node": [
     {
       title: "Node.js Full Course for Beginners",
       url: "https://www.youtube.com/watch?v=f2EqECiTBL8",
@@ -77,7 +77,7 @@ export const techStackVideos: Record<string, TechStackVideo[]> = {
       description: "Quick introduction to MongoDB basics and setup"
     }
   ],
-  "Vue.js": [
+  "Vue": [
     {
       title: "Vue.js Course for Beginners 2024",
       url: "https://www.youtube.com/watch?v=FXpIoQ_rT_c",
@@ -123,6 +123,30 @@ export const techStackVideos: Record<string, TechStackVideo[]> = {
       title: "Docker Tutorial for Beginners",
       url: "https://www.youtube.com/watch?v=17Bl31rlnRM",
       description: "Quick introduction to Docker containerization"
+    }
+  ],
+  "Express": [
+    {
+      title: "Express.js Full Course 2024",
+      url: "https://www.youtube.com/watch?v=Oe421EPjeBE",
+      description: "Complete Express.js tutorial for building web applications"
+    },
+    {
+      title: "Express.js Crash Course",
+      url: "https://www.youtube.com/watch?v=SccSCuHhOw0",
+      description: "Quick introduction to Express.js framework"
+    }
+  ],
+  "PostgreSQL": [
+    {
+      title: "PostgreSQL Full Course 2024",
+      url: "https://www.youtube.com/watch?v=qw--VYLpxG4",
+      description: "Complete PostgreSQL database tutorial"
+    },
+    {
+      title: "PostgreSQL Crash Course",
+      url: "https://www.youtube.com/watch?v=zw4s3Ey8ayo",
+      description: "Quick introduction to PostgreSQL fundamentals"
     }
   ]
 };

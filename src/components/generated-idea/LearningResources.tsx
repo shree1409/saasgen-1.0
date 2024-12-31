@@ -13,9 +13,13 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
     const technologies = techStack.toLowerCase().split(/[,\s]+/);
     const videos: TechStackVideo[] = [];
     
-    Object.entries(techStackVideos).forEach(([tech, techVideos]) => {
-      if (technologies.some(t => tech.toLowerCase().includes(t))) {
-        videos.push(...techVideos);
+    technologies.forEach(tech => {
+      const matchingTech = Object.keys(techStackVideos).find(
+        t => t.toLowerCase().includes(tech) || tech.includes(t.toLowerCase())
+      );
+      
+      if (matchingTech) {
+        videos.push(...techStackVideos[matchingTech]);
       }
     });
     
@@ -39,9 +43,12 @@ const LearningResources = ({ techStack }: LearningResourcesProps) => {
           ))}
         </div>
         {videos.length === 0 && (
-          <p className="text-muted-foreground text-center py-4">
-            No learning resources found for the specified tech stack.
-          </p>
+          <div className="text-center py-8 space-y-3">
+            <Youtube className="w-12 h-12 text-red-500 mx-auto" />
+            <p className="text-muted-foreground">
+              Loading learning resources for {techStack}...
+            </p>
+          </div>
         )}
         <ProTip />
       </CardContent>
