@@ -6,15 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
 import { toast } from "@/hooks/use-toast";
-import { AuthError } from "@supabase/supabase-js";
 
 const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
     // Handle successful sign in/up
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "SIGNED_IN") {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
         toast({
           title: "Welcome to SaasGen!",
           description: "Your account has been created successfully.",
@@ -23,24 +22,33 @@ const SignUp = () => {
       }
     });
 
-    // Set up error listener
+    // Set up error listener for auth events
     const {
       data: { subscription: errorSubscription },
-    } = supabase.auth.onAuthStateChange((_, session) => {
-      const error = session?.error;
-      if (error?.message?.includes("User already registered")) {
-        toast({
-          title: "Account already exists",
-          description: "Please sign in instead",
-          variant: "destructive",
-        });
-        navigate("/sign-in");
-      } else if (error) {
-        toast({
-          title: "Error signing up",
-          description: error.message,
-          variant: "destructive",
-        });
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "USER_DELETED" || event === "SIGNED_OUT") {
+        // Handle user deletion or sign out
+        return;
+      }
+
+      // Check for existing session errors
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError) {
+        if (authError.message.includes("User already registered")) {
+          toast({
+            title: "Account already exists",
+            description: "Please sign in instead",
+            variant: "destructive",
+          });
+          navigate("/sign-in");
+        } else {
+          toast({
+            title: "Error signing up",
+            description: authError.message,
+            variant: "destructive",
+          });
+        }
       }
     });
 
