@@ -10,22 +10,53 @@ const Logo = () => {
       xmlns="http://www.w3.org/2000/svg"
       className="transform transition-transform duration-300 hover:scale-105"
     >
-      {/* Abstract S shape made of intersecting lines */}
+      {/* Bulb glass */}
       <path
-        d="M12 14C18 14 22 12 22 18C22 24 18 22 24 22C30 22 28 26 28 28"
+        d="M20 8C15 8 11 12 11 17C11 20 13 22 15 24C17 26 18 27 18 29V32"
+        stroke="#9b87f5"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 8C25 8 29 12 29 17C29 20 27 22 25 24C23 26 22 27 22 29V32"
+        stroke="#9b87f5"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+      />
+      
+      {/* Bulb base */}
+      <path
+        d="M16 32H24"
         stroke="#000000e6"
         strokeWidth="2.5"
         strokeLinecap="round"
       />
       <path
-        d="M14 12C20 12 24 10 24 16C24 22 20 20 26 20C32 20 30 24 30 26"
-        stroke="#9b87f5"
+        d="M17 34H23"
+        stroke="#000000e6"
         strokeWidth="2.5"
         strokeLinecap="round"
       />
-      {/* Decorative elements */}
-      <circle cx="20" cy="20" r="16" stroke="#6E59A5" strokeWidth="1.5" />
-      <circle cx="20" cy="20" r="12" stroke="#000000e6" strokeWidth="0.5" opacity="0.3" />
+      
+      {/* Light rays */}
+      <path
+        d="M20 4V6"
+        stroke="#000000e6"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M28 7L26 9"
+        stroke="#000000e6"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12 7L14 9"
+        stroke="#000000e6"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
     </svg>
   );
 };
