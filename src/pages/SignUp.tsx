@@ -1,49 +1,45 @@
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
 import { toast } from "@/hooks/use-toast";
-import { AuthChangeEvent } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // Handle successful sign in/up
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        toast({
-          title: "Welcome to SaasGen!",
-          description: "Your account has been created successfully.",
-        });
-        navigate("/");
-      }
-    });
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-    // Set up error listener for auth events
-    const {
-      data: { subscription: errorSubscription },
-    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
-      if (!session) {
-        const { error: authError } = await supabase.auth.getUser();
-        if (authError) {
-          toast({
-            title: "Error signing up",
-            description: authError.message,
-            variant: "destructive",
-          });
-        }
-      }
-    });
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    return () => {
-      subscription.unsubscribe();
-      errorSubscription.unsubscribe();
-    };
-  }, [navigate]);
+      if (error) throw error;
+
+      toast({
+        title: "Welcome to SaasGen!",
+        description: "Your account has been created successfully.",
+      });
+      navigate("/generator");
+    } catch (error: any) {
+      toast({
+        title: "Error signing up",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-secondary/20 p-4">
@@ -55,23 +51,51 @@ const SignUp = () => {
             Create an account to start generating unique SaaS ideas
           </p>
         </div>
-        <Auth
-          supabaseClient={supabase}
-          appearance={{
-            theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: '#6366f1',
-                  brandAccent: '#4f46e5',
-                }
-              }
-            }
-          }}
-          providers={[]}
-          theme="light"
-          view="sign_up"
-        />
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="email" className="text-sm font-medium">
+              Email
+            </label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="password" className="text-sm font-medium">
+              Password
+            </label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+          >
+            {isLoading ? "Creating account..." : "Create Account"}
+          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Button
+              variant="link"
+              className="p-0 h-auto font-semibold"
+              onClick={() => navigate("/sign-in")}
+            >
+              Sign in
+            </Button>
+          </p>
+        </form>
       </Card>
     </div>
   );
