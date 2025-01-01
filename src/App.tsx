@@ -8,6 +8,7 @@ import GeneratedIdea from "./pages/GeneratedIdea";
 import HowItWorks from "./pages/HowItWorks";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

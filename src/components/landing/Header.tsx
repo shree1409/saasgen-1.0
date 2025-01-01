@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "./Logo";
@@ -70,6 +70,15 @@ const Header = () => {
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
             <>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => navigate('/profile')}
+                className="text-muted-foreground hover:text-primary"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Profile
+              </Button>
               <Button 
                 variant="ghost" 
                 size="sm"

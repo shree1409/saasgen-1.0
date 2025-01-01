@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      generated_ideas: {
+        Row: {
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          market_potential: string | null
+          monetization_strategies: string[] | null
+          tech_stack: string | null
+          timeline_breakdown: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          market_potential?: string | null
+          monetization_strategies?: string[] | null
+          tech_stack?: string | null
+          timeline_breakdown?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          market_potential?: string | null
+          monetization_strategies?: string[] | null
+          tech_stack?: string | null
+          timeline_breakdown?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
