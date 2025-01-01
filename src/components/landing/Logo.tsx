@@ -26,29 +26,6 @@ const Logo = () => {
         strokeLinejoin="round"
       />
       
-      {/* Elegant ridges on the bulb */}
-      <path
-        d="M13 14C16 15 24 15 27 14"
-        stroke="#000000"
-        strokeWidth="0.75"
-        strokeLinecap="round"
-        opacity="0.6"
-      />
-      <path
-        d="M12 17C16 18 24 18 28 17"
-        stroke="#000000"
-        strokeWidth="0.75"
-        strokeLinecap="round"
-        opacity="0.6"
-      />
-      <path
-        d="M13 20C16 21 24 21 27 20"
-        stroke="#000000"
-        strokeWidth="0.75"
-        strokeLinecap="round"
-        opacity="0.6"
-      />
-      
       {/* Black bottom part */}
       <path
         d="M15 25C17 27 18 28 18 30V32"
@@ -63,18 +40,6 @@ const Logo = () => {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-      
-      {/* Purple spring coil in the middle */}
-      <path
-        d="M20 13C18 14 17 15 18 16C19 17 21 17 22 16
-           M20 15C18 16 17 17 18 18C19 19 21 19 22 18
-           M20 17C18 18 17 19 18 20C19 21 21 21 22 20"
-        stroke="#9b87f5"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
       />
       
       {/* Enhanced bulb base */}
