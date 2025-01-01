@@ -18,7 +18,11 @@ const Header = () => {
   return (
     <header className="container px-4 py-6 flex items-center justify-between">
       <div className="flex items-center gap-2">
-        <img src="/logo.png" alt="SaasGen Logo" className="w-8 h-8" />
+        <img 
+          src="/logo.png" 
+          alt="SaasGen Logo" 
+          className="w-8 h-8 object-contain"
+        />
         <span className="font-semibold text-lg">SaasGen</span>
       </div>
       <nav className="hidden md:flex items-center gap-8">
