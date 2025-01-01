@@ -12,8 +12,8 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_UP" || event === "SIGNED_IN") {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
         toast({
           title: "Welcome to SaasGen!",
           description: "Your account has been created successfully.",
@@ -22,16 +22,17 @@ const SignUp = () => {
       }
     });
 
-    // Handle auth errors separately
-    const handleAuthError = (error: AuthError) => {
-      if (error.message.includes("User already registered")) {
+    // Handle auth errors using event listener
+    const handleAuthStateChange = (event: { data: { error: AuthError } }) => {
+      const error = event.data.error;
+      if (error?.message.includes("User already registered")) {
         toast({
           title: "Account already exists",
           description: "Please sign in instead",
           variant: "destructive",
         });
         navigate("/sign-in");
-      } else {
+      } else if (error) {
         toast({
           title: "Error signing up",
           description: error.message,
@@ -40,12 +41,12 @@ const SignUp = () => {
       }
     };
 
-    // Subscribe to auth errors
-    const { data: { subscription: errorSubscription } } = supabase.auth.onError(handleAuthError);
+    // Subscribe to auth state changes for error handling
+    const authListener = supabase.auth.onAuthStateChange(handleAuthStateChange);
 
     return () => {
       subscription.unsubscribe();
-      errorSubscription.unsubscribe();
+      authListener.data.subscription.unsubscribe();
     };
   }, [navigate]);
 
