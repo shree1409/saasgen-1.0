@@ -5,26 +5,19 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 const SignIn = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_IN") {
         toast({
           title: "Welcome back!",
           description: "You've successfully signed in.",
         });
         navigate("/");
-      }
-      if (event === "USER_ERROR") {
-        toast({
-          title: "Error signing in",
-          description: "Please check your credentials and try again.",
-          variant: "destructive",
-        });
       }
     });
 
