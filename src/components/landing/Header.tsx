@@ -1,9 +1,19 @@
 import { CircuitBoard, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const scrollToFeatures = () => {
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollToFeatures: true } });
+    } else {
+      const featuresSection = document.getElementById('features');
+      featuresSection?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   return (
     <header className="container px-4 py-6 flex items-center justify-between">
@@ -14,7 +24,7 @@ const Header = () => {
       <nav className="hidden md:flex items-center gap-8">
         <Button 
           variant="ghost"
-          onClick={() => navigate('/features')}
+          onClick={scrollToFeatures}
           className="text-sm text-muted-foreground hover:text-primary"
         >
           Features

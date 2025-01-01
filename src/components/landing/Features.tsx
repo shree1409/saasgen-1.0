@@ -55,7 +55,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="mb-24">
+    <section id="features" className="mb-24">
       <div className="text-center mb-12">
         <h2 className="text-3xl font-bold mb-4">Powerful Features</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
