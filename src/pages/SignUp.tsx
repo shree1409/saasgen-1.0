@@ -11,13 +11,30 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, error) => {
       if (event === 'SIGNED_IN') {
         toast({
           title: "Welcome to SaasGen!",
           description: "Your account has been created successfully.",
         });
         navigate("/");
+      }
+      if (event === "USER_ERROR") {
+        const errorMessage = error?.message || "An error occurred during sign up";
+        if (errorMessage.includes("User already registered")) {
+          toast({
+            title: "Account already exists",
+            description: "Please sign in instead",
+            variant: "destructive",
+          });
+          navigate("/sign-in");
+        } else {
+          toast({
+            title: "Error signing up",
+            description: errorMessage,
+            variant: "destructive",
+          });
+        }
       }
     });
 
@@ -50,22 +67,6 @@ const SignUp = () => {
           providers={[]}
           theme="light"
           view="sign_up"
-          onError={(error) => {
-            if (error.message.includes("User already registered")) {
-              toast({
-                title: "Account already exists",
-                description: "Please sign in instead",
-                variant: "destructive",
-              });
-              navigate("/sign-in");
-            } else {
-              toast({
-                title: "Error signing up",
-                description: error.message,
-                variant: "destructive",
-              });
-            }
-          }}
         />
       </Card>
     </div>

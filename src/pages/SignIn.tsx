@@ -19,6 +19,13 @@ const SignIn = () => {
         });
         navigate("/");
       }
+      if (event === "USER_ERROR") {
+        toast({
+          title: "Error signing in",
+          description: "Please check your credentials and try again.",
+          variant: "destructive",
+        });
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -49,13 +56,6 @@ const SignIn = () => {
           }}
           providers={[]}
           theme="light"
-          onError={(error) => {
-            toast({
-              title: "Error signing in",
-              description: error.message,
-              variant: "destructive",
-            });
-          }}
         />
       </Card>
     </div>
