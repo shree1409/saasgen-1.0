@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
+import Logo from "./Logo";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -19,11 +20,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 w-full border-b bg-[#F1F1F1] shadow-sm">
       <div className="container px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <img 
-            src="/logo.png" 
-            alt="SaasGen Logo" 
-            className="w-10 h-10 object-contain brightness-90"
-          />
+          <Logo />
           <span className="font-semibold text-lg">SaasGen</span>
         </div>
         <nav className="hidden md:flex items-center gap-8">
