@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
+import { toast } from "@/components/ui/use-toast";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -12,6 +13,10 @@ const SignIn = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN") {
+        toast({
+          title: "Welcome back!",
+          description: "You've successfully signed in.",
+        });
         navigate("/");
       }
     });
@@ -44,6 +49,13 @@ const SignIn = () => {
           }}
           providers={[]}
           theme="light"
+          onError={(error) => {
+            toast({
+              title: "Error signing in",
+              description: error.message,
+              variant: "destructive",
+            });
+          }}
         />
       </Card>
     </div>

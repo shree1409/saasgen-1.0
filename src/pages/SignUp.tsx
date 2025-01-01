@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
+import { toast } from "@/components/ui/use-toast";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -12,6 +13,10 @@ const SignUp = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
+        toast({
+          title: "Welcome to SaasGen!",
+          description: "Your account has been created successfully.",
+        });
         navigate("/");
       }
     });
@@ -45,6 +50,22 @@ const SignUp = () => {
           providers={[]}
           theme="light"
           view="sign_up"
+          onError={(error) => {
+            if (error.message.includes("User already registered")) {
+              toast({
+                title: "Account already exists",
+                description: "Please sign in instead",
+                variant: "destructive",
+              });
+              navigate("/sign-in");
+            } else {
+              toast({
+                title: "Error signing up",
+                description: error.message,
+                variant: "destructive",
+              });
+            }
+          }}
         />
       </Card>
     </div>
