@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import GeneratedIdea from "./pages/GeneratedIdea";
 import HowItWorks from "./pages/HowItWorks";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/generated-idea" element={<GeneratedIdea />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
