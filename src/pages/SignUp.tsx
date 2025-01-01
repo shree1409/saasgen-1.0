@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
 import { toast } from "@/hooks/use-toast";
+import { AuthChangeEvent } from "@supabase/supabase-js";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -25,12 +26,7 @@ const SignUp = () => {
     // Set up error listener for auth events
     const {
       data: { subscription: errorSubscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "USER_DELETED" || event === "SIGNED_OUT") {
-        // Handle user deletion or sign out
-        return;
-      }
-
+    } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
       // Check for existing session errors
       const { data: { user }, error: authError } = await supabase.auth.getUser();
       
