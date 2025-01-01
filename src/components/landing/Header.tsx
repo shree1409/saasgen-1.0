@@ -16,13 +16,13 @@ const Header = () => {
   };
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
+    <header className="sticky top-0 z-50 w-full border-b bg-[#F1F1F1] shadow-sm">
       <div className="container px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img 
             src="/logo.png" 
             alt="SaasGen Logo" 
-            className="w-10 h-10 object-contain"
+            className="w-10 h-10 object-contain brightness-90"
           />
           <span className="font-semibold text-lg">SaasGen</span>
         </div>
