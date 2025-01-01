@@ -27,18 +27,9 @@ const SignUp = () => {
     const {
       data: { subscription: errorSubscription },
     } = supabase.auth.onAuthStateChange(async (event: AuthChangeEvent, session) => {
-      // Check for existing session errors
-      const { data: { user }, error: authError } = await supabase.auth.getUser();
-      
-      if (authError) {
-        if (authError.message.includes("User already registered")) {
-          toast({
-            title: "Account already exists",
-            description: "Please sign in instead",
-            variant: "destructive",
-          });
-          navigate("/sign-in");
-        } else {
+      if (!session) {
+        const { error: authError } = await supabase.auth.getUser();
+        if (authError) {
           toast({
             title: "Error signing up",
             description: authError.message,
