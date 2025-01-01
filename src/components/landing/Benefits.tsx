@@ -5,7 +5,7 @@ const benefits = [
   {
     icon: Zap,
     title: "AI-Powered Ideas",
-    description: "Get unique website concepts tailored to your needs"
+    description: "Get unique SaaS concepts tailored to your needs"
   },
   {
     icon: Target,
@@ -28,9 +28,9 @@ const Benefits = () => {
   return (
     <section className="mb-24">
       <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold mb-4">Why Choose WebsiteGuru?</h2>
+        <h2 className="text-3xl font-bold mb-4">Why Choose SaasGen?</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Our AI-powered platform helps entrepreneurs and creators build successful online businesses
+          Our AI-powered platform helps entrepreneurs and creators build successful SaaS businesses
         </p>
       </div>
 

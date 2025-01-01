@@ -13,7 +13,7 @@ const Hero = () => {
       >
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 text-primary text-sm font-medium">
           <Sparkles className="w-4 h-4" />
-          Website Idea Generator
+          SaaS Idea Generator
         </div>
         <h1 className="text-6xl font-bold leading-tight">
           Transform Your
@@ -31,7 +31,7 @@ const Hero = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-xl text-muted-foreground"
         >
-          Generate unique and actionable website ideas tailored to your goals and audience
+          Generate unique and actionable SaaS ideas tailored to your goals and audience
         </motion.p>
 
         <motion.div
