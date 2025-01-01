@@ -6,8 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Database } from "@/integrations/supabase/types";
-import { Mail, User as UserIcon, Clock, Lightbulb } from "lucide-react";
+import { Mail, User as UserIcon, Clock, Lightbulb, ArrowRight } from "lucide-react";
 import Header from "@/components/landing/Header";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 type GeneratedIdea = Database['public']['Tables']['generated_ideas']['Row'];
 
@@ -96,42 +104,56 @@ const Profile = () => {
 
           {/* Generated Ideas Section */}
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="w-6 h-6 text-yellow-500" />
                 Your Generated Ideas
               </CardTitle>
+              <Button onClick={() => navigate('/generator')} variant="outline">
+                Generate New Idea
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
             </CardHeader>
             <CardContent>
               {generatedIdeas.length === 0 ? (
                 <div className="text-center py-8">
                   <p className="text-muted-foreground mb-4">You haven't generated any ideas yet.</p>
-                  <Button onClick={() => navigate('/')}>Generate Your First Idea</Button>
+                  <Button onClick={() => navigate('/generator')}>Generate Your First Idea</Button>
                 </div>
               ) : (
-                <div className="grid gap-4 md:grid-cols-2">
-                  {generatedIdeas.map((idea) => (
-                    <Card key={idea.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <CardTitle className="text-lg">{idea.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-muted-foreground mb-4">{idea.description}</p>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-muted-foreground">
-                            {formatDate(idea.created_at)}
-                          </span>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => navigate('/generated-idea', { state: { generatedIdea: idea } })}
-                          >
-                            View Details
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Title</TableHead>
+                        <TableHead>Description</TableHead>
+                        <TableHead>Tech Stack</TableHead>
+                        <TableHead>Created</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {generatedIdeas.map((idea) => (
+                        <TableRow key={idea.id}>
+                          <TableCell className="font-medium">{idea.title}</TableCell>
+                          <TableCell className="max-w-md truncate">
+                            {idea.description}
+                          </TableCell>
+                          <TableCell>{idea.tech_stack}</TableCell>
+                          <TableCell>{formatDate(idea.created_at)}</TableCell>
+                          <TableCell>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => navigate('/generated-idea', { state: { generatedIdea: idea } })}
+                            >
+                              View Details
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </div>
               )}
             </CardContent>
