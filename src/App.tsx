@@ -9,6 +9,7 @@ import HowItWorks from "./pages/HowItWorks";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
+import Generator from "./pages/Generator";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/generator" element={<Generator />} />
           <Route path="/generated-idea" element={<GeneratedIdea />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/sign-in" element={<SignIn />} />
