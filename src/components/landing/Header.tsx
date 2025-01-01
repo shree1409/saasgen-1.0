@@ -16,41 +16,43 @@ const Header = () => {
   };
   
   return (
-    <header className="container px-4 py-6 flex items-center justify-between">
-      <div className="flex items-center gap-2">
-        <img 
-          src="/logo.png" 
-          alt="SaasGen Logo" 
-          className="w-10 h-10 object-contain"
-        />
-        <span className="font-semibold text-lg">SaasGen</span>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <img 
+            src="/logo.png" 
+            alt="SaasGen Logo" 
+            className="w-10 h-10 object-contain"
+          />
+          <span className="font-semibold text-lg">SaasGen</span>
+        </div>
+        <nav className="hidden md:flex items-center gap-8">
+          <Button 
+            variant="ghost"
+            onClick={scrollToFeatures}
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            Features
+          </Button>
+          <Button 
+            variant="ghost"
+            onClick={() => navigate('/how-it-works')}
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            How it Works
+          </Button>
+          <a href="#generator" className="text-sm text-muted-foreground hover:text-primary">Generator</a>
+        </nav>
+        <Button 
+          variant="default" 
+          size="sm"
+          className="text-white"
+          onClick={() => navigate('#generator')}
+        >
+          Get Started
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
       </div>
-      <nav className="hidden md:flex items-center gap-8">
-        <Button 
-          variant="ghost"
-          onClick={scrollToFeatures}
-          className="text-sm text-muted-foreground hover:text-primary"
-        >
-          Features
-        </Button>
-        <Button 
-          variant="ghost"
-          onClick={() => navigate('/how-it-works')}
-          className="text-sm text-muted-foreground hover:text-primary"
-        >
-          How it Works
-        </Button>
-        <a href="#generator" className="text-sm text-muted-foreground hover:text-primary">Generator</a>
-      </nav>
-      <Button 
-        variant="default" 
-        size="sm"
-        className="text-white"
-        onClick={() => navigate('#generator')}
-      >
-        Get Started
-        <ArrowRight className="w-4 h-4 ml-2" />
-      </Button>
     </header>
   );
 };
