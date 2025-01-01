@@ -6,22 +6,62 @@ import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import Logo from "@/components/landing/Logo";
 import { toast } from "@/hooks/use-toast";
+import { AuthError } from "@supabase/supabase-js";
 
 const SignIn = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    // Check if user is already signed in
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        navigate("/");
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN") {
         toast({
           title: "Welcome back!",
           description: "You've successfully signed in.",
         });
         navigate("/");
+      } else if (event === "SIGNED_OUT") {
+        toast({
+          title: "Signed out",
+          description: "You've been signed out successfully.",
+        });
+      } else if (event === "USER_UPDATED") {
+        // Handle user updates
+        if (session) {
+          toast({
+            title: "Profile updated",
+            description: "Your profile has been updated successfully.",
+          });
+        }
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Set up error listener
+    const {
+      data: { subscription: errorSubscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!session) {
+        const { error: authError } = await supabase.auth.getUser();
+        if (authError) {
+          toast({
+            title: "Error signing in",
+            description: authError.message,
+            variant: "destructive",
+          });
+        }
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+      errorSubscription.unsubscribe();
+    };
   }, [navigate]);
 
   return (
@@ -49,6 +89,8 @@ const SignIn = () => {
           }}
           providers={[]}
           theme="light"
+          showLinks={true}
+          redirectTo={window.location.origin}
         />
       </Card>
     </div>
