@@ -12,6 +12,7 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Handle successful sign in/up
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_IN") {
         toast({
@@ -22,10 +23,12 @@ const SignUp = () => {
       }
     });
 
-    // Handle auth errors using event listener
-    const handleAuthStateChange = (event: { data: { error: AuthError } }) => {
-      const error = event.data.error;
-      if (error?.message.includes("User already registered")) {
+    // Set up error listener
+    const {
+      data: { subscription: errorSubscription },
+    } = supabase.auth.onAuthStateChange((_, session) => {
+      const error = session?.error;
+      if (error?.message?.includes("User already registered")) {
         toast({
           title: "Account already exists",
           description: "Please sign in instead",
@@ -39,14 +42,11 @@ const SignUp = () => {
           variant: "destructive",
         });
       }
-    };
-
-    // Subscribe to auth state changes for error handling
-    const authListener = supabase.auth.onAuthStateChange(handleAuthStateChange);
+    });
 
     return () => {
       subscription.unsubscribe();
-      authListener.data.subscription.unsubscribe();
+      errorSubscription.unsubscribe();
     };
   }, [navigate]);
 
