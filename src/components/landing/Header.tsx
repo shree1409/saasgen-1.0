@@ -66,6 +66,13 @@ const Header = () => {
           >
             How it Works
           </Button>
+          <Button 
+            variant="ghost"
+            onClick={() => navigate('/pricing')}
+            className="text-sm text-muted-foreground hover:text-primary"
+          >
+            Pricing
+          </Button>
         </nav>
         <div className="flex items-center gap-4">
           {isAuthenticated ? (

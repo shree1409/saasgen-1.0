@@ -48,22 +48,64 @@ export type Database = {
         }
         Relationships: []
       }
+      prices: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          id: string
+          interval: string | null
+          stripe_price_id: string
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          type: string | null
+          unit_amount: number | null
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          interval?: string | null
+          stripe_price_id: string
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          type?: string | null
+          unit_amount?: number | null
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          interval?: string | null
+          stripe_price_id?: string
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          type?: string | null
+          unit_amount?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           id: string
+          stripe_customer_id: string | null
           updated_at: string | null
           username: string | null
         }
         Insert: {
           avatar_url?: string | null
           id: string
+          stripe_customer_id?: string | null
           updated_at?: string | null
           username?: string | null
         }
         Update: {
           avatar_url?: string | null
           id?: string
+          stripe_customer_id?: string | null
           updated_at?: string | null
           username?: string | null
         }
@@ -81,6 +123,39 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -89,7 +164,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      subscription_tier: "basic" | "advanced" | "pro"
     }
     CompositeTypes: {
       [_ in never]: never

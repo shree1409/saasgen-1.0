@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Generator from "./pages/Generator";
+import Pricing from "./pages/Pricing";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/pricing" element={<Pricing />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
