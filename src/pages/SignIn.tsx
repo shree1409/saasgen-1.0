@@ -32,13 +32,19 @@ const SignIn = () => {
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
         toast({
           title: "Welcome back!",
           description: "You've successfully signed in.",
         });
-        navigate("/");
+        navigate("/generator");
       }
+    } catch (error: any) {
+      toast({
+        title: "Error signing in",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

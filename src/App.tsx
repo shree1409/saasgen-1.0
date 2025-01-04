@@ -45,20 +45,35 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/generator" element={<Generator />} />
-            <Route path="/generated-idea" element={<GeneratedIdea />} />
-            <Route path="/basic" element={<Basic />} />
-            <Route path="/advanced" element={<Advanced />} />
+            <Route 
+              path="/generator" 
+              element={session ? <Generator /> : <Navigate to="/sign-in" />} 
+            />
+            <Route 
+              path="/generated-idea" 
+              element={session ? <GeneratedIdea /> : <Navigate to="/sign-in" />} 
+            />
+            <Route 
+              path="/basic" 
+              element={session ? <Basic /> : <Navigate to="/sign-in" />} 
+            />
+            <Route 
+              path="/advanced" 
+              element={session ? <Advanced /> : <Navigate to="/sign-in" />} 
+            />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route 
               path="/sign-in" 
-              element={session ? <Navigate to="/" /> : <SignIn />} 
+              element={session ? <Navigate to="/generator" /> : <SignIn />} 
             />
             <Route 
               path="/sign-up" 
-              element={session ? <Navigate to="/" /> : <SignUp />} 
+              element={session ? <Navigate to="/generator" /> : <SignUp />} 
             />
-            <Route path="/profile" element={<Profile />} />
+            <Route 
+              path="/profile" 
+              element={session ? <Profile /> : <Navigate to="/sign-in" />} 
+            />
             <Route path="/pricing" element={<Pricing />} />
           </Routes>
         </BrowserRouter>
