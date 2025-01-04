@@ -18,8 +18,8 @@ const SignUp = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
         password,
       });
 
@@ -40,11 +40,13 @@ const SignUp = () => {
         return;
       }
 
-      toast({
-        title: "Welcome to SaasGen!",
-        description: "Your account has been created successfully.",
-      });
-      navigate("/generator");
+      if (data.user) {
+        toast({
+          title: "Welcome to SaasGen!",
+          description: "Your account has been created successfully.",
+        });
+        navigate("/generator");
+      }
     } catch (error: any) {
       toast({
         title: "Error signing up",
