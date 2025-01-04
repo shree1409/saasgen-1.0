@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const GeneratorForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [hasSubscription, setHasSubscription] = useState(false);
+  const [hasSubscription, setHasSubscription] = useState(true); // Changed to true to allow access
   const {
     step,
     setStep,
@@ -20,36 +20,6 @@ const GeneratorForm = () => {
     setIsGenerating,
     updateFormData,
   } = useFormState();
-
-  useEffect(() => {
-    const checkSubscription = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/sign-in');
-        return;
-      }
-
-      const { data: subscriptions, error } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .single();
-
-      if (error || !subscriptions) {
-        navigate('/pricing');
-        toast({
-          title: "Subscription required",
-          description: "Please subscribe to access the generator.",
-        });
-        return;
-      }
-
-      setHasSubscription(true);
-    };
-
-    checkSubscription();
-  }, [navigate, toast]);
 
   const handleNext = () => {
     if (!validateStep(step, formData)) return;
@@ -61,17 +31,36 @@ const GeneratorForm = () => {
   };
 
   const handleSubmit = async () => {
-    setIsGenerating(true);
-    toast({
-      title: "Generating your website idea",
-      description: "We're crafting something unique for you...",
-    });
-
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('No session found');
+      if (!session) {
+        navigate('/sign-in');
+        return;
+      }
 
       const { data: subscription } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (!subscription) {
+        navigate('/pricing');
+        toast({
+          title: "Subscription required",
+          description: "Please subscribe to generate website ideas.",
+        });
+        return;
+      }
+
+      setIsGenerating(true);
+      toast({
+        title: "Generating your website idea",
+        description: "We're crafting something unique for you...",
+      });
+
+      const { data: subscriptionTier } = await supabase
         .from('subscriptions')
         .select('tier')
         .eq('user_id', session.user.id)
@@ -79,7 +68,7 @@ const GeneratorForm = () => {
         .single();
 
       const { data, error } = await supabase.functions.invoke('generate-website-idea', {
-        body: { ...formData, subscriptionTier: subscription?.tier || 'basic' },
+        body: { ...formData, subscriptionTier: subscriptionTier?.tier || 'basic' },
       });
 
       if (error) throw error;
@@ -101,10 +90,6 @@ const GeneratorForm = () => {
       setIsGenerating(false);
     }
   };
-
-  if (!hasSubscription) {
-    return null;
-  }
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
