@@ -18,7 +18,7 @@ const SignIn = () => {
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
@@ -26,23 +26,19 @@ const SignIn = () => {
       if (error) {
         toast({
           title: "Error signing in",
-          description: "Please check your credentials and try again.",
+          description: error.message,
           variant: "destructive",
         });
         return;
       }
 
-      toast({
-        title: "Welcome back!",
-        description: "You've successfully signed in.",
-      });
-      navigate("/generator");
-    } catch (error) {
-      toast({
-        title: "Error signing in",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
+      if (data.user) {
+        toast({
+          title: "Welcome back!",
+          description: "You've successfully signed in.",
+        });
+        navigate("/");
+      }
     } finally {
       setIsLoading(false);
     }
