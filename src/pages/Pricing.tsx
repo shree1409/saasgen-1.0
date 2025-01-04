@@ -65,6 +65,17 @@ const Pricing = () => {
     );
   }
 
+  const getDescription = (price) => {
+    switch (price.tier) {
+      case 'pro':
+        return "Everything in Advanced plus Market Analysis + Marketing Strategy Roadmap and Learning Resources";
+      case 'advanced':
+        return "Everything in Basic plus Development Timeline and Monetization Strategy";
+      default:
+        return price.description;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
@@ -79,9 +90,7 @@ const Pricing = () => {
               <CardHeader>
                 <CardTitle className="capitalize">{price.tier}</CardTitle>
                 <CardDescription>
-                  {price.tier === 'pro' 
-                    ? "Everything in Advanced plus Development Timeline + Market Analysis + Marketing Strategy Roadmap and Learning Resources"
-                    : price.description}
+                  {getDescription(price)}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
