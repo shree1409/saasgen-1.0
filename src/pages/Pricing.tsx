@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/landing/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
 const Pricing = () => {
@@ -78,7 +78,11 @@ const Pricing = () => {
             <Card key={price.id} className="flex flex-col">
               <CardHeader>
                 <CardTitle className="capitalize">{price.tier}</CardTitle>
-                <CardDescription>{price.description}</CardDescription>
+                <CardDescription>
+                  {price.tier === 'pro' 
+                    ? "Everything in Advanced plus Development Timeline + Market Analysis + Marketing Strategy Roadmap and Learning Resources"
+                    : price.description}
+                </CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
                 <div className="text-3xl font-bold">
@@ -88,7 +92,7 @@ const Pricing = () => {
               </CardContent>
               <CardFooter>
                 <Button 
-                  className="w-full" 
+                  className="w-full text-white" 
                   variant="default"
                   onClick={() => handleSubscribe(price.stripe_price_id)}
                 >
