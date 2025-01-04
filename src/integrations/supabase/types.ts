@@ -17,6 +17,9 @@ export type Database = {
           id: string
           market_potential: string | null
           monetization_strategies: string[] | null
+          subscription_tier:
+            | Database["public"]["Enums"]["subscription_tier_type"]
+            | null
           tech_stack: string | null
           timeline_breakdown: string | null
           title: string
@@ -29,6 +32,9 @@ export type Database = {
           id?: string
           market_potential?: string | null
           monetization_strategies?: string[] | null
+          subscription_tier?:
+            | Database["public"]["Enums"]["subscription_tier_type"]
+            | null
           tech_stack?: string | null
           timeline_breakdown?: string | null
           title: string
@@ -41,6 +47,9 @@ export type Database = {
           id?: string
           market_potential?: string | null
           monetization_strategies?: string[] | null
+          subscription_tier?:
+            | Database["public"]["Enums"]["subscription_tier_type"]
+            | null
           tech_stack?: string | null
           timeline_breakdown?: string | null
           title?: string
@@ -165,6 +174,7 @@ export type Database = {
     }
     Enums: {
       subscription_tier: "basic" | "advanced" | "pro"
+      subscription_tier_type: "basic" | "advanced" | "pro"
     }
     CompositeTypes: {
       [_ in never]: never

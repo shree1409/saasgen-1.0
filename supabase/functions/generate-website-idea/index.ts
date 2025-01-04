@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -9,7 +10,6 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -19,9 +19,9 @@ serve(async (req) => {
       throw new Error('OpenAI API key is not configured');
     }
 
-    const { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences } = await req.json();
+    const { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences, subscriptionTier } = await req.json();
 
-    console.log('Received inputs:', { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences });
+    console.log('Received inputs:', { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences, subscriptionTier });
 
     const systemPrompt = `You are a website idea generator that creates unique, actionable website concepts based on user inputs. Generate ideas that are modern, profitable, and match the user's experience level and timeline. Your response must be valid JSON with this exact structure:
     {
@@ -41,8 +41,12 @@ serve(async (req) => {
     - Target monthly revenue: $${revenue}
     - Preferred niche: ${niche || 'Open to suggestions'}
     - Additional preferences: ${preferences || 'None specified'}
+    - Subscription tier: ${subscriptionTier}
     
-    Consider the user's experience level when suggesting the tech stack and timeline. The idea should be realistic for their skills and timeline.`;
+    Consider the user's experience level when suggesting the tech stack and timeline. The idea should be realistic for their skills and timeline.
+    ${subscriptionTier === 'basic' ? 'Focus on basic features and monetization strategies.' : ''}
+    ${subscriptionTier === 'advanced' ? 'Include detailed technical implementation and development timeline.' : ''}
+    ${subscriptionTier === 'pro' ? 'Include comprehensive market analysis and detailed technical implementation.' : ''}`;
 
     console.log('Sending request to OpenAI...');
 
@@ -79,18 +83,52 @@ serve(async (req) => {
     const generatedContent = data.choices[0].message.content;
     console.log('Generated content:', generatedContent);
 
-    // Parse the JSON response and validate its structure
     let parsedIdea;
     try {
       parsedIdea = JSON.parse(generatedContent);
       
-      // Validate required fields
       const requiredFields = ['websiteName', 'description', 'keyFeatures', 'monetizationStrategy', 'techStack', 'timelineBreakdown', 'marketPotential'];
       for (const field of requiredFields) {
         if (!parsedIdea[field]) {
           throw new Error(`Missing required field: ${field}`);
         }
       }
+
+      // Create Supabase client
+      const supabaseClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+      );
+
+      // Get user from authorization header
+      const authHeader = req.headers.get('Authorization')!;
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabaseClient.auth.getUser(token);
+
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Save the generated idea to the database
+      const { error: insertError } = await supabaseClient
+        .from('generated_ideas')
+        .insert({
+          user_id: user.id,
+          title: parsedIdea.websiteName,
+          description: parsedIdea.description,
+          features: parsedIdea.keyFeatures,
+          tech_stack: parsedIdea.techStack,
+          timeline_breakdown: parsedIdea.timelineBreakdown,
+          market_potential: parsedIdea.marketPotential,
+          monetization_strategies: parsedIdea.monetizationStrategy,
+          subscription_tier: subscriptionTier
+        });
+
+      if (insertError) {
+        console.error('Error saving idea:', insertError);
+        throw new Error('Failed to save generated idea');
+      }
+
     } catch (error) {
       console.error('Error parsing generated content:', error);
       throw new Error('Failed to parse generated website idea');
