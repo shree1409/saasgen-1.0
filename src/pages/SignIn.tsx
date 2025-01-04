@@ -18,12 +18,15 @@ const SignIn = () => {
     setIsLoading(true);
 
     try {
+      console.log("Attempting to sign in with email:", email.trim());
       const { error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
       if (error) {
+        console.error("Sign in error details:", error);
+        
         if (error.message === "Email not confirmed") {
           toast({
             title: "Email not verified",
