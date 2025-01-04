@@ -46,9 +46,10 @@ const SignUp = () => {
       if (data?.user) {
         toast({
           title: "Welcome to SaasGen!",
-          description: "Please check your email to confirm your account.",
+          description: "Your account has been created successfully.",
         });
-        // Don't navigate yet - wait for email confirmation
+        // Since email confirmation is disabled, we can navigate directly
+        navigate("/generator");
       }
     } catch (error: any) {
       toast({
