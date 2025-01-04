@@ -16,36 +16,36 @@ const SignIn = () => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isLoading) return; // Prevent multiple submissions
+    if (isLoading) return;
     setIsLoading(true);
 
     try {
-      // Use a single destructuring assignment to get both data and error
-      const { data: { user }, error } = await supabase.auth.signInWithPassword({
+      const signInResponse = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
-      if (error) throw error;
+      // Handle authentication response
+      if (signInResponse.error) {
+        toast({
+          title: "Error signing in",
+          description: signInResponse.error.message || "Invalid email or password",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      if (user) {
+      if (signInResponse.data.user) {
         toast({
           title: "Welcome back!",
           description: "You've successfully signed in.",
         });
         navigate("/generator");
-      } else {
-        toast({
-          title: "Error signing in",
-          description: "Invalid email or password",
-          variant: "destructive",
-        });
       }
     } catch (error: any) {
-      console.error("Sign in error:", error);
       toast({
         title: "Error signing in",
-        description: error.message || "An unexpected error occurred",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -67,21 +67,27 @@ const SignIn = () => {
     setIsResettingPassword(true);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      const resetResponse = await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/update-password`,
       });
 
-      if (error) throw error;
+      if (resetResponse.error) {
+        toast({
+          title: "Error",
+          description: resetResponse.error.message || "Failed to send reset password email",
+          variant: "destructive",
+        });
+        return;
+      }
 
       toast({
         title: "Password reset email sent",
         description: "Check your email for the password reset link.",
       });
     } catch (error: any) {
-      console.error("Password reset error:", error);
       toast({
         title: "Error",
-        description: error.message || "Failed to send reset password email",
+        description: "Failed to send reset password email",
         variant: "destructive",
       });
     } finally {
