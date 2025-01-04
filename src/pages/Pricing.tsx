@@ -3,8 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/landing/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Pricing = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   const { data: prices, isLoading } = useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
@@ -19,8 +24,45 @@ const Pricing = () => {
     },
   });
 
+  const handleSubscribe = async (priceId: string) => {
+    try {
+      const session = await supabase.auth.getSession();
+      if (!session.data.session) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to subscribe to a plan",
+        });
+        navigate('/sign-in');
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('create-checkout-session', {
+        body: { priceId },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to start checkout process",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+        <Header />
+        <div className="container px-4 py-12 flex items-center justify-center">
+          <div className="animate-pulse">Loading pricing plans...</div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -35,18 +77,22 @@ const Pricing = () => {
           {prices?.map((price) => (
             <Card key={price.id} className="flex flex-col">
               <CardHeader>
-                <CardTitle>{price.tier}</CardTitle>
+                <CardTitle className="capitalize">{price.tier}</CardTitle>
                 <CardDescription>{price.description}</CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
                 <div className="text-3xl font-bold">
-                  ${(price.unit_amount / 100).toFixed(2)}
-                  <span className="text-sm font-normal text-muted-foreground">/{price.interval}</span>
+                  £{(price.unit_amount / 100).toFixed(2)}
+                  <span className="text-sm font-normal text-muted-foreground">/month</span>
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" variant="default">
-                  Get Started
+                <Button 
+                  className="w-full" 
+                  variant="default"
+                  onClick={() => handleSubscribe(price.stripe_price_id)}
+                >
+                  Subscribe
                 </Button>
               </CardFooter>
             </Card>
