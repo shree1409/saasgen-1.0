@@ -55,20 +55,34 @@ const features = [
 
 const Features = () => {
   return (
-    <section id="features" className="mb-24">
-      <div className="text-center mb-12">
+    <motion.section 
+      id="features" 
+      className="mb-24"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.div 
+        className="text-center mb-12"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
         <h2 className="text-3xl font-bold mb-4">Powerful Features</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
           Everything you need to transform your website idea from concept to reality
         </p>
-      </div>
+      </motion.div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((feature, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className="p-6 rounded-xl bg-white/50 hover:bg-white/80 transition-colors border hover:border-primary/20"
           >
@@ -78,7 +92,7 @@ const Features = () => {
           </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 };
 
