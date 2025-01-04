@@ -12,6 +12,7 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isResettingPassword, setIsResettingPassword] = useState(false);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +48,39 @@ const SignIn = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsResettingPassword(true);
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/update-password`,
+      });
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      toast({
+        title: "Password reset email sent",
+        description: "Check your email for the password reset link.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsResettingPassword(false);
     }
   };
 
@@ -96,16 +130,25 @@ const SignIn = () => {
           >
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+          <div className="flex justify-between items-center">
             <Button
+              type="button"
               variant="link"
-              className="p-0 h-auto font-semibold"
+              className="p-0 h-auto text-sm"
+              onClick={handleResetPassword}
+              disabled={isResettingPassword || !email}
+            >
+              {isResettingPassword ? "Sending reset link..." : "Forgot password?"}
+            </Button>
+            <Button
+              type="button"
+              variant="link"
+              className="p-0 h-auto text-sm"
               onClick={() => navigate("/sign-up")}
             >
-              Sign up
+              Don't have an account? Sign up
             </Button>
-          </p>
+          </div>
         </form>
       </Card>
     </div>

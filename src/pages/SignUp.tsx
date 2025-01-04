@@ -21,6 +21,9 @@ const SignUp = () => {
       const { data, error } = await supabase.auth.signUp({
         email: email.trim(),
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/generator`,
+        },
       });
 
       if (error) {
@@ -40,12 +43,12 @@ const SignUp = () => {
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
         toast({
           title: "Welcome to SaasGen!",
-          description: "Your account has been created successfully.",
+          description: "Please check your email to confirm your account.",
         });
-        navigate("/generator");
+        // Don't navigate yet - wait for email confirmation
       }
     } catch (error: any) {
       toast({

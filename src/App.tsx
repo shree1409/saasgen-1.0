@@ -75,6 +75,10 @@ const App = () => {
               element={session ? <Profile /> : <Navigate to="/sign-in" />} 
             />
             <Route path="/pricing" element={<Pricing />} />
+            <Route 
+              path="/update-password" 
+              element={<SignIn />} 
+            />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
