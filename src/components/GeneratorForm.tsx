@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const GeneratorForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [hasSubscription, setHasSubscription] = useState(true); // Changed to true to allow access
+  const [hasSubscription, setHasSubscription] = useState(false);
   const {
     step,
     setStep,
@@ -20,6 +20,27 @@ const GeneratorForm = () => {
     setIsGenerating,
     updateFormData,
   } = useFormState();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/sign-in');
+        return;
+      }
+
+      const { data: subscription } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      setHasSubscription(!!subscription);
+    };
+
+    checkAuth();
+  }, [navigate]);
 
   const handleNext = () => {
     if (!validateStep(step, formData)) return;
@@ -38,14 +59,7 @@ const GeneratorForm = () => {
         return;
       }
 
-      const { data: subscription } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .single();
-
-      if (!subscription) {
+      if (!hasSubscription) {
         navigate('/pricing');
         toast({
           title: "Subscription required",
@@ -60,7 +74,7 @@ const GeneratorForm = () => {
         description: "We're crafting something unique for you...",
       });
 
-      const { data: subscriptionTier } = await supabase
+      const { data: subscription } = await supabase
         .from('subscriptions')
         .select('tier')
         .eq('user_id', session.user.id)
@@ -68,12 +82,19 @@ const GeneratorForm = () => {
         .single();
 
       const { data, error } = await supabase.functions.invoke('generate-website-idea', {
-        body: { ...formData, subscriptionTier: subscriptionTier?.tier || 'basic' },
+        body: { ...formData, subscriptionTier: subscription?.tier || 'basic' },
       });
 
       if (error) throw error;
 
-      navigate('/generated-idea', { state: { generatedIdea: data.idea } });
+      // Redirect based on subscription tier
+      if (subscription?.tier === 'basic') {
+        navigate('/basic', { state: { generatedIdea: data.idea } });
+      } else if (subscription?.tier === 'advanced') {
+        navigate('/advanced', { state: { generatedIdea: data.idea } });
+      } else {
+        navigate('/generated-idea', { state: { generatedIdea: data.idea } });
+      }
       
       toast({
         title: "Idea generated successfully!",
