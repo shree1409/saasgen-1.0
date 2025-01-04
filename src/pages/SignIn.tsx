@@ -25,22 +25,32 @@ const SignIn = () => {
       });
 
       if (error) {
+        console.error("Sign in error:", error);
         toast({
           title: "Error signing in",
-          description: error.message,
+          description: error.message || "Invalid email or password",
           variant: "destructive",
         });
         return;
       }
 
       if (data?.user) {
+        console.log("Sign in successful:", data.user);
         toast({
           title: "Welcome back!",
           description: "You've successfully signed in.",
         });
         navigate("/generator");
+      } else {
+        console.error("No user data received");
+        toast({
+          title: "Error signing in",
+          description: "No user data received. Please try again.",
+          variant: "destructive",
+        });
       }
     } catch (error: any) {
+      console.error("Unexpected error:", error);
       toast({
         title: "Error signing in",
         description: "An unexpected error occurred. Please try again.",
@@ -53,6 +63,15 @@ const SignIn = () => {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsResettingPassword(true);
 
     try {
@@ -61,9 +80,10 @@ const SignIn = () => {
       });
 
       if (error) {
+        console.error("Password reset error:", error);
         toast({
           title: "Error",
-          description: error.message,
+          description: error.message || "Failed to send reset password email",
           variant: "destructive",
         });
         return;
@@ -74,6 +94,7 @@ const SignIn = () => {
         description: "Check your email for the password reset link.",
       });
     } catch (error: any) {
+      console.error("Unexpected error during password reset:", error);
       toast({
         title: "Error",
         description: "An unexpected error occurred. Please try again.",
