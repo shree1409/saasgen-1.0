@@ -70,7 +70,7 @@ const Pricing = () => {
       case 'pro':
         return "Everything in Advanced plus Market Analysis + Marketing Strategy Roadmap and Learning Resources";
       case 'advanced':
-        return "Everything in Basic plus Development Timeline and Monetization Strategy";
+        return "Everything in Basic plus Technical Implementation, Development Timeline and Monetization Strategy";
       default:
         return price.description;
     }

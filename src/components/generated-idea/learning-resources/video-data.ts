@@ -144,5 +144,91 @@ export const techStackVideos: TechStackVideos = {
       url: "https://www.youtube.com/watch?v=zw4s3Ey8ayo",
       description: "Quick introduction to PostgreSQL fundamentals"
     }
+  ],
+  "Wix": [
+    {
+      title: "Wix Tutorial for Beginners 2024",
+      url: "https://youtu.be/tL0Jrwo2V_U",
+      description: "Complete guide to creating a website with Wix"
+    },
+    {
+      title: "Build a Professional Website with Wix",
+      url: "https://youtu.be/cd53d6gwyJU",
+      description: "Step-by-step tutorial for building a professional Wix website"
+    }
+  ],
+  "Squarespace": [
+    {
+      title: "Squarespace Tutorial for Beginners",
+      url: "https://youtu.be/cMfrvK3a8oA",
+      description: "Complete Squarespace tutorial for beginners"
+    },
+    {
+      title: "Build a Professional Squarespace Website",
+      url: "https://youtu.be/kmQTck7bqsk",
+      description: "Create a stunning website with Squarespace"
+    }
+  ],
+  "Firebase": [
+    {
+      title: "Firebase Full Course",
+      url: "https://youtu.be/9kRgVxULbag",
+      description: "Complete Firebase course covering all major features"
+    }
+  ],
+  "WordPress": [
+    {
+      title: "WordPress Full Course 2024",
+      url: "https://youtu.be/IxpxQ62Im14",
+      description: "Complete WordPress tutorial for beginners"
+    },
+    {
+      title: "WordPress Website Tutorial",
+      url: "https://youtu.be/UT3No6nswz8",
+      description: "Step-by-step guide to building a WordPress website"
+    }
+  ],
+  "WooCommerce": [
+    {
+      title: "WooCommerce Tutorial 2024",
+      url: "https://youtu.be/zR1lpFFNwOs",
+      description: "Complete guide to setting up an online store with WooCommerce"
+    }
+  ],
+  "Bubble": [
+    {
+      title: "Bubble.io Tutorial for Beginners",
+      url: "https://youtu.be/CSMx0cTa6Ls",
+      description: "Learn the basics of no-code development with Bubble"
+    },
+    {
+      title: "Build a Full Stack App with Bubble",
+      url: "https://youtu.be/IWdDr54qE4A",
+      description: "Create a complete application using Bubble"
+    }
+  ],
+  "Webflow": [
+    {
+      title: "Webflow Complete Course",
+      url: "https://youtu.be/RXdH2H01P88",
+      description: "Comprehensive guide to building with Webflow"
+    },
+    {
+      title: "Webflow Tutorial for Beginners",
+      url: "https://youtu.be/GdeQKGhPKpQ",
+      description: "Learn Webflow from scratch"
+    }
+  ],
+  "Adalo": [
+    {
+      title: "Adalo App Building Tutorial",
+      url: "https://youtu.be/ruYYuSZfYn4",
+      description: "Learn to build mobile apps with Adalo"
+    },
+    {
+      title: "Create Your First Adalo App",
+      url: "https://youtu.be/CbC3j7cFkM0",
+      description: "Step-by-step guide to building an app with Adalo"
+    }
   ]
 };
