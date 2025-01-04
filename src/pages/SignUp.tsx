@@ -23,7 +23,22 @@ const SignUp = () => {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message === "User already registered") {
+          toast({
+            title: "Account already exists",
+            description: "Please sign in instead or use a different email address.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error signing up",
+            description: error.message,
+            variant: "destructive",
+          });
+        }
+        return;
+      }
 
       toast({
         title: "Welcome to SaasGen!",
@@ -33,7 +48,7 @@ const SignUp = () => {
     } catch (error: any) {
       toast({
         title: "Error signing up",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -63,6 +78,7 @@ const SignUp = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
+              disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
@@ -76,6 +92,7 @@ const SignUp = () => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
               required
+              disabled={isLoading}
             />
           </div>
           <Button
