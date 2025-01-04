@@ -20,29 +20,28 @@ const SignIn = () => {
     setIsLoading(true);
 
     try {
-      const signInResponse = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
-      // Handle authentication response
-      if (signInResponse.error) {
+      if (error) {
         toast({
           title: "Error signing in",
-          description: signInResponse.error.message || "Invalid email or password",
+          description: error.message,
           variant: "destructive",
         });
         return;
       }
 
-      if (signInResponse.data.user) {
+      if (data?.user) {
+        navigate("/generator");
         toast({
           title: "Welcome back!",
           description: "You've successfully signed in.",
         });
-        navigate("/generator");
       }
-    } catch (error: any) {
+    } catch {
       toast({
         title: "Error signing in",
         description: "An unexpected error occurred. Please try again.",
@@ -67,14 +66,14 @@ const SignIn = () => {
     setIsResettingPassword(true);
 
     try {
-      const resetResponse = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/update-password`,
       });
 
-      if (resetResponse.error) {
+      if (error) {
         toast({
           title: "Error",
-          description: resetResponse.error.message || "Failed to send reset password email",
+          description: error.message,
           variant: "destructive",
         });
         return;
@@ -84,7 +83,7 @@ const SignIn = () => {
         title: "Password reset email sent",
         description: "Check your email for the password reset link.",
       });
-    } catch (error: any) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to send reset password email",
