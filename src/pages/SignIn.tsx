@@ -18,34 +18,17 @@ const SignIn = () => {
     setIsLoading(true);
 
     try {
-      console.log("Attempting to sign in with email:", email.trim());
       const { error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
 
       if (error) {
-        console.error("Sign in error details:", error);
-        
-        if (error.message === "Email not confirmed") {
-          toast({
-            title: "Email not verified",
-            description: "Please check your email and verify your account before signing in.",
-            variant: "destructive",
-          });
-        } else if (error.message === "Invalid login credentials") {
-          toast({
-            title: "Invalid credentials",
-            description: "Please check your email and password and try again. If you haven't signed up yet, please create an account.",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Error signing in",
-            description: error.message,
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "Error signing in",
+          description: "Please check your credentials and try again.",
+          variant: "destructive",
+        });
         return;
       }
 
@@ -54,8 +37,7 @@ const SignIn = () => {
         description: "You've successfully signed in.",
       });
       navigate("/generator");
-    } catch (error: any) {
-      console.error("Sign in error:", error);
+    } catch (error) {
       toast({
         title: "Error signing in",
         description: "An unexpected error occurred. Please try again.",
