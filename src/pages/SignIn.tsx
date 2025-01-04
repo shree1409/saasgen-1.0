@@ -24,10 +24,16 @@ const SignIn = () => {
       });
 
       if (error) {
-        if (error.message === "Invalid login credentials") {
+        if (error.message === "Email not confirmed") {
+          toast({
+            title: "Email not verified",
+            description: "Please check your email and verify your account before signing in.",
+            variant: "destructive",
+          });
+        } else if (error.message === "Invalid login credentials") {
           toast({
             title: "Invalid credentials",
-            description: "Please check your email and password and try again.",
+            description: "Please check your email and password and try again. If you haven't signed up yet, please create an account.",
             variant: "destructive",
           });
         } else {
@@ -46,6 +52,7 @@ const SignIn = () => {
       });
       navigate("/generator");
     } catch (error: any) {
+      console.error("Sign in error:", error);
       toast({
         title: "Error signing in",
         description: "An unexpected error occurred. Please try again.",
