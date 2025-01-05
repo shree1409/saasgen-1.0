@@ -24,11 +24,7 @@ const SignIn = () => {
           description: "Check your email for the password reset link.",
         });
       }
-    });
-
-    // Add error listener for invalid credentials
-    const authListener = supabase.auth.onError((error) => {
-      if (error.message.includes('Invalid login credentials')) {
+      if (event === 'USER_ERROR') {
         toast({
           title: "Error",
           description: "Invalid email or password. Please try again.",
@@ -39,7 +35,6 @@ const SignIn = () => {
 
     return () => {
       subscription.unsubscribe();
-      authListener.data.subscription.unsubscribe();
     };
   }, [navigate, toast]);
 
