@@ -29,18 +29,28 @@ const GeneratorForm = () => {
         return;
       }
 
-      const { data: subscription } = await supabase
+      const { data: subscription, error } = await supabase
         .from('subscriptions')
         .select('*')
         .eq('user_id', session.user.id)
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error checking subscription:', error);
+        toast({
+          title: "Error checking subscription",
+          description: "Please try again later.",
+          variant: "destructive",
+        });
+        return;
+      }
 
       setHasSubscription(!!subscription);
     };
 
     checkAuth();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   const handleNext = () => {
     if (!validateStep(step, formData)) return;
@@ -74,12 +84,16 @@ const GeneratorForm = () => {
         description: "We're crafting something unique for you...",
       });
 
-      const { data: subscription } = await supabase
+      const { data: subscription, error: subscriptionError } = await supabase
         .from('subscriptions')
         .select('tier')
         .eq('user_id', session.user.id)
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
+
+      if (subscriptionError) {
+        throw subscriptionError;
+      }
 
       const { data, error } = await supabase.functions.invoke('generate-website-idea', {
         body: { ...formData, subscriptionTier: subscription?.tier || 'basic' },
