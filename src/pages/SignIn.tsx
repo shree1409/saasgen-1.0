@@ -69,7 +69,7 @@ const SignIn = () => {
               }}
               theme="light"
               providers={[]}
-              redirectTo={`${window.location.origin}/dashboard`}
+              redirectTo={window.location.origin + '/dashboard'}
               localization={{
                 variables: {
                   sign_in: {
