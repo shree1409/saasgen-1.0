@@ -25,7 +25,7 @@ const SignIn = () => {
         });
       }
       // Handle invalid credentials error
-      if (event === 'USER_ERROR') {
+      if (event === 'INVALID_CREDENTIALS') {
         toast({
           title: "Error",
           description: "Invalid email or password. Please try again.",
@@ -81,11 +81,6 @@ const SignIn = () => {
                     loading_button_label: 'Signing in...',
                     social_provider_text: 'Sign in with {{provider}}',
                     link_text: "Don't have an account? Sign up",
-                    password_recovery: {
-                      button_label: 'Forgot your password?',
-                      email_label: 'Email address',
-                      email_input_placeholder: 'Your email address',
-                    },
                   },
                 },
               }}
