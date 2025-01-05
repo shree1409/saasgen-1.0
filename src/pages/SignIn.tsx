@@ -25,7 +25,7 @@ const SignIn = () => {
           description: "You have successfully signed in.",
         });
         navigate('/dashboard');
-      } else if (event === 'USER_DELETED' || event === 'SIGNED_OUT') {
+      } else if (event === 'SIGNED_OUT') {
         navigate('/sign-in');
       }
     });
@@ -70,13 +70,6 @@ const SignIn = () => {
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/dashboard`}
-              onError={(error) => {
-                toast({
-                  title: "Error",
-                  description: error.message || "Invalid login credentials",
-                  variant: "destructive",
-                });
-              }}
               localization={{
                 variables: {
                   sign_in: {
