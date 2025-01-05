@@ -12,6 +12,7 @@ import Basic from "./pages/Basic";
 import Advanced from "./pages/Advanced";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Dashboard from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/generator" element={<Generator />} />
             <Route path="/generated-idea" element={<GeneratedIdea />} />
             <Route path="/basic" element={<Basic />} />
