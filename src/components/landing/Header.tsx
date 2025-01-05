@@ -95,7 +95,7 @@ const Header = () => {
       <div className="container px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
           <Logo />
-          <span className="font-semibold text-lg">SaasGen</span>
+          <span className="font-semibold text-lg">saasgen.dev</span>
         </div>
         <nav className="hidden md:flex items-center gap-8">
           <Button 
