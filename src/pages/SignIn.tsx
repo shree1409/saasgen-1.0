@@ -10,26 +10,13 @@ const SignIn = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
         navigate('/');
-      }
-      if (event === 'PASSWORD_RECOVERY') {
-        toast({
-          title: "Password Recovery",
-          description: "Check your email for the password reset link.",
-        });
-      }
-      if (event === 'USER_ERROR') {
-        toast({
-          title: "Error",
-          description: "Invalid email or password. Please try again.",
-          variant: "destructive",
-        });
       }
     });
 
