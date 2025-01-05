@@ -24,12 +24,19 @@ const SignIn = () => {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
         if (session) {
           navigate('/dashboard');
         }
       } catch (error) {
         console.error('Session check error:', error);
+        toast({
+          title: "Error",
+          description: "Failed to check session status",
+          variant: "destructive",
+        });
       } finally {
         setLoading(false);
       }

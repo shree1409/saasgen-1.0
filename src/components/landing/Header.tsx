@@ -17,18 +17,45 @@ const Header = () => {
   const location = useLocation();
   const { toast } = useToast();
   const [session, setSession] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+    // Initial session check
+    const checkSession = async () => {
+      try {
+        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        setSession(currentSession);
+      } catch (error) {
+        console.error('Session check error:', error);
+        toast({
+          title: "Session Error",
+          description: "Please sign in again",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      console.log('Auth event:', event);
+      setSession(currentSession);
+      
+      if (event === 'SIGNED_OUT') {
+        setSession(null);
+      } else if (event === 'SIGNED_IN') {
+        setSession(currentSession);
+      }
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [toast]);
   
   const scrollToFeatures = () => {
     if (location.pathname !== '/') {
@@ -40,13 +67,28 @@ const Header = () => {
   };
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Signed out",
-      description: "You have been signed out successfully.",
-    });
-    navigate('/');
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+      navigate('/');
+    } catch (error) {
+      console.error('Sign out error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
+
+  if (loading) {
+    return null; // Or a loading spinner if you prefer
+  }
   
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
