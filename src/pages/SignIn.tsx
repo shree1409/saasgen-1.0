@@ -1,13 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     // Check if user is already signed in
@@ -44,6 +55,35 @@ const SignIn = () => {
       subscription.unsubscribe();
     };
   }, [navigate, toast]);
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Password Reset Email Sent",
+        description: "Check your email for the password reset link.",
+      });
+      setResetPasswordOpen(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
@@ -95,26 +135,7 @@ const SignIn = () => {
             />
             <div className="mt-4 text-center">
               <button
-                onClick={async () => {
-                  const { data, error } = await supabase.auth.resetPasswordForEmail(
-                    '', // This will be filled by the modal
-                    {
-                      redirectTo: `${window.location.origin}/reset-password`,
-                    }
-                  );
-                  if (error) {
-                    toast({
-                      title: "Error",
-                      description: error.message,
-                      variant: "destructive",
-                    });
-                  } else {
-                    toast({
-                      title: "Password Reset",
-                      description: "Check your email for the reset link.",
-                    });
-                  }
-                }}
+                onClick={() => setResetPasswordOpen(true)}
                 className="text-sm text-primary hover:underline"
               >
                 Forgot your password?
@@ -123,6 +144,28 @@ const SignIn = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={resetPasswordOpen} onOpenChange={setResetPasswordOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reset Password</DialogTitle>
+            <DialogDescription>
+              Enter your email address and we'll send you a link to reset your password.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button onClick={handleResetPassword} className="w-full">
+              Send Reset Link
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
