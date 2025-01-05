@@ -50,11 +50,26 @@ const SignIn = () => {
                   container: 'w-full',
                   button: 'w-full px-4 py-2 rounded-lg',
                   input: 'rounded-lg px-4 py-2 bg-white/50',
+                  label: 'text-sm font-medium text-gray-700',
+                  message: 'text-sm text-red-600',
                 },
               }}
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/`}
+              view="sign_in"
+              localization={{
+                variables: {
+                  sign_in: {
+                    email_label: 'Email address',
+                    password_label: 'Password',
+                    button_label: 'Sign in',
+                    loading_button_label: 'Signing in...',
+                    social_provider_text: 'Sign in with {{provider}}',
+                    link_text: "Don't have an account? Sign up",
+                  },
+                },
+              }}
             />
           </div>
         </div>
