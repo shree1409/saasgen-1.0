@@ -29,8 +29,12 @@ const SignIn = () => {
         navigate('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         navigate('/sign-in');
+      } else if (event === 'PASSWORD_RECOVERY') {
+        toast({
+          title: "Password Recovery",
+          description: "Check your email for the password reset link.",
+        });
       } else if (event === 'USER_UPDATED') {
-        // Handle user updates if needed
         console.log('User updated:', session);
       }
     });
@@ -89,6 +93,33 @@ const SignIn = () => {
                 },
               }}
             />
+            <div className="mt-4 text-center">
+              <button
+                onClick={async () => {
+                  const { data, error } = await supabase.auth.resetPasswordForEmail(
+                    '', // This will be filled by the modal
+                    {
+                      redirectTo: `${window.location.origin}/reset-password`,
+                    }
+                  );
+                  if (error) {
+                    toast({
+                      title: "Error",
+                      description: error.message,
+                      variant: "destructive",
+                    });
+                  } else {
+                    toast({
+                      title: "Password Reset",
+                      description: "Check your email for the reset link.",
+                    });
+                  }
+                }}
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot your password?
+              </button>
+            </div>
           </div>
         </div>
       </div>
