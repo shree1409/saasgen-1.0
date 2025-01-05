@@ -19,19 +19,26 @@ const SignIn = () => {
   const { toast } = useToast();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is already signed in
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate('/dashboard');
+    const checkSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          navigate('/dashboard');
+        }
+      } catch (error) {
+        console.error('Session check error:', error);
+      } finally {
+        setLoading(false);
       }
     };
-    checkUser();
 
-    // Listen for auth state changes
+    checkSession();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth event:', event);
       if (event === 'SIGNED_IN' && session) {
         toast({
           title: "Welcome back!",
@@ -45,12 +52,9 @@ const SignIn = () => {
           title: "Password Recovery",
           description: "Check your email for the password reset link.",
         });
-      } else if (event === 'USER_UPDATED') {
-        console.log('User updated:', session);
       }
     });
 
-    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };
@@ -66,24 +70,35 @@ const SignIn = () => {
       return;
     }
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
       });
-    } else {
+
+      if (error) throw error;
+
       toast({
         title: "Password Reset Email Sent",
         description: "Check your email for the password reset link.",
       });
       setResetPasswordOpen(false);
+    } catch (error: any) {
+      console.error('Reset password error:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send reset password email",
+        variant: "destructive",
+      });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20 flex items-center justify-center">
+        <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
@@ -120,17 +135,13 @@ const SignIn = () => {
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/dashboard`}
-              localization={{
-                variables: {
-                  sign_in: {
-                    email_label: 'Email address',
-                    password_label: 'Password',
-                    button_label: 'Sign in',
-                    loading_button_label: 'Signing in...',
-                    social_provider_text: 'Sign in with {{provider}}',
-                    link_text: "Don't have an account? Sign up",
-                  },
-                },
+              onError={(error) => {
+                console.error('Auth error:', error);
+                toast({
+                  title: "Authentication Error",
+                  description: error.message,
+                  variant: "destructive",
+                });
               }}
             />
             <div className="mt-4 text-center">
