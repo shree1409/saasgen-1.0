@@ -81,14 +81,20 @@ const Pricing = () => {
       <Header />
       <div className="container px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold tracking-tight">Simple, transparent pricing</h1>
-          <p className="text-lg text-muted-foreground mt-4">Choose the plan that's right for you</p>
+          <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+            Simple, transparent pricing
+          </h1>
+          <p className="text-lg text-muted-foreground mt-4">
+            Choose the plan that's right for you
+          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {prices?.map((price) => (
-            <Card key={price.id} className="flex flex-col">
+            <Card key={price.id} className="flex flex-col hover:scale-105 transition-transform duration-300 bg-white/80 backdrop-blur-lg border-purple-100">
               <CardHeader>
-                <CardTitle className="capitalize">{price.tier}</CardTitle>
+                <CardTitle className="capitalize bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                  {price.tier}
+                </CardTitle>
                 <CardDescription>
                   {getDescription(price)}
                 </CardDescription>
@@ -101,8 +107,7 @@ const Pricing = () => {
               </CardContent>
               <CardFooter>
                 <Button 
-                  className="w-full text-white" 
-                  variant="default"
+                  className="w-full text-white bg-gradient-to-r from-primary to-purple-600 hover:from-purple-600 hover:to-primary transition-all duration-300" 
                   onClick={() => handleSubscribe(price.stripe_price_id)}
                 >
                   Subscribe

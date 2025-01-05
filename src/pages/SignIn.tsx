@@ -24,16 +24,40 @@ const SignIn = () => {
   }, [navigate, toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-center mb-6">Welcome Back</h1>
-        <Auth
-          supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          theme="light"
-          providers={[]}
-          redirectTo={`${window.location.origin}/`}
-        />
+    <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+      <div className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-screen">
+        <div className="w-full max-w-md">
+          <div className="bg-white/80 backdrop-blur-lg rounded-lg shadow-xl p-8 animate-fadeIn">
+            <h1 className="text-3xl font-bold text-center mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              Welcome Back
+            </h1>
+            <p className="text-muted-foreground text-center mb-8">
+              Sign in to your account to continue
+            </p>
+            <Auth
+              supabaseClient={supabase}
+              appearance={{
+                theme: ThemeSupa,
+                variables: {
+                  default: {
+                    colors: {
+                      brand: 'rgb(147, 51, 234)',
+                      brandAccent: 'rgb(126, 34, 206)',
+                    },
+                  },
+                },
+                className: {
+                  container: 'w-full',
+                  button: 'w-full px-4 py-2 rounded-lg',
+                  input: 'rounded-lg px-4 py-2 bg-white/50',
+                },
+              }}
+              theme="light"
+              providers={[]}
+              redirectTo={`${window.location.origin}/`}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
