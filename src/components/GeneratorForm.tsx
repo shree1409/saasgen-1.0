@@ -53,7 +53,14 @@ const GeneratorForm = () => {
   }, [navigate, toast]);
 
   const handleNext = () => {
-    if (!validateStep(step, formData)) return;
+    if (!validateStep(step, formData)) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (step < 5) setStep(step + 1);
   };
 
@@ -100,6 +107,26 @@ const GeneratorForm = () => {
       });
 
       if (error) throw error;
+
+      // Store the generated idea in the database
+      const { error: insertError } = await supabase
+        .from('generated_ideas')
+        .insert({
+          user_id: session.user.id,
+          title: data.idea.websiteName,
+          description: data.idea.description,
+          features: data.idea.keyFeatures,
+          tech_stack: data.idea.techStack,
+          timeline_breakdown: data.idea.timelineBreakdown,
+          market_potential: data.idea.marketPotential,
+          monetization_strategies: data.idea.monetizationStrategy,
+          subscription_tier: subscription?.tier || 'basic'
+        });
+
+      if (insertError) {
+        console.error('Error storing idea:', insertError);
+        throw new Error('Failed to store generated idea');
+      }
 
       // Redirect based on subscription tier
       if (subscription?.tier === 'basic') {

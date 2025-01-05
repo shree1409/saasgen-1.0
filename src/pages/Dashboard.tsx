@@ -13,6 +13,7 @@ interface GeneratedIdea {
   description: string;
   created_at: string;
   tech_stack: string;
+  subscription_tier: string;
 }
 
 const Dashboard = () => {
