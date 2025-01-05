@@ -10,6 +10,7 @@ const SignIn = () => {
   const { toast } = useToast();
 
   useEffect(() => {
+    // Check if user is already signed in
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
@@ -18,6 +19,7 @@ const SignIn = () => {
     };
     checkUser();
 
+    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
         toast({
@@ -27,9 +29,13 @@ const SignIn = () => {
         navigate('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         navigate('/sign-in');
+      } else if (event === 'USER_UPDATED') {
+        // Handle user updates if needed
+        console.log('User updated:', session);
       }
     });
 
+    // Cleanup subscription
     return () => {
       subscription.unsubscribe();
     };
@@ -69,7 +75,7 @@ const SignIn = () => {
               }}
               theme="light"
               providers={[]}
-              redirectTo={window.location.origin + '/dashboard'}
+              redirectTo={`${window.location.origin}/dashboard`}
               localization={{
                 variables: {
                   sign_in: {
