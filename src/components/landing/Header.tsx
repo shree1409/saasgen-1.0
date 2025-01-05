@@ -97,8 +97,8 @@ const Header = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    Profile
+                  <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                    Dashboard
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleSignOut}>
                     Sign Out

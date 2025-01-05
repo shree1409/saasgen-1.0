@@ -79,7 +79,6 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20 p-4 md:p-8">
       <div className="container max-w-6xl mx-auto space-y-6 md:space-y-8">
-        {/* User Info Card */}
         <Card className="bg-white/50 backdrop-blur-sm border-none shadow-lg">
           <CardContent className="flex flex-col md:flex-row md:items-center md:justify-between p-4 md:p-6 space-y-4 md:space-y-0">
             <div className="flex items-center gap-3 md:gap-4">
@@ -88,9 +87,9 @@ const Dashboard = () => {
               </div>
               <div>
                 <h2 className="text-lg md:text-xl font-semibold">Welcome back!</h2>
-                <div className="flex items-center text-sm md:text-base text-muted-foreground">
-                  <Mail className="w-4 h-4 mr-2 shrink-0" />
-                  <span className="truncate">{userEmail}</span>
+                <div className="flex items-center text-xs md:text-sm text-muted-foreground">
+                  <Mail className="w-3 h-3 md:w-4 md:h-4 mr-2 shrink-0" />
+                  <span className="truncate max-w-[200px] md:max-w-[300px]">{userEmail}</span>
                 </div>
               </div>
             </div>

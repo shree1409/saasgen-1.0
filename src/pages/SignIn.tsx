@@ -135,14 +135,6 @@ const SignIn = () => {
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/dashboard`}
-              onError={(error) => {
-                console.error('Auth error:', error);
-                toast({
-                  title: "Authentication Error",
-                  description: error.message,
-                  variant: "destructive",
-                });
-              }}
             />
             <div className="mt-4 text-center">
               <button
