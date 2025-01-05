@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -18,13 +18,15 @@ const SignIn = () => {
     };
     checkUser();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session) {
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
         navigate('/dashboard');
+      } else if (event === 'USER_DELETED' || event === 'SIGNED_OUT') {
+        navigate('/sign-in');
       }
     });
 
@@ -49,20 +51,44 @@ const SignIn = () => {
               supabaseClient={supabase}
               appearance={{
                 theme: ThemeSupa,
-                style: {
-                  button: {
-                    background: 'hsl(var(--primary))',
-                    color: 'white',
-                    borderRadius: '0.5rem',
+                variables: {
+                  default: {
+                    colors: {
+                      brand: 'rgb(147, 51, 234)',
+                      brandAccent: 'rgb(126, 34, 206)',
+                    },
                   },
-                  anchor: {
-                    color: 'hsl(var(--primary))',
-                  },
+                },
+                className: {
+                  container: 'w-full',
+                  button: 'w-full px-4 py-2 rounded-lg',
+                  input: 'rounded-lg px-4 py-2 bg-white/50',
+                  label: 'text-sm font-medium text-gray-700',
+                  message: 'text-sm text-red-600',
                 },
               }}
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/dashboard`}
+              onError={(error) => {
+                toast({
+                  title: "Error",
+                  description: error.message || "Invalid login credentials",
+                  variant: "destructive",
+                });
+              }}
+              localization={{
+                variables: {
+                  sign_in: {
+                    email_label: 'Email address',
+                    password_label: 'Password',
+                    button_label: 'Sign in',
+                    loading_button_label: 'Signing in...',
+                    social_provider_text: 'Sign in with {{provider}}',
+                    link_text: "Don't have an account? Sign up",
+                  },
+                },
+              }}
             />
           </div>
         </div>
