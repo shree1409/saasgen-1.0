@@ -10,6 +10,8 @@ import Generator from "./pages/Generator";
 import Pricing from "./pages/Pricing";
 import Basic from "./pages/Basic";
 import Advanced from "./pages/Advanced";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ const App = () => {
             <Route path="/advanced" element={<Advanced />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
