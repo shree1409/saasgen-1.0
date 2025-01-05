@@ -10,13 +10,21 @@ const SignUp = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN') {
         toast({
           title: "Welcome!",
           description: "Your account has been created successfully.",
         });
         navigate('/');
+      }
+      if (event === 'USER_UPDATED') {
+        toast({
+          title: "Error",
+          description: "This email is already registered. Please sign in instead.",
+          variant: "destructive",
+        });
+        navigate('/sign-in');
       }
     });
 
@@ -50,12 +58,26 @@ const SignUp = () => {
                   container: 'w-full',
                   button: 'w-full px-4 py-2 rounded-lg',
                   input: 'rounded-lg px-4 py-2 bg-white/50',
+                  label: 'text-sm font-medium text-gray-700',
+                  message: 'text-sm text-red-600',
                 },
               }}
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/`}
               view="sign_up"
+              localization={{
+                variables: {
+                  sign_up: {
+                    email_label: 'Email address',
+                    password_label: 'Password',
+                    button_label: 'Sign up',
+                    loading_button_label: 'Signing up...',
+                    social_provider_text: 'Sign up with {{provider}}',
+                    link_text: "Already have an account? Sign in",
+                  },
+                },
+              }}
             />
           </div>
         </div>
