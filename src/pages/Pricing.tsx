@@ -19,15 +19,23 @@ const Pricing = () => {
         .eq('active', true)
         .order('unit_amount');
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching prices:', error);
+        throw error;
+      }
       return data;
     },
   });
 
   const handleSubscribe = async (priceId: string) => {
     try {
-      const session = await supabase.auth.getSession();
-      if (!session.data.session) {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        throw sessionError;
+      }
+
+      if (!session) {
         toast({
           title: "Authentication required",
           description: "Please sign in to subscribe to a plan",
@@ -36,13 +44,23 @@ const Pricing = () => {
         return;
       }
 
+      console.log('Creating checkout session for price:', priceId);
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-        body: { priceId },
+        body: { 
+          priceId,
+          returnUrl: `${window.location.origin}/generator`
+        },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Checkout session error:', error);
+        throw error;
+      }
+
       if (data?.url) {
         window.location.href = data.url;
+      } else {
+        throw new Error('No checkout URL received');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -72,7 +90,7 @@ const Pricing = () => {
       case 'advanced':
         return "Everything in Basic plus Technical Implementation, Development Timeline and Monetization Strategy";
       default:
-        return price.description;
+        return "Generate website ideas with basic features and monetization suggestions";
     }
   };
 
@@ -101,7 +119,7 @@ const Pricing = () => {
               </CardHeader>
               <CardContent className="flex-grow">
                 <div className="text-3xl font-bold">
-                  £{(price.unit_amount / 100).toFixed(2)}
+                  ${(price.unit_amount / 100).toFixed(2)}
                   <span className="text-sm font-normal text-muted-foreground">/month</span>
                 </div>
               </CardContent>

@@ -18,50 +18,49 @@ serve(async (req) => {
   )
 
   try {
-    const { priceId } = await req.json()
+    const { priceId, returnUrl } = await req.json()
     const authHeader = req.headers.get('Authorization')!
     const token = authHeader.replace('Bearer ', '')
-    const { data } = await supabaseClient.auth.getUser(token)
-    const user = data.user
-    const email = user?.email
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser(token)
 
-    if (!email) {
-      throw new Error('No email found')
+    if (userError || !user?.email) {
+      throw new Error('Authentication required')
     }
 
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
       apiVersion: '2023-10-16',
     })
 
-    const customers = await stripe.customers.list({
-      email: email,
+    const { data: customers } = await stripe.customers.list({
+      email: user.email,
       limit: 1
     })
 
-    let customer_id = undefined
-    if (customers.data.length > 0) {
-      customer_id = customers.data[0].id
+    let customerId = undefined
+    if (customers.length > 0) {
+      customerId = customers[0].id
       // Check if already subscribed to this price
-      const subscriptions = await stripe.subscriptions.list({
-        customer: customers.data[0].id,
-        status: 'active',
+      const { data: subscriptions } = await stripe.subscriptions.list({
+        customer: customers[0].id,
         price: priceId,
+        status: 'active',
         limit: 1
       })
 
-      if (subscriptions.data.length > 0) {
+      if (subscriptions.length > 0) {
         throw new Error("You are already subscribed to this plan")
       }
     }
 
     console.log('Creating checkout session...')
     const session = await stripe.checkout.sessions.create({
-      customer: customer_id,
-      customer_email: customer_id ? undefined : email,
+      customer: customerId,
+      customer_email: customerId ? undefined : user.email,
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `${req.headers.get('origin')}/generator`,
+      success_url: returnUrl || `${req.headers.get('origin')}/generator`,
       cancel_url: `${req.headers.get('origin')}/pricing`,
+      allow_promotion_codes: true,
     })
 
     return new Response(
