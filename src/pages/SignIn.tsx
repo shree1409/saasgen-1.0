@@ -10,8 +10,18 @@ const SignIn = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') {
+    // Check if user is already signed in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate('/');
+      }
+    };
+    checkUser();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -59,18 +69,12 @@ const SignIn = () => {
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/`}
-              view="sign_in"
-              localization={{
-                variables: {
-                  sign_in: {
-                    email_label: 'Email address',
-                    password_label: 'Password',
-                    button_label: 'Sign in',
-                    loading_button_label: 'Signing in...',
-                    social_provider_text: 'Sign in with {{provider}}',
-                    link_text: "Don't have an account? Sign up",
-                  },
-                },
+              onError={(error) => {
+                toast({
+                  title: "Error",
+                  description: error.message,
+                  variant: "destructive",
+                });
               }}
             />
           </div>
