@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import KeyFeatures from "@/components/generated-idea/KeyFeatures";
 import MonetizationStrategy from "@/components/generated-idea/MonetizationStrategy";
@@ -21,36 +21,42 @@ interface GeneratedIdea {
   marketPotential: string;
 }
 
-const GeneratedIdea = () => {
+interface GeneratedIdeaProps {
+  demoData?: GeneratedIdea;
+}
+
+const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [generatedIdea] = useState(location.state?.generatedIdea as GeneratedIdea);
+  const [generatedIdea] = useState(demoData || location.state?.generatedIdea as GeneratedIdea);
   const [subscription, setSubscription] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkSubscription = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate('/sign-in');
-        return;
-      }
+    if (!demoData) {
+      const checkSubscription = async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          navigate('/sign-in');
+          return;
+        }
 
-      const { data: sub } = await supabase
-        .from('subscriptions')
-        .select('tier')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .single();
+        const { data: sub } = await supabase
+          .from('subscriptions')
+          .select('tier')
+          .eq('user_id', session.user.id)
+          .eq('is_active', true)
+          .single();
 
-      setSubscription(sub?.tier || null);
-    };
+        setSubscription(sub?.tier || null);
+      };
 
-    checkSubscription();
-  }, [navigate]);
+      checkSubscription();
+    }
+  }, [navigate, demoData]);
 
-  if (!generatedIdea) {
+  if (!generatedIdea && !demoData) {
     navigate('/');
     return null;
   }
@@ -107,8 +113,8 @@ const GeneratedIdea = () => {
       </motion.div>
     );
 
-    // Advanced content
-    if (subscription === 'advanced' || subscription === 'pro') {
+    // Show all content in demo mode
+    if (demoData || subscription === 'advanced' || subscription === 'pro') {
       sections.push(
         <motion.div key="marketing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
           <MarketingSection marketPotential={safeIdea.marketPotential} />
@@ -119,8 +125,7 @@ const GeneratedIdea = () => {
       );
     }
 
-    // Pro content
-    if (subscription === 'pro') {
+    if (demoData || subscription === 'pro') {
       sections.push(
         <motion.div key="learning" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
           <LearningResources techStack={safeIdea.techStack} />

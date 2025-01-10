@@ -1,33 +1,39 @@
 import { motion } from "framer-motion";
-import HeroTitle from "./HeroTitle";
 import HeroButton from "./HeroButton";
+import HeroTitle from "./HeroTitle";
 
-const Hero = () => {
+interface HeroProps {
+  onDemoClick: () => void;
+}
+
+const Hero = ({ onDemoClick }: HeroProps) => {
   return (
-    <div className="flex flex-col items-center justify-center mb-24 max-w-5xl mx-auto relative overflow-hidden">
-      {/* Purple light spreading effect */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(155,135,245,0.15) 0%, rgba(155,135,245,0) 70%)",
-          filter: "blur(40px)",
-          transform: "translate(-50%, -50%)",
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.3, 0.7, 0.3],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* Centered content */}
-      <div className="flex flex-col items-center space-y-6">
+    <div className="container px-4 pt-20 pb-16 md:pt-32 md:pb-24">
+      <div className="max-w-3xl mx-auto text-center">
         <HeroTitle />
-        <HeroButton />
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="mt-6 text-xl text-muted-foreground"
+        >
+          Generate unique, profitable website ideas tailored to your goals and expertise.
+          Our AI-powered platform helps you discover untapped opportunities in the digital space.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
+          <HeroButton />
+          <button
+            onClick={onDemoClick}
+            className="px-8 py-3 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+          >
+            View Demo
+          </button>
+        </motion.div>
       </div>
     </div>
   );

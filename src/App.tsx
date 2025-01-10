@@ -23,6 +23,27 @@ const queryClient = new QueryClient({
   },
 });
 
+// Sample demo data
+const demoIdea = {
+  websiteName: "EcoSwap Marketplace",
+  description: "A sustainable marketplace platform where users can trade, sell, or swap eco-friendly products and services within their local community.",
+  keyFeatures: [
+    "User-friendly product listing and search",
+    "Secure in-app messaging system",
+    "Eco-impact scoring system",
+    "Local community groups and events",
+    "Verified seller program"
+  ],
+  monetizationStrategy: [
+    "Premium listing features for sellers",
+    "Commission on successful transactions",
+    "Featured product placement opportunities"
+  ],
+  techStack: "React, Node.js, MongoDB, AWS S3, Stripe API, Socket.io, Redux",
+  timelineBreakdown: "Month 1-2: Core marketplace features and user authentication. Month 3-4: Messaging system and community features. Month 5-6: Payment integration and premium features.",
+  marketPotential: "Growing demand for sustainable products with 25% YoY market growth. Target audience includes environmentally conscious consumers aged 25-45 in urban areas."
+};
+
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -41,6 +62,10 @@ const App = () => {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
+            <Route 
+              path="/demo" 
+              element={<GeneratedIdea demoData={demoIdea} />} 
+            />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
