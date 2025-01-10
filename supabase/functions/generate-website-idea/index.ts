@@ -23,7 +23,8 @@ serve(async (req) => {
 
     console.log('Received inputs:', { noCodeKnowledge, codingKnowledge, targetMonths, revenue, niche, preferences, subscriptionTier });
 
-    const systemPrompt = `You are a website idea generator that creates unique, actionable website concepts based on user inputs. Generate ideas that are modern, profitable, and match the user's experience level and timeline. Your response must be valid JSON with this exact structure:
+    // Enhanced system prompt to ensure detailed tech stack and timeline
+    const systemPrompt = `You are a website idea generator that creates unique, actionable website concepts based on user inputs. You must ALWAYS provide detailed technical specifications and timelines, even for no-code solutions. Your response must be valid JSON with this exact structure:
     {
       "websiteName": "Name of the website",
       "description": "2-3 sentence description",
@@ -33,10 +34,17 @@ serve(async (req) => {
         "Detailed monetization strategy 2 with pricing suggestions",
         "Detailed monetization strategy 3 with market validation"
       ],
-      "techStack": "Detailed, comma-separated list of specific technologies based on user's experience level, including frontend framework, backend, database, and essential tools",
-      "timelineBreakdown": "Detailed month-by-month breakdown of development phases, including specific milestones and deliverables",
+      "techStack": "Detailed, comma-separated list of specific technologies. For no-code, list specific no-code platforms and tools. For code, list frontend, backend, database technologies.",
+      "timelineBreakdown": "Detailed week-by-week breakdown of development phases with specific milestones and deliverables. Must include at least 3 distinct phases.",
       "marketPotential": "Comprehensive market analysis with target audience, competition, and growth potential"
-    }`;
+    }
+
+    Rules:
+    1. NEVER return empty or "not specified" values
+    2. For no-code users, recommend specific no-code platforms (e.g., Webflow, Bubble, Airtable)
+    3. For developers, recommend specific frameworks and tools
+    4. Always provide a detailed timeline with concrete milestones
+    5. Timeline must match the user's target completion time`;
 
     const userPrompt = `Generate a detailed website idea with these parameters:
     - No-code experience: ${noCodeKnowledge}
@@ -47,12 +55,14 @@ serve(async (req) => {
     - Additional preferences: ${preferences || 'None specified'}
     
     Requirements:
-    1. For techStack: Provide a detailed, comma-separated list of specific technologies that match the user's experience level
-    2. For timelineBreakdown: Create a detailed month-by-month plan with specific milestones
-    3. For monetizationStrategy: Include 3 detailed strategies with implementation details and revenue projections
+    1. For techStack: ${codingKnowledge === 'None' ? 
+      'Provide specific no-code tools and platforms that match the project needs' : 
+      'Provide specific coding technologies that match the user\'s experience level'}
+    2. For timelineBreakdown: Create a detailed ${targetMonths}-month plan with weekly milestones
+    3. For monetizationStrategy: Include 3 detailed strategies with implementation details
     4. Ensure all suggestions are realistic for the user's skill level and timeline
     
-    The response should be practical and immediately actionable.`;
+    The response must be immediately actionable with no placeholder or "not specified" values.`;
 
     console.log('Sending request to OpenAI...');
 
@@ -93,10 +103,14 @@ serve(async (req) => {
     try {
       parsedIdea = JSON.parse(generatedContent);
       
+      // Validate that no fields are empty or contain "not specified"
       const requiredFields = ['websiteName', 'description', 'keyFeatures', 'monetizationStrategy', 'techStack', 'timelineBreakdown', 'marketPotential'];
       for (const field of requiredFields) {
-        if (!parsedIdea[field]) {
-          throw new Error(`Missing required field: ${field}`);
+        if (!parsedIdea[field] || 
+            parsedIdea[field] === '' || 
+            parsedIdea[field].includes('not specified') ||
+            (Array.isArray(parsedIdea[field]) && parsedIdea[field].length === 0)) {
+          throw new Error(`Invalid or empty field: ${field}`);
         }
       }
 
