@@ -8,6 +8,15 @@ interface TechnicalImplementationProps {
 
 const TechnicalImplementation = ({ techStack, timelineBreakdown }: TechnicalImplementationProps) => {
   const renderTechStackItems = () => {
+    if (!techStack) {
+      return (
+        <div className="flex items-center space-x-2 p-3 rounded-lg border bg-card/50">
+          <Code2 className="w-5 h-5 text-blue-500" />
+          <span className="text-muted-foreground">No tech stack specified</span>
+        </div>
+      );
+    }
+    
     return techStack.split(',').map((tech, index) => (
       <div key={index} className="flex items-center space-x-2 p-3 rounded-lg border bg-card/50 hover:bg-card/80 transition-colors">
         <Code2 className="w-5 h-5 text-blue-500" />
@@ -17,6 +26,15 @@ const TechnicalImplementation = ({ techStack, timelineBreakdown }: TechnicalImpl
   };
 
   const renderTimelinePhases = () => {
+    if (!timelineBreakdown) {
+      return (
+        <div className="flex items-start space-x-3 p-3">
+          <Clock className="w-5 h-5 text-purple-500 mt-1" />
+          <span className="text-muted-foreground">Timeline not specified</span>
+        </div>
+      );
+    }
+
     const phases = timelineBreakdown.split('.').filter(phase => phase.trim().length > 0);
     return phases.map((phase, index) => (
       <div key={index} className="flex items-start space-x-3 p-3">

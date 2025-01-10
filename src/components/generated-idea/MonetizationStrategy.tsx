@@ -6,6 +6,24 @@ interface MonetizationStrategyProps {
 }
 
 const MonetizationStrategy = ({ strategies }: MonetizationStrategyProps) => {
+  if (!strategies || strategies.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <DollarSign className="w-6 h-6 text-green-500" />
+            Monetization Strategy
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center p-6 border rounded-lg bg-card/50">
+            <span className="text-muted-foreground">No monetization strategies specified</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
