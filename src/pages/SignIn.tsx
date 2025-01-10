@@ -13,6 +13,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AuthError } from "@supabase/supabase-js";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -20,6 +22,18 @@ const SignIn = () => {
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const getErrorMessage = (error: AuthError) => {
+    switch (error.message) {
+      case "Invalid login credentials":
+        return "Invalid email or password. Please check your credentials and try again.";
+      case "Email not confirmed":
+        return "Please verify your email address before signing in.";
+      default:
+        return error.message;
+    }
+  };
 
   useEffect(() => {
     const checkSession = async () => {
@@ -47,6 +61,7 @@ const SignIn = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth event:', event);
       if (event === 'SIGNED_IN' && session) {
+        setErrorMessage(""); // Clear any error messages on successful sign in
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -59,6 +74,11 @@ const SignIn = () => {
           title: "Password Recovery",
           description: "Check your email for the password reset link.",
         });
+      } else if (event === 'USER_UPDATED') {
+        const { error } = await supabase.auth.getSession();
+        if (error) {
+          setErrorMessage(getErrorMessage(error));
+        }
       }
     });
 
@@ -117,6 +137,12 @@ const SignIn = () => {
               Sign in to your account to continue
             </p>
           </div>
+
+          {errorMessage && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{errorMessage}</AlertDescription>
+            </Alert>
+          )}
 
           <div className="bg-card rounded-lg shadow-lg p-6">
             <Auth
