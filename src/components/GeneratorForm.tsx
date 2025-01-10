@@ -11,7 +11,8 @@ import { useEffect, useState } from "react";
 const GeneratorForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [hasSubscription, setHasSubscription] = useState(false);
+  // For preview mode, we'll assume user has a basic subscription
+  const [hasSubscription, setHasSubscription] = useState(true);
   const {
     step,
     setStep,
@@ -29,24 +30,8 @@ const GeneratorForm = () => {
         return;
       }
 
-      const { data: subscription, error } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .maybeSingle();
-
-      if (error) {
-        console.error('Error checking subscription:', error);
-        toast({
-          title: "Error checking subscription",
-          description: "Please try again later.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setHasSubscription(!!subscription);
+      // For preview mode, we'll skip the actual subscription check
+      setHasSubscription(true);
     };
 
     checkAuth();
@@ -76,31 +61,14 @@ const GeneratorForm = () => {
         return;
       }
 
-      if (!hasSubscription) {
-        navigate('/pricing');
-        toast({
-          title: "Subscription required",
-          description: "Please subscribe to generate website ideas.",
-        });
-        return;
-      }
-
       setIsGenerating(true);
       toast({
         title: "Generating your website idea",
         description: "We're crafting something unique for you...",
       });
 
-      const { data: subscription, error: subscriptionError } = await supabase
-        .from('subscriptions')
-        .select('tier')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .maybeSingle();
-
-      if (subscriptionError) {
-        throw subscriptionError;
-      }
+      // For preview mode, we'll simulate a basic subscription
+      const subscription = { tier: 'basic' };
 
       const { data, error } = await supabase.functions.invoke('generate-website-idea', {
         body: { ...formData, subscriptionTier: subscription?.tier || 'basic' },
@@ -120,7 +88,7 @@ const GeneratorForm = () => {
           timeline_breakdown: data.idea.timelineBreakdown,
           market_potential: data.idea.marketPotential,
           monetization_strategies: data.idea.monetizationStrategy,
-          subscription_tier: subscription?.tier || 'basic'
+          subscription_tier: 'basic'
         });
 
       if (insertError) {
@@ -128,14 +96,8 @@ const GeneratorForm = () => {
         throw new Error('Failed to store generated idea');
       }
 
-      // Redirect based on subscription tier
-      if (subscription?.tier === 'basic') {
-        navigate('/basic', { state: { generatedIdea: data.idea } });
-      } else if (subscription?.tier === 'advanced') {
-        navigate('/advanced', { state: { generatedIdea: data.idea } });
-      } else {
-        navigate('/generated-idea', { state: { generatedIdea: data.idea } });
-      }
+      // For preview mode, always navigate to basic view
+      navigate('/basic', { state: { generatedIdea: data.idea } });
       
       toast({
         title: "Idea generated successfully!",
