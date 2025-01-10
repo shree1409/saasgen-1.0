@@ -1,41 +1,49 @@
 import { motion } from "framer-motion";
-import HeroButton from "./HeroButton";
 import HeroTitle from "./HeroTitle";
+import HeroButton from "./HeroButton";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface HeroProps {
   onDemoClick: () => void;
 }
 
 const Hero = ({ onDemoClick }: HeroProps) => {
+  const navigate = useNavigate();
+
   return (
-    <div className="container px-4 pt-20 pb-16 md:pt-32 md:pb-24">
-      <div className="max-w-3xl mx-auto text-center">
-        <HeroTitle />
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mt-6 text-xl text-muted-foreground"
-        >
-          Generate unique, profitable website ideas tailored to your goals and expertise.
-          Our AI-powered platform helps you discover untapped opportunities in the digital space.
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <HeroButton />
-          <button
-            onClick={onDemoClick}
-            className="px-8 py-3 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+    <section className="py-20 md:py-32">
+      <div className="container px-4 md:px-6">
+        <div className="flex flex-col items-center space-y-8 text-center">
+          <HeroTitle />
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400"
           >
-            View Demo
-          </button>
-        </motion.div>
+            Generate unique website ideas tailored to your goals and preferences. Get detailed insights, technical recommendations, and monetization strategies.
+          </motion.p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <HeroButton />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <Button 
+                variant="outline"
+                size="lg" 
+                className="rounded-full"
+                onClick={() => navigate('/demo')}
+              >
+                View Demo
+              </Button>
+            </motion.div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
