@@ -30,6 +30,16 @@ const GeneratedIdea = () => {
     return null;
   }
 
+  // Ensure arrays have default values if undefined
+  const safeIdea = {
+    ...generatedIdea,
+    keyFeatures: generatedIdea.keyFeatures || [],
+    monetizationStrategy: generatedIdea.monetizationStrategy || [],
+    techStack: generatedIdea.techStack || '',
+    timelineBreakdown: generatedIdea.timelineBreakdown || '',
+    marketPotential: generatedIdea.marketPotential || '',
+  };
+
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -74,8 +84,8 @@ const GeneratedIdea = () => {
       >
         <div className="glass-panel rounded-2xl p-8 space-y-8">
           <IdeaTitle 
-            websiteName={generatedIdea.websiteName}
-            description={generatedIdea.description}
+            websiteName={safeIdea.websiteName}
+            description={safeIdea.description}
           />
 
           <div className="grid gap-8">
@@ -84,7 +94,7 @@ const GeneratedIdea = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <KeyFeatures features={generatedIdea.keyFeatures} />
+              <KeyFeatures features={safeIdea.keyFeatures} />
             </motion.div>
 
             <motion.div
@@ -92,7 +102,7 @@ const GeneratedIdea = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <MonetizationStrategy strategies={generatedIdea.monetizationStrategy} />
+              <MonetizationStrategy strategies={safeIdea.monetizationStrategy} />
             </motion.div>
 
             <motion.div
@@ -101,8 +111,8 @@ const GeneratedIdea = () => {
               transition={{ delay: 0.4 }}
             >
               <TechnicalImplementation 
-                techStack={generatedIdea.techStack}
-                timelineBreakdown={generatedIdea.timelineBreakdown}
+                techStack={safeIdea.techStack}
+                timelineBreakdown={safeIdea.timelineBreakdown}
               />
             </motion.div>
 
@@ -111,7 +121,7 @@ const GeneratedIdea = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <MarketingSection marketPotential={generatedIdea.marketPotential} />
+              <MarketingSection marketPotential={safeIdea.marketPotential} />
             </motion.div>
 
             <motion.div
@@ -119,7 +129,7 @@ const GeneratedIdea = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
             >
-              <LearningResources techStack={generatedIdea.techStack} />
+              <LearningResources techStack={safeIdea.techStack} />
             </motion.div>
           </div>
         </div>
