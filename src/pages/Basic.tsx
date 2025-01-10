@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import KeyFeatures from "@/components/generated-idea/KeyFeatures";
-import MonetizationStrategy from "@/components/generated-idea/MonetizationStrategy";
+import TechnicalImplementation from "@/components/generated-idea/TechnicalImplementation";
 import { useToast } from "@/components/ui/use-toast";
 
 const Basic = () => {
@@ -59,7 +59,10 @@ const Basic = () => {
         </div>
         
         <KeyFeatures features={generatedIdea.keyFeatures} />
-        <MonetizationStrategy strategies={generatedIdea.monetizationStrategy} />
+        <TechnicalImplementation 
+          techStack={generatedIdea.techStack} 
+          timelineBreakdown={generatedIdea.timelineBreakdown} 
+        />
       </div>
     </div>
   );

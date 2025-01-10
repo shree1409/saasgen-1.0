@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import KeyFeatures from "@/components/generated-idea/KeyFeatures";
 import MonetizationStrategy from "@/components/generated-idea/MonetizationStrategy";
 import TechnicalImplementation from "@/components/generated-idea/TechnicalImplementation";
@@ -23,7 +25,30 @@ const GeneratedIdea = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const generatedIdea = location.state?.generatedIdea as GeneratedIdea;
+  const [generatedIdea] = useState(location.state?.generatedIdea as GeneratedIdea);
+  const [subscription, setSubscription] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkSubscription = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate('/sign-in');
+        return;
+      }
+
+      const { data: sub } = await supabase
+        .from('subscriptions')
+        .select('tier')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      setSubscription(sub?.tier || null);
+    };
+
+    checkSubscription();
+  }, [navigate]);
 
   if (!generatedIdea) {
     navigate('/');
@@ -69,6 +94,43 @@ const GeneratedIdea = () => {
     document.body.removeChild(element);
   };
 
+  const renderContent = () => {
+    const sections = [];
+
+    // Basic content (available to all)
+    sections.push(
+      <motion.div key="basic" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+        <KeyFeatures features={safeIdea.keyFeatures} />
+      </motion.div>,
+      <motion.div key="technical" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+        <TechnicalImplementation techStack={safeIdea.techStack} timelineBreakdown={safeIdea.timelineBreakdown} />
+      </motion.div>
+    );
+
+    // Advanced content
+    if (subscription === 'advanced' || subscription === 'pro') {
+      sections.push(
+        <motion.div key="marketing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+          <MarketingSection marketPotential={safeIdea.marketPotential} />
+        </motion.div>,
+        <motion.div key="monetization" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+          <MonetizationStrategy strategies={safeIdea.monetizationStrategy} />
+        </motion.div>
+      );
+    }
+
+    // Pro content
+    if (subscription === 'pro') {
+      sections.push(
+        <motion.div key="learning" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+          <LearningResources techStack={safeIdea.techStack} />
+        </motion.div>
+      );
+    }
+
+    return sections;
+  };
+
   return (
     <div className="container px-4 py-8 max-w-6xl">
       <PageHeader 
@@ -89,48 +151,7 @@ const GeneratedIdea = () => {
           />
 
           <div className="grid gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <KeyFeatures features={safeIdea.keyFeatures} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <MonetizationStrategy strategies={safeIdea.monetizationStrategy} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <TechnicalImplementation 
-                techStack={safeIdea.techStack}
-                timelineBreakdown={safeIdea.timelineBreakdown}
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <MarketingSection marketPotential={safeIdea.marketPotential} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <LearningResources techStack={safeIdea.techStack} />
-            </motion.div>
+            {renderContent()}
           </div>
         </div>
       </motion.div>

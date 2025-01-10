@@ -61,12 +61,12 @@ const Advanced = () => {
         </div>
         
         <KeyFeatures features={generatedIdea.keyFeatures} />
-        <MonetizationStrategy strategies={generatedIdea.monetizationStrategy} />
         <TechnicalImplementation 
           techStack={generatedIdea.techStack} 
           timelineBreakdown={generatedIdea.timelineBreakdown} 
         />
         <MarketingSection marketPotential={generatedIdea.marketPotential} />
+        <MonetizationStrategy strategies={generatedIdea.monetizationStrategy} />
       </div>
     </div>
   );
