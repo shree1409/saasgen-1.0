@@ -28,25 +28,31 @@ serve(async (req) => {
       "websiteName": "Name of the website",
       "description": "2-3 sentence description",
       "keyFeatures": ["feature1", "feature2", "feature3"],
-      "monetizationStrategy": ["strategy1", "strategy2"],
-      "techStack": "Recommended technology stack based on user's experience",
-      "timelineBreakdown": "Month-by-month breakdown of development",
-      "marketPotential": "Brief market analysis"
+      "monetizationStrategy": [
+        "Detailed monetization strategy 1 with implementation approach",
+        "Detailed monetization strategy 2 with pricing suggestions",
+        "Detailed monetization strategy 3 with market validation"
+      ],
+      "techStack": "Detailed, comma-separated list of specific technologies based on user's experience level, including frontend framework, backend, database, and essential tools",
+      "timelineBreakdown": "Detailed month-by-month breakdown of development phases, including specific milestones and deliverables",
+      "marketPotential": "Comprehensive market analysis with target audience, competition, and growth potential"
     }`;
 
-    const userPrompt = `Generate a website idea with these parameters:
+    const userPrompt = `Generate a detailed website idea with these parameters:
     - No-code experience: ${noCodeKnowledge}
     - Coding experience: ${codingKnowledge}
     - Timeline: ${targetMonths} months
     - Target monthly revenue: $${revenue}
     - Preferred niche: ${niche || 'Open to suggestions'}
     - Additional preferences: ${preferences || 'None specified'}
-    - Subscription tier: ${subscriptionTier}
     
-    Consider the user's experience level when suggesting the tech stack and timeline. The idea should be realistic for their skills and timeline.
-    ${subscriptionTier === 'basic' ? 'Focus on basic features and monetization strategies.' : ''}
-    ${subscriptionTier === 'advanced' ? 'Include detailed technical implementation and development timeline.' : ''}
-    ${subscriptionTier === 'pro' ? 'Include comprehensive market analysis and detailed technical implementation.' : ''}`;
+    Requirements:
+    1. For techStack: Provide a detailed, comma-separated list of specific technologies that match the user's experience level
+    2. For timelineBreakdown: Create a detailed month-by-month plan with specific milestones
+    3. For monetizationStrategy: Include 3 detailed strategies with implementation details and revenue projections
+    4. Ensure all suggestions are realistic for the user's skill level and timeline
+    
+    The response should be practical and immediately actionable.`;
 
     console.log('Sending request to OpenAI...');
 
@@ -57,7 +63,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt }
