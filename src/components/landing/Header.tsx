@@ -18,14 +18,27 @@ const Header = () => {
   const { toast } = useToast();
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
   
   useEffect(() => {
-    // Initial session check
     const checkSession = async () => {
       try {
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         if (error) throw error;
         setSession(currentSession);
+
+        if (currentSession) {
+          // Check for active subscription
+          const { data: subscriptions, error: subError } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', currentSession.user.id)
+            .eq('is_active', true)
+            .single();
+
+          if (subError) throw subError;
+          setHasActiveSubscription(!!subscriptions);
+        }
       } catch (error) {
         console.error('Session check error:', error);
         toast({
@@ -40,15 +53,24 @@ const Header = () => {
 
     checkSession();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
       console.log('Auth event:', event);
       setSession(currentSession);
       
       if (event === 'SIGNED_OUT') {
         setSession(null);
-      } else if (event === 'SIGNED_IN') {
+        setHasActiveSubscription(false);
+      } else if (event === 'SIGNED_IN' && currentSession) {
         setSession(currentSession);
+        // Check subscription status on sign in
+        const { data: subscriptions } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', currentSession.user.id)
+          .eq('is_active', true)
+          .single();
+        
+        setHasActiveSubscription(!!subscriptions);
       }
     });
 
@@ -87,12 +109,17 @@ const Header = () => {
   };
 
   const handleGenerateIdea = () => {
-    // In preview mode, skip pricing and go directly to generator
-    if (process.env.NODE_ENV === 'development') {
-      navigate('/generator');
+    if (session) {
+      if (hasActiveSubscription) {
+        // If user has an active subscription, go directly to generator
+        navigate('/generator');
+      } else {
+        // If no active subscription, show pricing page
+        navigate('/pricing');
+      }
     } else {
-      // In production, maintain normal flow through pricing
-      navigate('/pricing');
+      // If not logged in, redirect to sign in
+      navigate('/sign-in');
     }
   };
 
@@ -122,13 +149,15 @@ const Header = () => {
           >
             How it Works
           </Button>
-          <Button 
-            variant="ghost"
-            onClick={() => navigate('/pricing')}
-            className="text-sm text-muted-foreground hover:text-primary"
-          >
-            Pricing
-          </Button>
+          {!session || !hasActiveSubscription ? (
+            <Button 
+              variant="ghost"
+              onClick={() => navigate('/pricing')}
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              Pricing
+            </Button>
+          ) : null}
         </nav>
         <div className="flex items-center gap-4">
           {session ? (
