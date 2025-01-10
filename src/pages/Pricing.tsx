@@ -23,17 +23,17 @@ const Pricing = () => {
         if (session?.user) {
           console.log('Checking subscription for user:', session.user.email);
           
-          const { data: subscription, error: subError } = await supabase
+          const { data: subscriptions, error: subError } = await supabase
             .from('subscriptions')
             .select('*')
             .eq('user_id', session.user.id)
-            .eq('is_active', true)
-            .maybeSingle();
+            .eq('is_active', true);
 
           if (subError) throw subError;
 
-          if (subscription) {
-            console.log('Active subscription found:', subscription);
+          // Check if there are any active subscriptions
+          if (subscriptions && subscriptions.length > 0) {
+            console.log('Active subscription found:', subscriptions[0]);
             toast({
               title: "Active Subscription",
               description: "Redirecting to generator...",
