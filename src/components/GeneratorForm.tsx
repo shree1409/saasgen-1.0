@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import StepIndicator from "./StepIndicator";
 import FormButtons from "./form/FormButtons";
 import FormStepContent from "./form/FormStepContent";
@@ -31,7 +31,22 @@ const GeneratorForm = () => {
         navigate('/sign-in');
         return;
       }
-      setHasSubscription(true);
+
+      // Check for active subscription
+      const { data: subscription, error: subError } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (subError) {
+        console.error('Error checking subscription:', subError);
+        setHasSubscription(false);
+        return;
+      }
+
+      setHasSubscription(!!subscription);
     };
 
     checkAuth();
@@ -50,36 +65,55 @@ const GeneratorForm = () => {
   };
 
   const handleBack = () => {
-    setError(null); // Clear any existing errors when going back
+    setError(null);
     if (step > 1) setStep(step - 1);
   };
 
   const handleSubmit = async () => {
     try {
-      setError(null); // Clear any existing errors
+      setError(null);
+      setIsGenerating(true);
+
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate('/sign-in');
         return;
       }
 
-      setIsGenerating(true);
+      // Get user's subscription tier
+      const { data: subscription, error: subError } = await supabase
+        .from('subscriptions')
+        .select('tier')
+        .eq('user_id', session.user.id)
+        .eq('is_active', true)
+        .single();
+
+      if (subError) {
+        throw new Error('Failed to verify subscription status');
+      }
+
       toast({
         title: "Generating your website idea",
         description: "We're crafting something unique for you...",
       });
 
       const { data, error: generateError } = await supabase.functions.invoke('generate-website-idea', {
-        body: { ...formData, subscriptionTier: 'basic' },
+        body: { 
+          ...formData,
+          subscriptionTier: subscription?.tier || 'basic'
+        },
       });
 
-      if (generateError) throw generateError;
-
-      if (!data || !data.idea) {
-        throw new Error('Failed to generate idea - invalid response format');
+      if (generateError) {
+        console.error('Generation error:', generateError);
+        throw new Error('Failed to generate idea. Please try again.');
       }
 
-      // Store the generated idea in the database
+      if (!data || !data.idea) {
+        throw new Error('Invalid response format from idea generator');
+      }
+
+      // Store the generated idea
       const { error: insertError } = await supabase
         .from('generated_ideas')
         .insert({
@@ -91,27 +125,28 @@ const GeneratorForm = () => {
           timeline_breakdown: data.idea.timelineBreakdown,
           market_potential: data.idea.marketPotential,
           monetization_strategies: data.idea.monetizationStrategy,
-          subscription_tier: 'basic'
+          subscription_tier: subscription?.tier || 'basic'
         });
 
       if (insertError) {
         console.error('Error storing idea:', insertError);
-        throw new Error('Failed to store generated idea');
+        throw new Error('Failed to save your generated idea');
       }
 
-      navigate('/basic', { state: { generatedIdea: data.idea } });
+      // Navigate based on subscription tier
+      const tier = subscription?.tier || 'basic';
+      navigate(`/${tier}`, { state: { generatedIdea: data.idea } });
       
       toast({
-        title: "Idea generated successfully!",
-        description: "Here's your personalized website concept.",
+        title: "Success!",
+        description: "Your website idea has been generated.",
       });
     } catch (error) {
-      console.error('Error generating idea:', error);
-      setError('Unable to generate idea. Please try again later.');
-      setIsGenerating(false);
+      console.error('Error in handleSubmit:', error);
+      setError(error.message || 'An unexpected error occurred. Please try again.');
       toast({
-        title: "Error generating idea",
-        description: "Please try again later.",
+        title: "Error",
+        description: error.message || "Failed to generate idea. Please try again.",
         variant: "destructive",
       });
     } finally {
