@@ -23,13 +23,6 @@ const Pricing = () => {
         if (session?.user) {
           console.log('Checking subscription for user:', session.user.email);
           
-          // Special case for the specific email - redirect directly to generator
-          if (session.user.email === 'pawarshreeyansh619@gmail.com') {
-            console.log('Special user detected, redirecting to generator');
-            navigate('/generator');
-            return;
-          }
-
           // Check for active subscriptions
           const { data: subscriptions, error: subError } = await supabase
             .from('subscriptions')
