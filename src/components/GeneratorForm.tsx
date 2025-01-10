@@ -26,27 +26,45 @@ const GeneratorForm = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/sign-in');
-        return;
-      }
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          navigate('/sign-in');
+          return;
+        }
 
-      // Check for active subscription
-      const { data: subscription, error: subError } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', session.user.id)
-        .eq('is_active', true)
-        .single();
+        console.log('Checking subscription for user:', session.user.email);
 
-      if (subError) {
-        console.error('Error checking subscription:', subError);
+        // Check for active subscription
+        const { data: subscription, error: subError } = await supabase
+          .from('subscriptions')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (subError) {
+          console.error('Error checking subscription:', subError);
+          setError('Failed to verify subscription status. Please try again.');
+          setHasSubscription(false);
+          return;
+        }
+
+        if (!subscription) {
+          console.log('No active subscription found');
+          setHasSubscription(false);
+          navigate('/pricing');
+          return;
+        }
+
+        console.log('Active subscription found:', subscription);
+        setHasSubscription(true);
+        setError(null);
+      } catch (error) {
+        console.error('Error in checkAuth:', error);
+        setError('An unexpected error occurred. Please try again.');
         setHasSubscription(false);
-        return;
       }
-
-      setHasSubscription(!!subscription);
     };
 
     checkAuth();
@@ -86,11 +104,20 @@ const GeneratorForm = () => {
         .select('tier')
         .eq('user_id', session.user.id)
         .eq('is_active', true)
-        .single();
+        .maybeSingle();
 
       if (subError) {
+        console.error('Subscription verification error:', subError);
         throw new Error('Failed to verify subscription status');
       }
+
+      if (!subscription) {
+        console.error('No active subscription found');
+        navigate('/pricing');
+        return;
+      }
+
+      console.log('Generating idea with subscription tier:', subscription.tier);
 
       toast({
         title: "Generating your website idea",
@@ -100,7 +127,7 @@ const GeneratorForm = () => {
       const { data, error: generateError } = await supabase.functions.invoke('generate-website-idea', {
         body: { 
           ...formData,
-          subscriptionTier: subscription?.tier || 'basic'
+          subscriptionTier: subscription.tier
         },
       });
 
@@ -125,7 +152,7 @@ const GeneratorForm = () => {
           timeline_breakdown: data.idea.timelineBreakdown,
           market_potential: data.idea.marketPotential,
           monetization_strategies: data.idea.monetizationStrategy,
-          subscription_tier: subscription?.tier || 'basic'
+          subscription_tier: subscription.tier
         });
 
       if (insertError) {
@@ -133,9 +160,7 @@ const GeneratorForm = () => {
         throw new Error('Failed to save your generated idea');
       }
 
-      // Navigate based on subscription tier
-      const tier = subscription?.tier || 'basic';
-      navigate(`/${tier}`, { state: { generatedIdea: data.idea } });
+      navigate(`/${subscription.tier}`, { state: { generatedIdea: data.idea } });
       
       toast({
         title: "Success!",
