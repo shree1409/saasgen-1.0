@@ -86,8 +86,18 @@ const Header = () => {
     }
   };
 
+  const handleGenerateIdea = () => {
+    // In preview mode, skip pricing and go directly to generator
+    if (process.env.NODE_ENV === 'development') {
+      navigate('/generator');
+    } else {
+      // In production, maintain normal flow through pricing
+      navigate('/pricing');
+    }
+  };
+
   if (loading) {
-    return null; // Or a loading spinner if you prefer
+    return null;
   }
   
   return (
@@ -127,7 +137,7 @@ const Header = () => {
                 variant="default" 
                 size="sm"
                 className="text-white"
-                onClick={() => navigate('/generator')}
+                onClick={handleGenerateIdea}
               >
                 Generate Idea
                 <ArrowRight className="w-4 h-4 ml-2" />
