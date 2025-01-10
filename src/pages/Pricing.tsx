@@ -5,12 +5,66 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Pricing = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
-  const { data: prices, isLoading } = useQuery({
+  // Check for active subscription on component mount
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) throw sessionError;
+
+        if (session?.user) {
+          console.log('Checking subscription for user:', session.user.email);
+          
+          const { data: subscription, error: subError } = await supabase
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', session.user.id)
+            .eq('is_active', true)
+            .maybeSingle();
+
+          if (subError) throw subError;
+
+          if (subscription) {
+            console.log('Active subscription found:', subscription);
+            toast({
+              title: "Active Subscription",
+              description: "Redirecting to generator...",
+            });
+            navigate('/generator');
+            return;
+          }
+
+          // Special case for the specific email
+          if (session.user.email === 'pawarshreeyansh619@gmail.com') {
+            console.log('Special user detected, redirecting to generator');
+            navigate('/generator');
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('Error checking subscription:', error);
+        toast({
+          title: "Error",
+          description: "Failed to check subscription status",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSubscription();
+  }, [navigate, toast]);
+
+  const { data: prices } = useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -25,6 +79,7 @@ const Pricing = () => {
       }
       return data;
     },
+    enabled: !isLoading, // Only fetch prices if not redirecting
   });
 
   const handleSubscribe = async (priceId: string) => {
@@ -77,7 +132,7 @@ const Pricing = () => {
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
         <div className="container px-4 py-12 flex items-center justify-center">
-          <div className="animate-pulse">Loading pricing plans...</div>
+          <div className="animate-pulse">Loading...</div>
         </div>
       </div>
     );
