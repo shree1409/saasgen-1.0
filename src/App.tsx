@@ -7,7 +7,6 @@ import Index from "./pages/Index";
 import GeneratedIdea from "./pages/GeneratedIdea";
 import HowItWorks from "./pages/HowItWorks";
 import Generator from "./pages/Generator";
-import Pricing from "./pages/Pricing";
 import Basic from "./pages/Basic";
 import Advanced from "./pages/Advanced";
 import SignIn from "./pages/SignIn";
@@ -62,7 +61,6 @@ const App = () => {
             <Route path="/basic" element={<Basic />} />
             <Route path="/advanced" element={<Advanced />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/pricing" element={<Pricing />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/demo" element={<GeneratedIdea demoData={demoIdea} />} />
