@@ -36,7 +36,7 @@ export const usePrices = () => {
       return prices;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
-    refetchOnMount: true,
+    refetchInterval: 1000 * 60 * 5, // Refetch every 5 minutes
     retry: 3,
   });
 };
