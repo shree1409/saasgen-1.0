@@ -4,7 +4,7 @@ import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 const DemoAdvanced = () => {
   const demoData = {
     websiteName: "Advanced Website Solution",
-    description: "Elevate your online presence with advanced features, market analysis, and detailed technical implementation guidance.",
+    description: "Elevate your online presence with advanced features and market analysis. Perfect for growing businesses.",
     keyFeatures: [
       "Advanced user management",
       "Payment gateway integration",
