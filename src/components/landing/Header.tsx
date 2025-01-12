@@ -54,7 +54,7 @@ const Header = () => {
   }
   
   return (
-    <header className="sticky top-0 w-full bg-white/95 backdrop-blur-sm border-b shadow-sm z-[100]">
+    <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b shadow-sm z-[100]">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
           <Logo />
@@ -66,13 +66,11 @@ const Header = () => {
           scrollToFeatures={scrollToFeatures} 
         />
         
-        <div className="flex items-center gap-4">
-          <AuthButtons 
-            session={session}
-            handleGenerateIdea={handleGenerateIdea}
-            handleSignOut={handleSignOut}
-          />
-        </div>
+        <AuthButtons 
+          session={session}
+          handleGenerateIdea={handleGenerateIdea}
+          handleSignOut={handleSignOut}
+        />
       </div>
     </header>
   );

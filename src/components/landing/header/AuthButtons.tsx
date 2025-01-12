@@ -18,7 +18,7 @@ const AuthButtons = ({ session, handleGenerateIdea, handleSignOut }: AuthButtons
   const navigate = useNavigate();
 
   return session ? (
-    <>
+    <div className="flex items-center gap-4">
       <Button 
         variant="default" 
         size="sm"
@@ -43,17 +43,26 @@ const AuthButtons = ({ session, handleGenerateIdea, handleSignOut }: AuthButtons
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   ) : (
-    <Button 
-      variant="default" 
-      size="sm"
-      className="text-white"
-      onClick={() => navigate('/sign-in')}
-    >
-      Sign In
-      <ArrowRight className="w-4 h-4 ml-2" />
-    </Button>
+    <div className="flex items-center gap-4">
+      <Button 
+        variant="ghost" 
+        size="sm"
+        onClick={() => navigate('/sign-up')}
+      >
+        Sign Up
+      </Button>
+      <Button 
+        variant="default" 
+        size="sm"
+        className="text-white"
+        onClick={() => navigate('/sign-in')}
+      >
+        Sign In
+        <ArrowRight className="w-4 h-4 ml-2" />
+      </Button>
+    </div>
   );
 };
 
