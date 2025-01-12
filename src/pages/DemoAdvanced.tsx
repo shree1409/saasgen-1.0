@@ -2,34 +2,32 @@ import Header from "@/components/landing/Header";
 import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoAdvanced = () => {
-  const demoIdea = {
-    websiteName: "SkillShare Hub - Online Learning Platform",
-    description: "A marketplace for skill-sharing and online courses",
+  const demoData = {
+    websiteName: "SkillShare Hub",
+    description: "A platform connecting skilled professionals with learners for personalized mentorship and skill development across various domains.",
     keyFeatures: [
-      "Course creation tools",
-      "Live streaming capabilities",
-      "Interactive quizzes",
-      "Progress tracking",
-      "Community forums",
-      "Instructor analytics"
+      "Advanced matching algorithm",
+      "Video conferencing integration",
+      "Progress tracking dashboard",
+      "Resource sharing system",
+      "Scheduling and calendar management"
     ],
-    techStack: "Next.js, GraphQL, PostgreSQL, AWS",
-    timelineBreakdown: "6-8 months development timeline",
-    marketPotential: "Expanding e-learning market with high growth potential",
     monetizationStrategy: [
-      "Revenue sharing with instructors",
-      "Premium subscriptions",
-      "Course marketplace fees",
-      "Enterprise solutions"
+      "Premium membership tiers",
+      "Commission from session bookings",
+      "Sponsored mentor listings"
     ],
+    techStack: "React, Node.js, PostgreSQL, WebRTC, Redis",
+    timelineBreakdown: "Month 1: Core platform development, Month 2: Video integration, Month 3: Payment systems",
+    marketPotential: "Growing online learning market with 15% CAGR",
     subscription_tier: "advanced" as const
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
-      <div className="container mx-auto px-4 py-8">
-        <GeneratedIdea demoData={demoIdea} />
+      <div className="container px-4 py-12">
+        <GeneratedIdea demoData={demoData} />
       </div>
     </div>
   );

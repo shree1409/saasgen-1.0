@@ -2,36 +2,32 @@ import Header from "@/components/landing/Header";
 import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoPro = () => {
-  const demoIdea = {
-    websiteName: "AI Analytics Suite - Business Intelligence Platform",
-    description: "Advanced analytics platform powered by artificial intelligence",
+  const demoData = {
+    websiteName: "HealthTech Analytics",
+    description: "An AI-powered healthcare analytics platform that helps medical professionals track patient outcomes and optimize treatment plans using machine learning.",
     keyFeatures: [
-      "AI-powered data analysis",
-      "Predictive modeling",
-      "Custom dashboards",
-      "Integration capabilities",
-      "Real-time monitoring",
-      "Automated reporting",
-      "Data security features"
+      "Real-time data analytics",
+      "Machine learning predictions",
+      "HIPAA-compliant storage",
+      "Interactive dashboards",
+      "Automated reporting system"
     ],
-    techStack: "Python, TensorFlow, React, Docker, Kubernetes",
-    timelineBreakdown: "12-15 months development timeline",
-    marketPotential: "High-growth market in AI and analytics sector",
     monetizationStrategy: [
-      "Enterprise licensing",
-      "Custom solutions",
-      "API access fees",
-      "Consulting services",
-      "Premium support plans"
+      "Enterprise licensing model",
+      "Per-user subscription pricing",
+      "Custom integration services"
     ],
+    techStack: "React, Python, TensorFlow, AWS, PostgreSQL",
+    timelineBreakdown: "Month 1: Core platform, Month 2: ML integration, Month 3: Security & Compliance",
+    marketPotential: "Healthcare analytics market growing at 24% CAGR",
     subscription_tier: "pro" as const
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
-      <div className="container mx-auto px-4 py-8">
-        <GeneratedIdea demoData={demoIdea} />
+      <div className="container px-4 py-12">
+        <GeneratedIdea demoData={demoData} />
       </div>
     </div>
   );
