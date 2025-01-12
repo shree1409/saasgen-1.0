@@ -1,16 +1,8 @@
 import { motion } from "framer-motion";
 import HeroTitle from "./HeroTitle";
 import HeroButton from "./HeroButton";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
-interface HeroProps {
-  onDemoClick: () => void;
-}
-
-const Hero = ({ onDemoClick }: HeroProps) => {
-  const navigate = useNavigate();
-
+const Hero = () => {
   return (
     <section className="py-20 md:py-32">
       <div className="container px-4 md:px-6">
@@ -26,20 +18,6 @@ const Hero = ({ onDemoClick }: HeroProps) => {
           </motion.p>
           <div className="flex flex-col sm:flex-row gap-4">
             <HeroButton />
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <Button 
-                variant="outline"
-                size="lg" 
-                className="rounded-full"
-                onClick={() => navigate('/demo')}
-              >
-                View Demo
-              </Button>
-            </motion.div>
           </div>
         </div>
       </div>
