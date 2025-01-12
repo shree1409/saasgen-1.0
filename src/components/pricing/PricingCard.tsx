@@ -17,6 +17,11 @@ const PricingCard = ({ price, onSubscribe, getDescription }: PricingCardProps) =
 
   console.log('Rendering PricingCard with price:', price);
 
+  const handleDemoClick = () => {
+    // Navigate to the appropriate demo page based on the tier
+    navigate(`/demo-${price.tier.toLowerCase()}`);
+  };
+
   return (
     <div className="space-y-6">
       <Card className="hover:scale-105 transition-transform duration-300 bg-white/80 backdrop-blur-lg border-purple-100">
@@ -44,7 +49,7 @@ const PricingCard = ({ price, onSubscribe, getDescription }: PricingCardProps) =
           <Button
             variant="outline"
             className="w-full"
-            onClick={() => navigate(`/${price.tier.toLowerCase()}`)}
+            onClick={handleDemoClick}
           >
             View Demo
           </Button>
