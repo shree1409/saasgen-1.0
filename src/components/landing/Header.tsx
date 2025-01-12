@@ -54,24 +54,26 @@ const Header = () => {
   }
   
   return (
-    <header className="fixed top-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-          <Logo />
-          <span className="font-semibold text-lg">saasgen</span>
+    <header className="sticky top-0 w-full bg-white border-b border-gray-200 shadow-sm z-50">
+      <nav className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+            <Logo />
+            <span className="font-semibold text-lg">saasgen</span>
+          </div>
+          
+          <Navigation 
+            session={session} 
+            scrollToFeatures={scrollToFeatures} 
+          />
+          
+          <AuthButtons 
+            session={session}
+            handleGenerateIdea={handleGenerateIdea}
+            handleSignOut={handleSignOut}
+          />
         </div>
-        
-        <Navigation 
-          session={session} 
-          scrollToFeatures={scrollToFeatures} 
-        />
-        
-        <AuthButtons 
-          session={session}
-          handleGenerateIdea={handleGenerateIdea}
-          handleSignOut={handleSignOut}
-        />
-      </div>
+      </nav>
     </header>
   );
 };
