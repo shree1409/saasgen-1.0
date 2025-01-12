@@ -41,22 +41,22 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
       </Card>
 
       {(demoData.subscription_tier === 'advanced' || demoData.subscription_tier === 'pro') && (
+        <Card className="p-6">
+          <MarketingSection marketPotential={demoData.marketPotential || ''} />
+        </Card>
+      )}
+
+      {demoData.subscription_tier === 'pro' && (
         <>
           <Card className="p-6">
             <MonetizationStrategy strategies={demoData.monetizationStrategy || []} />
           </Card>
           <Card className="p-6">
-            <MarketingSection marketPotential={demoData.marketPotential || ''} />
+            <LearningResources 
+              techStack={demoData.techStack}
+            />
           </Card>
         </>
-      )}
-
-      {demoData.subscription_tier === 'pro' && (
-        <Card className="p-6">
-          <LearningResources 
-            techStack={demoData.techStack}
-          />
-        </Card>
       )}
     </div>
   );

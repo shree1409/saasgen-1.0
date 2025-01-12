@@ -18,7 +18,6 @@ const DemoAdvanced = () => {
       "Premium support packages"
     ],
     techStack: "React, Node.js, PostgreSQL, Redis",
-    timelineBreakdown: "Month 1: Core features, Month 2: Advanced integrations, Month 3: Testing and optimization",
     marketPotential: "Enterprise solutions market growing at 15% CAGR, with high demand for scalable solutions",
     subscription_tier: "advanced" as const
   };
