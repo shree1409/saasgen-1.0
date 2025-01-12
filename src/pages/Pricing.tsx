@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import GeneratedIdea from "./GeneratedIdea";
 
-// Sample demo data for different tiers
 const demoIdeas = {
   basic: {
     websiteName: "TaskFlow Basic",
@@ -86,11 +85,12 @@ const Pricing = () => {
             .from('subscriptions')
             .select('*')
             .eq('user_id', session.user.id)
-            .eq('is_active', true);
+            .eq('is_active', true)
+            .maybeSingle();
 
           if (subError) throw subError;
 
-          if (subscriptions && subscriptions.length > 0) {
+          if (subscriptions) {
             toast({
               title: "Active Subscription",
               description: "Redirecting to generator...",
@@ -136,9 +136,7 @@ const Pricing = () => {
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
-      if (sessionError) {
-        throw sessionError;
-      }
+      if (sessionError) throw sessionError;
 
       if (!session) {
         toast({
@@ -156,10 +154,7 @@ const Pricing = () => {
         },
       });
 
-      if (error) {
-        console.error('Checkout session error:', error);
-        throw error;
-      }
+      if (error) throw error;
 
       if (data?.url) {
         window.location.href = data.url;
@@ -238,26 +233,12 @@ const Pricing = () => {
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => setSelectedDemo(price.tier)}
+                    onClick={() => navigate(`/${price.tier.toLowerCase()}`)}
                   >
                     View Demo
                   </Button>
                 </CardFooter>
               </Card>
-              
-              {selectedDemo === price.tier && (
-                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-                  <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <div className="p-4 border-b flex justify-between items-center">
-                      <h3 className="text-lg font-semibold">Demo Preview - {price.tier} Plan</h3>
-                      <Button variant="ghost" onClick={() => setSelectedDemo(null)}>Close</Button>
-                    </div>
-                    <div className="p-4">
-                      <GeneratedIdea demoData={demoIdeas[price.tier]} />
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </div>
