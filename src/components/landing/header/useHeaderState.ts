@@ -23,17 +23,17 @@ export const useHeaderState = () => {
           setSession(currentSession);
 
           if (currentSession) {
-            const { data: subscriptions, error: subError } = await supabase
+            const { data: subscription, error: subError } = await supabase
               .from('subscriptions')
               .select('*')
               .eq('user_id', currentSession.user.id)
               .eq('is_active', true)
-              .single();
+              .maybeSingle();
 
-            if (subError && !subError.message.includes('No rows found')) {
+            if (subError) {
               throw subError;
             }
-            setHasActiveSubscription(!!subscriptions);
+            setHasActiveSubscription(!!subscription);
           }
         }
       } catch (error) {
@@ -58,14 +58,14 @@ export const useHeaderState = () => {
         setHasActiveSubscription(false);
       } else if (event === 'SIGNED_IN' && currentSession) {
         setSession(currentSession);
-        const { data: subscriptions } = await supabase
+        const { data: subscription } = await supabase
           .from('subscriptions')
           .select('*')
           .eq('user_id', currentSession.user.id)
           .eq('is_active', true)
-          .single();
+          .maybeSingle();
         
-        setHasActiveSubscription(!!subscriptions);
+        setHasActiveSubscription(!!subscription);
       }
     });
 
