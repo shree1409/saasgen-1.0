@@ -16,6 +16,8 @@ export const usePrices = () => {
         .eq('active', true)
         .order('unit_amount');
       
+      console.log('Raw Supabase response:', { prices, error: fetchError });
+
       if (fetchError) {
         console.error('Error fetching prices:', fetchError);
         toast({
@@ -23,25 +25,18 @@ export const usePrices = () => {
           description: "Failed to load pricing information. Please try again later.",
           variant: "destructive",
         });
-        throw new Error(`Failed to fetch prices: ${fetchError.message}`);
+        throw fetchError;
       }
 
-      console.log('Raw response from Supabase:', { prices, error: fetchError });
-      
       if (!prices || prices.length === 0) {
-        console.warn('No active prices found in the database');
-        toast({
-          title: "No Prices Available",
-          description: "Currently there are no active pricing plans.",
-          variant: "destructive",
-        });
+        console.warn('No active prices found');
         return [];
       }
 
       console.log('Successfully fetched prices:', prices);
       return prices;
     },
-    retry: 3,
+    retry: 1,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });

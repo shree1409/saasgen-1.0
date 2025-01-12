@@ -13,7 +13,7 @@ const Pricing = () => {
   console.log('Rendering Pricing component with:', {
     prices,
     isLoading: subscriptionLoading || pricesLoading,
-    error
+    error,
   });
 
   const getDescription = (price: any) => {
