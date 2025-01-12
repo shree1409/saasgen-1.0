@@ -16,7 +16,8 @@ export const usePrices = () => {
         .eq('active', true)
         .order('unit_amount');
       
-      console.log('📦 Raw Supabase response:', { prices, fetchError });
+      console.log('📦 Raw prices response:', prices);
+      console.log('❌ Fetch error if any:', fetchError);
 
       if (fetchError) {
         console.error('❌ Error fetching prices:', fetchError);

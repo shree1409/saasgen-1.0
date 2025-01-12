@@ -10,7 +10,7 @@ const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
   const { data: prices, isLoading: pricesLoading, error } = usePrices();
 
-  console.log('🎯 Rendering Pricing component with:', {
+  console.log('🎯 Pricing component data:', {
     prices,
     isLoading: subscriptionLoading || pricesLoading,
     error,
