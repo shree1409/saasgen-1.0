@@ -27,6 +27,8 @@ const GeneratorForm = () => {
   useSubscriptionCheck(setError, setHasSubscription);
 
   const handleComplete = () => {
+    // Store form data in session storage before redirecting
+    sessionStorage.setItem('generatorFormData', JSON.stringify(formData));
     toast({
       title: "Survey completed",
       description: "Please choose a subscription plan to generate your idea",
