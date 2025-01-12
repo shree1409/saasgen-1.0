@@ -5,13 +5,16 @@ import PricingHeader from "@/components/pricing/PricingHeader";
 import PricingCard from "@/components/pricing/PricingCard";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
 
 const Pricing = () => {
+  const { toast } = useToast();
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
 
-  const { data: prices, isLoading: pricesLoading } = useQuery({
+  const { data: prices, isLoading: pricesLoading, error } = useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
+      console.log('Fetching prices...');
       const { data, error } = await supabase
         .from('prices')
         .select('*')
@@ -20,8 +23,15 @@ const Pricing = () => {
       
       if (error) {
         console.error('Error fetching prices:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load pricing information",
+          variant: "destructive",
+        });
         throw error;
       }
+      
+      console.log('Fetched prices:', data);
       return data;
     }
   });
@@ -54,6 +64,19 @@ const Pricing = () => {
       ))}
     </div>
   );
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+        <Header />
+        <div className="container pt-24 px-4 py-12">
+          <div className="text-center text-red-500">
+            Failed to load pricing information. Please try again later.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
