@@ -28,15 +28,6 @@ const Navigation = ({ session, scrollToFeatures }: NavigationProps) => {
         <Info className="w-4 h-4" />
         How it Works
       </Button>
-      {!session && (
-        <Button 
-          variant="ghost"
-          onClick={() => navigate('/pricing')}
-          className="text-sm text-muted-foreground hover:text-primary"
-        >
-          Pricing
-        </Button>
-      )}
     </nav>
   );
 };
