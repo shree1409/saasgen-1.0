@@ -55,6 +55,7 @@ export const useSubscriptionManagement = () => {
       if (sessionError) throw sessionError;
 
       if (!session) {
+        sessionStorage.setItem('intended_price_id', priceId);
         toast({
           title: "Authentication required",
           description: "Please sign in to subscribe",
@@ -77,6 +78,7 @@ export const useSubscriptionManagement = () => {
       }
 
       if (data?.url) {
+        console.log('Redirecting to checkout URL:', data.url);
         window.location.href = data.url;
       } else {
         throw new Error('No checkout URL received');

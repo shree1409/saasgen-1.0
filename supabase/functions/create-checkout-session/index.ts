@@ -27,6 +27,8 @@ serve(async (req) => {
       throw new Error('Authentication required')
     }
 
+    console.log('Creating checkout session for user:', user.email)
+
     const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
       apiVersion: '2023-10-16',
     })
@@ -63,6 +65,7 @@ serve(async (req) => {
       allow_promotion_codes: true,
     })
 
+    console.log('Checkout session created:', session.id)
     return new Response(
       JSON.stringify({ url: session.url }),
       { 
