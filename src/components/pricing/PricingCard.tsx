@@ -15,6 +15,8 @@ interface PricingCardProps {
 const PricingCard = ({ price, onSubscribe, getDescription }: PricingCardProps) => {
   const navigate = useNavigate();
 
+  console.log('Rendering PricingCard with price:', price);
+
   return (
     <div className="space-y-6">
       <Card className="hover:scale-105 transition-transform duration-300 bg-white/80 backdrop-blur-lg border-purple-100">

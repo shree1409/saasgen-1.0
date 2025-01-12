@@ -33,7 +33,8 @@ const Pricing = () => {
       
       console.log('Fetched prices:', data);
       return data;
-    }
+    },
+    retry: 3
   });
 
   const getDescription = (price: any) => {
