@@ -110,15 +110,8 @@ const Header = () => {
 
   const handleGenerateIdea = () => {
     if (session) {
-      if (hasActiveSubscription) {
-        // If user has an active subscription, go directly to generator
-        navigate('/generator');
-      } else {
-        // If no active subscription, show pricing page
-        navigate('/pricing');
-      }
+      navigate('/generator');
     } else {
-      // If not logged in, redirect to sign in
       navigate('/sign-in');
     }
   };
@@ -149,7 +142,7 @@ const Header = () => {
           >
             How it Works
           </Button>
-          {!session || !hasActiveSubscription ? (
+          {!session ? (
             <Button 
               variant="ghost"
               onClick={() => navigate('/pricing')}
