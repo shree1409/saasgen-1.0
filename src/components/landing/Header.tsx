@@ -49,23 +49,6 @@ const Header = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200">
-        <div className="container mx-auto">
-          <nav className="px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Logo />
-                <span className="font-semibold text-lg">saasgen</span>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </header>
-    );
-  }
-  
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200">
       <div className="container mx-auto">
@@ -79,16 +62,18 @@ const Header = () => {
               <span className="font-semibold text-lg">saasgen</span>
             </div>
             
-            <Navigation 
-              session={session} 
-              scrollToFeatures={scrollToFeatures} 
-            />
-            
-            <AuthButtons 
-              session={session}
-              handleGenerateIdea={handleGenerateIdea}
-              handleSignOut={handleSignOut}
-            />
+            <div className="flex items-center gap-4">
+              <Navigation 
+                session={session} 
+                scrollToFeatures={scrollToFeatures} 
+              />
+              
+              <AuthButtons 
+                session={session}
+                handleGenerateIdea={handleGenerateIdea}
+                handleSignOut={handleSignOut}
+              />
+            </div>
           </div>
         </nav>
       </div>
