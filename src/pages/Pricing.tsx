@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
-import { Link } from "react-router-dom";
+import { PricingHeader } from "@/components/pricing/PricingHeader";
+import { PricingTierCard } from "@/components/pricing/PricingTierCard";
 
 const tiers = [
   {
@@ -55,54 +53,19 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20 py-12">
       <div className="container px-4 mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-muted-foreground">
-            Choose the perfect plan for your needs
-          </p>
-        </div>
+        <PricingHeader 
+          title="Simple, Transparent Pricing"
+          subtitle="Choose the perfect plan for your needs"
+        />
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {tiers.map((tier) => (
-            <div
+            <PricingTierCard
               key={tier.name}
-              className="rounded-lg border bg-card text-card-foreground shadow-sm"
-            >
-              <div className="p-6 space-y-4">
-                <h3 className="text-2xl font-bold">{tier.name}</h3>
-                <p className="text-muted-foreground">{tier.description}</p>
-                <div className="text-3xl font-bold">
-                  {tier.price}
-                  <span className="text-sm font-normal text-muted-foreground">
-                    /month
-                  </span>
-                </div>
-              </div>
-              <div className="p-6 border-t space-y-4">
-                <ul className="space-y-2">
-                  {tier.features.map((feature) => (
-                    <li key={feature} className="flex items-center">
-                      <Check className="h-4 w-4 text-green-500 mr-2" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="space-y-3">
-                  <Button
-                    className="w-full text-white"
-                    onClick={() => handleSubscribe(tier.priceId)}
-                    disabled={isLoading}
-                  >
-                    Get Started
-                  </Button>
-                  <Link to={tier.demoPath}>
-                    <Button variant="outline" className="w-full">
-                      View Demo
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
+              {...tier}
+              onSubscribe={handleSubscribe}
+              isLoading={isLoading}
+            />
           ))}
         </div>
       </div>
