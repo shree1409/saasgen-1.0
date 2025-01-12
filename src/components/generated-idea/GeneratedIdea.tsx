@@ -27,7 +27,7 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
     <div className="space-y-8">
       <Card className="p-6">
         <IdeaTitle 
-          title={demoData.websiteName} 
+          websiteName={demoData.websiteName} 
           description={demoData.description} 
         />
       </Card>
@@ -53,7 +53,7 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
 
       {demoData.subscription_tier === 'pro' && (
         <Card className="p-6">
-          <LearningResources websiteName={demoData.websiteName} />
+          <LearningResources techStack={demoData.techStack} />
         </Card>
       )}
     </div>
