@@ -15,20 +15,20 @@ const Pricing = () => {
     queryKey: ['prices'],
     queryFn: async () => {
       console.log('Fetching prices...');
-      const { data, error } = await supabase
+      const { data, error: fetchError } = await supabase
         .from('prices')
         .select('*')
         .eq('active', true)
         .order('unit_amount');
       
-      if (error) {
-        console.error('Error fetching prices:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load pricing information",
-          variant: "destructive",
-        });
-        throw error;
+      if (fetchError) {
+        console.error('Error fetching prices:', fetchError);
+        throw fetchError;
+      }
+      
+      if (!data || data.length === 0) {
+        console.error('No prices found');
+        throw new Error('No prices found');
       }
       
       console.log('Fetched prices:', data);
@@ -37,6 +37,14 @@ const Pricing = () => {
     retry: 3,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    onError: (err) => {
+      console.error('Query error:', err);
+      toast({
+        title: "Error",
+        description: "Failed to load pricing information. Please try again later.",
+        variant: "destructive",
+      });
+    }
   });
 
   const getDescription = (price: any) => {
@@ -89,9 +97,9 @@ const Pricing = () => {
         <PricingHeader />
         {(subscriptionLoading || pricesLoading) ? (
           <LoadingSkeleton />
-        ) : (
+        ) : prices && prices.length > 0 ? (
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {prices?.map((price) => (
+            {prices.map((price) => (
               <PricingCard
                 key={price.id}
                 price={price}
@@ -99,6 +107,10 @@ const Pricing = () => {
                 getDescription={getDescription}
               />
             ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500">
+            No pricing plans are currently available. Please check back later.
           </div>
         )}
       </div>
