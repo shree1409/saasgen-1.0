@@ -1,19 +1,34 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Youtube } from "lucide-react";
+import VideoList from "./VideoList";
+import ProTip from "./ProTip";
+import { useVideoMatcher } from "./useVideoMatcher";
+
 interface LearningResourcesProps {
   techStack: string;
+  features?: string[];
 }
 
-const LearningResources = ({ techStack }: LearningResourcesProps) => {
+const LearningResources = ({ techStack, features }: LearningResourcesProps) => {
+  const { videos, isLoading } = useVideoMatcher(techStack);
+
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Learning Resources</h2>
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* Display learning resources based on techStack */}
-        <div className="p-4 border rounded-lg">
-          <h3 className="font-medium mb-2">Tech Stack</h3>
-          <p className="text-muted-foreground">{techStack}</p>
-        </div>
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Youtube className="w-6 h-6 text-red-500" />
+          Learning Resources
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <VideoList 
+          videos={videos} 
+          techStack={techStack} 
+          isLoading={isLoading} 
+        />
+        <ProTip />
+      </CardContent>
+    </Card>
   );
 };
 

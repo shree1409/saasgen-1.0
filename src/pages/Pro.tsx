@@ -5,7 +5,7 @@ import KeyFeatures from "@/components/generated-idea/KeyFeatures";
 import TechnicalImplementation from "@/components/generated-idea/TechnicalImplementation";
 import MarketingSection from "@/components/generated-idea/MarketingSection";
 import MonetizationStrategy from "@/components/generated-idea/MonetizationStrategy";
-import LearningResources from "@/components/generated-idea/LearningResources";
+import LearningResources from "@/components/generated-idea/learning-resources/LearningResources";
 import { useToast } from "@/components/ui/use-toast";
 
 const Pro = () => {
