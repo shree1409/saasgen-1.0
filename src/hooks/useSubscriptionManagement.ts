@@ -28,7 +28,7 @@ export const useSubscriptionManagement = () => {
           if (subscriptions) {
             toast({
               title: "Active Subscription",
-              description: "Redirecting to generator...",
+              description: "You already have an active subscription.",
             });
             navigate('/generator');
             return;
@@ -71,14 +71,17 @@ export const useSubscriptionManagement = () => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Checkout session error:', error);
+        throw error;
+      }
 
       if (data?.url) {
         window.location.href = data.url;
       } else {
         throw new Error('No checkout URL received');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Subscription error:', error);
       toast({
         title: "Error",

@@ -50,7 +50,7 @@ export const PricingTierCard = ({
             onClick={() => onSubscribe(priceId)}
             disabled={isLoading}
           >
-            Get Started
+            {isLoading ? "Processing..." : "Get Started"}
           </Button>
           <Link to={demoPath}>
             <Button variant="outline" className="w-full">
