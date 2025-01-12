@@ -16,8 +16,7 @@ export const usePrices = () => {
         .eq('active', true)
         .order('unit_amount');
       
-      console.log('📦 Raw prices response:', prices);
-      console.log('❌ Fetch error if any:', fetchError);
+      console.log('📦 Raw prices response:', { prices, fetchError });
 
       if (fetchError) {
         console.error('❌ Error fetching prices:', fetchError);
@@ -40,15 +39,5 @@ export const usePrices = () => {
     retry: 1,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    meta: {
-      onError: (error: Error) => {
-        console.error('❌ Query error:', error);
-        toast({
-          title: "Error",
-          description: "Failed to load pricing information. Please try again later.",
-          variant: "destructive",
-        });
-      }
-    }
   });
 };
