@@ -10,6 +10,8 @@ const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
   const { data: prices, isLoading: pricesLoading, error } = usePrices();
 
+  console.log('Rendering Pricing component with prices:', prices);
+
   const getDescription = (price: any) => {
     switch (price.tier) {
       case 'pro':
@@ -23,31 +25,59 @@ const Pricing = () => {
 
   const isLoading = subscriptionLoading || pricesLoading;
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+        <Header />
+        <div className="container pt-24 px-4 py-12">
+          <PricingHeader />
+          <PricingSkeleton />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+        <Header />
+        <div className="container pt-24 px-4 py-12">
+          <PricingHeader />
+          <PricingError />
+        </div>
+      </div>
+    );
+  }
+
+  if (!prices || prices.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+        <Header />
+        <div className="container pt-24 px-4 py-12">
+          <PricingHeader />
+          <div className="text-center text-gray-500">
+            No pricing plans are currently available. Please check back later.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
       <div className="container pt-24 px-4 py-12">
         <PricingHeader />
-        {isLoading ? (
-          <PricingSkeleton />
-        ) : error ? (
-          <PricingError />
-        ) : prices && prices.length > 0 ? (
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {prices.map((price) => (
-              <PricingCard
-                key={price.id}
-                price={price}
-                onSubscribe={handleSubscribe}
-                getDescription={getDescription}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center text-gray-500">
-            No pricing plans are currently available. Please check back later.
-          </div>
-        )}
+        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {prices.map((price) => (
+            <PricingCard
+              key={price.id}
+              price={price}
+              onSubscribe={handleSubscribe}
+              getDescription={getDescription}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -8,8 +8,9 @@ export const usePrices = () => {
   return useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
-      console.log('Fetching prices...');
-      const { data, error: fetchError } = await supabase
+      console.log('Fetching prices from Supabase...');
+      
+      const { data: prices, error: fetchError } = await supabase
         .from('prices')
         .select('*')
         .eq('active', true)
@@ -17,24 +18,25 @@ export const usePrices = () => {
       
       if (fetchError) {
         console.error('Error fetching prices:', fetchError);
-        throw fetchError;
+        throw new Error(`Failed to fetch prices: ${fetchError.message}`);
       }
       
-      if (!data || data.length === 0) {
-        console.error('No prices found');
-        throw new Error('No prices found');
+      console.log('Received prices from Supabase:', prices);
+      
+      if (!prices || prices.length === 0) {
+        console.warn('No active prices found in the database');
+        return [];
       }
       
-      console.log('Fetched prices:', data);
-      return data;
+      return prices;
     },
     retry: 3,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
     meta: {
-      errorMessage: "Failed to load pricing information. Please try again later.",
-      onError: (err: Error) => {
-        console.error('Query error:', err);
+      errorMessage: "Failed to load pricing information",
+      onError: (error: Error) => {
+        console.error('Query error:', error);
         toast({
           title: "Error",
           description: "Failed to load pricing information. Please try again later.",
