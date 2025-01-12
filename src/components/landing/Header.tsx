@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import Logo from "./Logo";
 import Navigation from "./header/Navigation";
 import AuthButtons from "./header/AuthButtons";
 import { useHeaderState } from "./header/useHeaderState";
@@ -57,11 +58,7 @@ const Header = () => {
               className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" 
               onClick={() => navigate('/')}
             >
-              <img 
-                src="/logo.png" 
-                alt="saasgen logo" 
-                className="h-8 w-auto"
-              />
+              <Logo />
               <span className="font-semibold text-lg">saasgen</span>
             </div>
             
