@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 export const useSubscriptionManagement = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkSubscription = async () => {
@@ -41,8 +41,6 @@ export const useSubscriptionManagement = () => {
           description: "Failed to check subscription status",
           variant: "destructive",
         });
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -50,6 +48,7 @@ export const useSubscriptionManagement = () => {
   }, [navigate, toast]);
 
   const handleSubscribe = async (priceId: string) => {
+    setIsLoading(true);
     try {
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
@@ -58,12 +57,13 @@ export const useSubscriptionManagement = () => {
       if (!session) {
         toast({
           title: "Authentication required",
-          description: "Please sign in to subscribe to a plan",
+          description: "Please sign in to subscribe",
         });
         navigate('/sign-in');
         return;
       }
 
+      console.log('Creating checkout session for price:', priceId);
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
         body: { 
           priceId,
@@ -79,12 +79,14 @@ export const useSubscriptionManagement = () => {
         throw new Error('No checkout URL received');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Subscription error:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to start checkout process",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
