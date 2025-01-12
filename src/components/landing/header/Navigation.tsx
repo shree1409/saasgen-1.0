@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
+import { Session } from "@supabase/supabase-js";
 
-const Navigation = () => {
+interface NavigationProps {
+  session?: Session | null;
+  scrollToFeatures?: () => void;
+}
+
+const Navigation = ({ session, scrollToFeatures }: NavigationProps) => {
   return (
     <nav className="hidden md:flex items-center space-x-6">
       <Link
