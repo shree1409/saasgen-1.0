@@ -5,10 +5,9 @@ interface FormButtonsProps {
   isGenerating: boolean;
   onBack: () => void;
   onNext: () => void;
-  onSubmit: () => void;
 }
 
-const FormButtons = ({ step, isGenerating, onBack, onNext, onSubmit }: FormButtonsProps) => {
+const FormButtons = ({ step, isGenerating, onBack, onNext }: FormButtonsProps) => {
   return (
     <div className="flex justify-between mt-8">
       <Button
@@ -20,11 +19,11 @@ const FormButtons = ({ step, isGenerating, onBack, onNext, onSubmit }: FormButto
         Back
       </Button>
       <Button
-        onClick={step === 5 ? onSubmit : onNext}
+        onClick={onNext}
         disabled={isGenerating}
         className="text-white"
       >
-        {step === 5 ? (isGenerating ? "Generating..." : "Generate Idea") : "Next"}
+        {step === 5 ? "Complete Survey" : "Next"}
       </Button>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import StepIndicator from "./StepIndicator";
 import FormButtons from "./form/FormButtons";
 import FormStepContent from "./form/FormStepContent";
@@ -10,6 +11,7 @@ import { useSubscriptionCheck } from "@/hooks/useSubscriptionCheck";
 import { useToast } from "@/hooks/use-toast";
 
 const GeneratorForm = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [hasSubscription, setHasSubscription] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +25,14 @@ const GeneratorForm = () => {
   } = useFormState();
 
   useSubscriptionCheck(setError, setHasSubscription);
-  const { handleSubmit } = useGeneratorSubmit(setIsGenerating, setError);
+
+  const handleComplete = () => {
+    toast({
+      title: "Survey completed",
+      description: "Please choose a subscription plan to generate your idea",
+    });
+    navigate('/pricing');
+  };
 
   const handleNext = () => {
     if (!validateStep(step, formData)) {
@@ -34,15 +43,17 @@ const GeneratorForm = () => {
       });
       return;
     }
-    if (step < 5) setStep(step + 1);
+    if (step < 5) {
+      setStep(step + 1);
+    } else {
+      handleComplete();
+    }
   };
 
   const handleBack = () => {
     setError(null);
     if (step > 1) setStep(step - 1);
   };
-
-  const onSubmit = () => handleSubmit(formData);
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
@@ -58,7 +69,6 @@ const GeneratorForm = () => {
         isGenerating={isGenerating}
         onBack={handleBack}
         onNext={handleNext}
-        onSubmit={onSubmit}
       />
     </div>
   );
