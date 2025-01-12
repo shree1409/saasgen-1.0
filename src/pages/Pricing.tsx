@@ -37,13 +37,16 @@ const Pricing = () => {
     retry: 3,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    onError: (err) => {
-      console.error('Query error:', err);
-      toast({
-        title: "Error",
-        description: "Failed to load pricing information. Please try again later.",
-        variant: "destructive",
-      });
+    meta: {
+      errorMessage: "Failed to load pricing information. Please try again later.",
+      onError: (err: Error) => {
+        console.error('Query error:', err);
+        toast({
+          title: "Error",
+          description: "Failed to load pricing information. Please try again later.",
+          variant: "destructive",
+        });
+      }
     }
   });
 
