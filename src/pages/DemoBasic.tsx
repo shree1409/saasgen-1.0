@@ -19,7 +19,7 @@ const DemoBasic = () => {
       "Monthly subscription plans",
       "Team-based pricing"
     ],
-    subscription_tier: "basic"
+    subscription_tier: "basic" as const
   };
 
   return (

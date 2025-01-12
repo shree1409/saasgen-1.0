@@ -24,7 +24,7 @@ const DemoPro = () => {
       "Consulting services",
       "Premium support plans"
     ],
-    subscription_tier: "pro"
+    subscription_tier: "pro" as const
   };
 
   return (

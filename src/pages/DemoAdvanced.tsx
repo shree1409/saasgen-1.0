@@ -22,7 +22,7 @@ const DemoAdvanced = () => {
       "Course marketplace fees",
       "Enterprise solutions"
     ],
-    subscription_tier: "advanced"
+    subscription_tier: "advanced" as const
   };
 
   return (
