@@ -54,8 +54,8 @@ const Header = () => {
   }
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
-      <div className="container px-4 py-4 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full border-b bg-background/80 backdrop-blur-sm">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
           <Logo />
           <span className="font-semibold text-lg">saasgen</span>

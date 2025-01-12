@@ -7,9 +7,11 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
-      <Hero />
-      <Features />
-      <Benefits />
+      <main className="pt-20">
+        <Hero />
+        <Features />
+        <Benefits />
+      </main>
     </div>
   );
 };
