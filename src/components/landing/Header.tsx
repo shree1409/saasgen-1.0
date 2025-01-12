@@ -24,20 +24,31 @@ const Header = () => {
     const checkSession = async () => {
       try {
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        setSession(currentSession);
+        if (error) {
+          if (error.message.includes('refresh_token_not_found')) {
+            // Clear the invalid session state
+            await supabase.auth.signOut();
+            setSession(null);
+          } else {
+            throw error;
+          }
+        } else {
+          setSession(currentSession);
 
-        if (currentSession) {
-          // Check for active subscription
-          const { data: subscriptions, error: subError } = await supabase
-            .from('subscriptions')
-            .select('*')
-            .eq('user_id', currentSession.user.id)
-            .eq('is_active', true)
-            .single();
+          if (currentSession) {
+            // Check for active subscription
+            const { data: subscriptions, error: subError } = await supabase
+              .from('subscriptions')
+              .select('*')
+              .eq('user_id', currentSession.user.id)
+              .eq('is_active', true)
+              .single();
 
-          if (subError) throw subError;
-          setHasActiveSubscription(!!subscriptions);
+            if (subError && !subError.message.includes('No rows found')) {
+              throw subError;
+            }
+            setHasActiveSubscription(!!subscriptions);
+          }
         }
       } catch (error) {
         console.error('Session check error:', error);
@@ -55,9 +66,8 @@ const Header = () => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
       console.log('Auth event:', event);
-      setSession(currentSession);
       
-      if (event === 'SIGNED_OUT') {
+      if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
         setSession(null);
         setHasActiveSubscription(false);
       } else if (event === 'SIGNED_IN' && currentSession) {
