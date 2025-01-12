@@ -17,7 +17,7 @@ const Pricing = () => {
   });
 
   const getDescription = (price: any) => {
-    switch (price.tier) {
+    switch (price.tier.toLowerCase()) {
       case 'pro':
         return "Everything in Advanced plus Market Analysis + Marketing Strategy Roadmap and Learning Resources";
       case 'advanced':
