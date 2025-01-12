@@ -54,29 +54,27 @@ const Header = () => {
   }
   
   return (
-    <div className="absolute top-0 left-0 right-0 w-full z-50">
-      <header className="w-full border-b bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <Logo />
-            <span className="font-semibold text-lg">saasgen</span>
-          </div>
-          
-          <Navigation 
-            session={session} 
-            scrollToFeatures={scrollToFeatures} 
-          />
-          
-          <div className="flex items-center gap-4">
-            <AuthButtons 
-              session={session}
-              handleGenerateIdea={handleGenerateIdea}
-              handleSignOut={handleSignOut}
-            />
-          </div>
+    <header className="fixed top-0 left-0 right-0 w-full bg-white border-b shadow-sm z-50">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
+          <Logo />
+          <span className="font-semibold text-lg">saasgen</span>
         </div>
-      </header>
-    </div>
+        
+        <Navigation 
+          session={session} 
+          scrollToFeatures={scrollToFeatures} 
+        />
+        
+        <div className="flex items-center gap-4">
+          <AuthButtons 
+            session={session}
+            handleGenerateIdea={handleGenerateIdea}
+            handleSignOut={handleSignOut}
+          />
+        </div>
+      </div>
+    </header>
   );
 };
 
