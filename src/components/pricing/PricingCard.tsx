@@ -18,7 +18,7 @@ const PricingCard = ({ price, onSubscribe, getDescription }: PricingCardProps) =
   console.log('Rendering PricingCard with price:', price);
 
   const handleDemoClick = () => {
-    // Navigate to the appropriate demo page based on the tier
+    console.log('Demo clicked for tier:', price.tier);
     navigate(`/demo-${price.tier.toLowerCase()}`);
   };
 

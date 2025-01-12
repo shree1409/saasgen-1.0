@@ -21,7 +21,7 @@ export const usePrices = () => {
         throw new Error(`Failed to fetch prices: ${fetchError.message}`);
       }
       
-      console.log('Received prices from Supabase:', prices);
+      console.log('Raw prices data from Supabase:', prices);
       
       if (!prices || prices.length === 0) {
         console.warn('No active prices found in the database');
