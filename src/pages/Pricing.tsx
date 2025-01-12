@@ -23,13 +23,14 @@ const tiers = [
     name: "Advanced",
     priceId: "price_1Qcwy0BNGIJ8hstKYmE68GcO",
     price: "$25",
-    description: "Enhanced features with market analysis",
+    description: "Enhanced features with market analysis and monetization strategies",
     demoPath: "/demo-advanced",
     features: [
       "Everything in Basic",
       "Market analysis",
       "Detailed project insights",
       "Enhanced suggestions",
+      "Monetization strategies",
     ],
   },
   {
