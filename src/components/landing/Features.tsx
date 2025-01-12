@@ -57,7 +57,7 @@ const Features = () => {
   return (
     <motion.section 
       id="features" 
-      className="mb-24"
+      className="mb-24 scroll-mt-20"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
