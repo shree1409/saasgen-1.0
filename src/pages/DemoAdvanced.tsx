@@ -1,5 +1,5 @@
 import Header from "@/components/landing/Header";
-import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
+import GeneratedIdea from "./GeneratedIdea";
 
 const DemoAdvanced = () => {
   const demoIdea = {
