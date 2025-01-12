@@ -4,7 +4,7 @@ import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 const DemoAdvanced = () => {
   const demoData = {
     websiteName: "Advanced Website Solution",
-    description: "Elevate your online presence with advanced features and detailed technical implementation guidance.",
+    description: "Elevate your online presence with advanced features, market analysis, and detailed technical implementation guidance.",
     keyFeatures: [
       "Advanced user management",
       "Payment gateway integration",
@@ -19,6 +19,7 @@ const DemoAdvanced = () => {
     ],
     techStack: "React, Node.js, PostgreSQL, Redis",
     timelineBreakdown: "Month 1: Core features, Month 2: Advanced integrations, Month 3: Testing and optimization",
+    marketPotential: "Enterprise solutions market growing at 15% CAGR, with high demand for scalable solutions",
     subscription_tier: "advanced" as const
   };
 
