@@ -1,28 +1,41 @@
+import Header from "@/components/landing/Header";
 import GeneratedIdea from "./GeneratedIdea";
 
 const DemoPro = () => {
-  const demoData = {
-    websiteName: "EnterpriseHub Elite",
-    description: "A comprehensive enterprise solution for large-scale business operations and analytics.",
-    keyFeatures: [
-      "Enterprise-grade security",
-      "Advanced analytics dashboard",
-      "Custom integrations",
-      "Automated workflows",
-      "Multi-team management"
+  const demoIdea = {
+    title: "AI Analytics Suite - Business Intelligence Platform",
+    description: "Advanced analytics platform powered by artificial intelligence",
+    features: [
+      "AI-powered data analysis",
+      "Predictive modeling",
+      "Custom dashboards",
+      "Real-time monitoring",
+      "Integration capabilities",
+      "Advanced visualization tools",
+      "Automated reporting",
+      "Data security features"
     ],
-    monetizationStrategy: [
+    tech_stack: "Python, TensorFlow, React, Docker, Kubernetes",
+    timeline_breakdown: "12-15 months development timeline",
+    market_potential: "High-growth market in AI and analytics sector",
+    monetization_strategies: [
       "Enterprise licensing",
-      "Custom development services",
-      "White-label solutions",
-      "Consulting services"
+      "Custom solutions",
+      "API access fees",
+      "Consulting services",
+      "Industry-specific packages"
     ],
-    techStack: "React, Node.js, PostgreSQL, Kubernetes, ElasticSearch, Redis",
-    timelineBreakdown: "Month 1-2: Core platform. Month 3-4: Enterprise features. Month 5-6: Security and scaling.",
-    marketPotential: "Enterprise software market growing at 35% annually, particularly strong in financial and healthcare sectors."
+    subscription_tier: "pro"
   };
 
-  return <GeneratedIdea demoData={demoData} />;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <GeneratedIdea demoData={demoIdea} />
+      </main>
+    </div>
+  );
 };
 
 export default DemoPro;

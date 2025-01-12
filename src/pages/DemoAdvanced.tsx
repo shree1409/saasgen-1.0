@@ -1,27 +1,38 @@
+import Header from "@/components/landing/Header";
 import GeneratedIdea from "./GeneratedIdea";
 
 const DemoAdvanced = () => {
-  const demoData = {
-    websiteName: "TeamSync Pro",
-    description: "An advanced team collaboration platform with integrated project management tools.",
-    keyFeatures: [
-      "Real-time collaboration",
-      "Advanced project tracking",
-      "Team analytics",
-      "Resource management",
-      "Custom workflows"
+  const demoIdea = {
+    title: "SkillShare Hub - Online Learning Platform",
+    description: "A marketplace for skill-sharing and online courses",
+    features: [
+      "Course creation tools",
+      "Live streaming capabilities",
+      "Interactive quizzes",
+      "Progress tracking",
+      "Community forums",
+      "Instructor analytics"
     ],
-    monetizationStrategy: [
-      "Tiered subscription plans",
-      "Team licensing",
-      "Priority support packages"
+    tech_stack: "Next.js, GraphQL, PostgreSQL, AWS",
+    timeline_breakdown: "6-8 months development timeline",
+    market_potential: "Expanding e-learning market with high growth potential",
+    monetization_strategies: [
+      "Revenue sharing with instructors",
+      "Premium subscriptions",
+      "Course marketplace fees",
+      "Enterprise solutions"
     ],
-    techStack: "React, Node.js, PostgreSQL, Redis, WebSocket",
-    timelineBreakdown: "Month 1-2: Core platform. Month 3: Advanced features. Month 4: Analytics and reporting.",
-    marketPotential: "High growth potential in the enterprise collaboration market with 30% YoY growth."
+    subscription_tier: "advanced"
   };
 
-  return <GeneratedIdea demoData={demoData} />;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <GeneratedIdea demoData={demoIdea} />
+      </main>
+    </div>
+  );
 };
 
 export default DemoAdvanced;

@@ -1,25 +1,35 @@
+import Header from "@/components/landing/Header";
 import GeneratedIdea from "./GeneratedIdea";
 
 const DemoBasic = () => {
-  const demoData = {
-    websiteName: "TaskFlow Basic",
-    description: "A streamlined task management platform for individuals and small teams.",
-    keyFeatures: [
-      "Task creation and management",
-      "Basic project organization",
-      "Simple progress tracking",
-      "Personal dashboard"
+  const demoIdea = {
+    title: "TaskFlow - Project Management Simplified",
+    description: "A streamlined project management tool for small teams",
+    features: [
+      "Task organization and tracking",
+      "Team collaboration features",
+      "Basic reporting dashboard",
+      "File sharing capabilities"
     ],
-    monetizationStrategy: [
-      "Freemium model with basic features",
-      "Premium user upgrades"
+    tech_stack: "React, Node.js, MongoDB",
+    timeline_breakdown: "3-4 months development timeline",
+    market_potential: "Growing market for project management tools",
+    monetization_strategies: [
+      "Freemium model",
+      "Monthly subscription plans",
+      "Team-based pricing"
     ],
-    techStack: "React, Node.js, MongoDB",
-    timelineBreakdown: "Month 1: Core features. Month 2: Testing and deployment.",
-    marketPotential: "Growing demand for personal productivity tools."
+    subscription_tier: "basic"
   };
 
-  return <GeneratedIdea demoData={demoData} />;
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
+        <GeneratedIdea demoData={demoIdea} />
+      </main>
+    </div>
+  );
 };
 
 export default DemoBasic;
