@@ -5,9 +5,9 @@ import Hero from "@/components/landing/Hero";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
       <Header />
-      <main className="pt-20">
+      <main>
         <div className="bg-gradient-to-b from-white to-secondary/20">
           <Hero />
           <Features />
