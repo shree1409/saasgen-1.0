@@ -10,7 +10,7 @@ const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
   const { data: prices, isLoading: pricesLoading, error } = usePrices();
 
-  console.log('Rendering Pricing component with:', {
+  console.log('🎯 Rendering Pricing component with:', {
     prices,
     isLoading: subscriptionLoading || pricesLoading,
     error,
@@ -30,7 +30,7 @@ const Pricing = () => {
   const isLoading = subscriptionLoading || pricesLoading;
 
   if (isLoading) {
-    console.log('Showing loading state');
+    console.log('⌛ Showing loading state');
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
@@ -43,7 +43,7 @@ const Pricing = () => {
   }
 
   if (error) {
-    console.error('Error in Pricing component:', error);
+    console.error('❌ Error in Pricing component:', error);
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
@@ -56,7 +56,7 @@ const Pricing = () => {
   }
 
   if (!prices || prices.length === 0) {
-    console.warn('No prices available');
+    console.warn('⚠️ No prices available');
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
@@ -70,7 +70,7 @@ const Pricing = () => {
     );
   }
 
-  console.log('Rendering pricing cards with prices:', prices);
+  console.log('💰 Rendering pricing cards with prices:', prices);
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
