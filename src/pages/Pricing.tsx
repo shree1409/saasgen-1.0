@@ -6,13 +6,74 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import GeneratedIdea from "./GeneratedIdea";
+
+// Sample demo data for different tiers
+const demoIdeas = {
+  basic: {
+    websiteName: "TaskFlow Basic",
+    description: "A streamlined task management platform for individuals and small teams.",
+    keyFeatures: [
+      "Task creation and management",
+      "Basic project organization",
+      "Simple progress tracking",
+      "Personal dashboard"
+    ],
+    monetizationStrategy: [
+      "Freemium model with basic features",
+      "Premium user upgrades"
+    ],
+    techStack: "React, Node.js, MongoDB",
+    timelineBreakdown: "Month 1: Core features. Month 2: Testing and deployment.",
+    marketPotential: "Growing demand for personal productivity tools."
+  },
+  advanced: {
+    websiteName: "TeamSync Pro",
+    description: "An advanced team collaboration platform with integrated project management tools.",
+    keyFeatures: [
+      "Real-time collaboration",
+      "Advanced project tracking",
+      "Team analytics",
+      "Resource management",
+      "Custom workflows"
+    ],
+    monetizationStrategy: [
+      "Tiered subscription plans",
+      "Team licensing",
+      "Priority support packages"
+    ],
+    techStack: "React, Node.js, PostgreSQL, Redis, WebSocket",
+    timelineBreakdown: "Month 1-2: Core platform. Month 3: Advanced features. Month 4: Analytics and reporting.",
+    marketPotential: "High growth potential in the enterprise collaboration market with 30% YoY growth."
+  },
+  pro: {
+    websiteName: "EnterpriseHub Elite",
+    description: "A comprehensive enterprise solution for large-scale business operations and analytics.",
+    keyFeatures: [
+      "Enterprise-grade security",
+      "Advanced analytics dashboard",
+      "Custom integrations",
+      "Automated workflows",
+      "Multi-team management"
+    ],
+    monetizationStrategy: [
+      "Enterprise licensing",
+      "Custom development services",
+      "White-label solutions",
+      "Consulting services"
+    ],
+    techStack: "React, Node.js, PostgreSQL, Kubernetes, ElasticSearch, Redis",
+    timelineBreakdown: "Month 1-2: Core platform. Month 3-4: Enterprise features. Month 5-6: Security and scaling.",
+    marketPotential: "Enterprise software market growing at 35% annually, particularly strong in financial and healthcare sectors."
+  }
+};
 
 const Pricing = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedDemo, setSelectedDemo] = useState<string | null>(null);
 
-  // Check for active subscription on component mount
   useEffect(() => {
     const checkSubscription = async () => {
       try {
@@ -21,9 +82,6 @@ const Pricing = () => {
         if (sessionError) throw sessionError;
 
         if (session?.user) {
-          console.log('Checking subscription for user:', session.user.email);
-          
-          // Check for active subscriptions
           const { data: subscriptions, error: subError } = await supabase
             .from('subscriptions')
             .select('*')
@@ -32,9 +90,7 @@ const Pricing = () => {
 
           if (subError) throw subError;
 
-          // Check if there are any active subscriptions
           if (subscriptions && subscriptions.length > 0) {
-            console.log('Active subscription found:', subscriptions[0]);
             toast({
               title: "Active Subscription",
               description: "Redirecting to generator...",
@@ -73,7 +129,7 @@ const Pricing = () => {
       }
       return data;
     },
-    enabled: !isLoading, // Only fetch prices if not redirecting
+    enabled: !isLoading,
   });
 
   const handleSubscribe = async (priceId: string) => {
@@ -93,7 +149,6 @@ const Pricing = () => {
         return;
       }
 
-      console.log('Creating checkout session for price:', priceId);
       const { data, error } = await supabase.functions.invoke('create-checkout-session', {
         body: { 
           priceId,
@@ -121,17 +176,6 @@ const Pricing = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
-        <Header />
-        <div className="container px-4 py-12 flex items-center justify-center">
-          <div className="animate-pulse">Loading...</div>
-        </div>
-      </div>
-    );
-  }
-
   const getDescription = (price) => {
     switch (price.tier) {
       case 'pro':
@@ -142,6 +186,17 @@ const Pricing = () => {
         return "Generate website ideas with basic features and monetization suggestions";
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
+        <Header />
+        <div className="container px-4 py-12 flex items-center justify-center">
+          <div className="animate-pulse">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
@@ -157,30 +212,53 @@ const Pricing = () => {
         </div>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {prices?.map((price) => (
-            <Card key={price.id} className="flex flex-col hover:scale-105 transition-transform duration-300 bg-white/80 backdrop-blur-lg border-purple-100">
-              <CardHeader>
-                <CardTitle className="capitalize bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-                  {price.tier}
-                </CardTitle>
-                <CardDescription>
-                  {getDescription(price)}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <div className="text-3xl font-bold">
-                  ${(price.unit_amount / 100).toFixed(2)}
-                  <span className="text-sm font-normal text-muted-foreground">/month</span>
+            <div key={price.id} className="space-y-6">
+              <Card className="hover:scale-105 transition-transform duration-300 bg-white/80 backdrop-blur-lg border-purple-100">
+                <CardHeader>
+                  <CardTitle className="capitalize bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+                    {price.tier}
+                  </CardTitle>
+                  <CardDescription>
+                    {getDescription(price)}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="text-3xl font-bold">
+                    ${(price.unit_amount / 100).toFixed(2)}
+                    <span className="text-sm font-normal text-muted-foreground">/month</span>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex flex-col gap-4">
+                  <Button 
+                    className="w-full text-white bg-gradient-to-r from-primary to-purple-600 hover:from-purple-600 hover:to-primary transition-all duration-300" 
+                    onClick={() => handleSubscribe(price.stripe_price_id)}
+                  >
+                    Subscribe
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setSelectedDemo(price.tier)}
+                  >
+                    View Demo
+                  </Button>
+                </CardFooter>
+              </Card>
+              
+              {selectedDemo === price.tier && (
+                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+                  <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <div className="p-4 border-b flex justify-between items-center">
+                      <h3 className="text-lg font-semibold">Demo Preview - {price.tier} Plan</h3>
+                      <Button variant="ghost" onClick={() => setSelectedDemo(null)}>Close</Button>
+                    </div>
+                    <div className="p-4">
+                      <GeneratedIdea demoData={demoIdeas[price.tier]} />
+                    </div>
+                  </div>
                 </div>
-              </CardContent>
-              <CardFooter>
-                <Button 
-                  className="w-full text-white bg-gradient-to-r from-primary to-purple-600 hover:from-purple-600 hover:to-primary transition-all duration-300" 
-                  onClick={() => handleSubscribe(price.stripe_price_id)}
-                >
-                  Subscribe
-                </Button>
-              </CardFooter>
-            </Card>
+              )}
+            </div>
           ))}
         </div>
       </div>
