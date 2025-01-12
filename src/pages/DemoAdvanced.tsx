@@ -3,9 +3,9 @@ import GeneratedIdea from "./GeneratedIdea";
 
 const DemoAdvanced = () => {
   const demoIdea = {
-    title: "SkillShare Hub - Online Learning Platform",
+    websiteName: "SkillShare Hub - Online Learning Platform",
     description: "A marketplace for skill-sharing and online courses",
-    features: [
+    keyFeatures: [
       "Course creation tools",
       "Live streaming capabilities",
       "Interactive quizzes",
@@ -13,10 +13,10 @@ const DemoAdvanced = () => {
       "Community forums",
       "Instructor analytics"
     ],
-    tech_stack: "Next.js, GraphQL, PostgreSQL, AWS",
-    timeline_breakdown: "6-8 months development timeline",
-    market_potential: "Expanding e-learning market with high growth potential",
-    monetization_strategies: [
+    techStack: "Next.js, GraphQL, PostgreSQL, AWS",
+    timelineBreakdown: "6-8 months development timeline",
+    marketPotential: "Expanding e-learning market with high growth potential",
+    monetizationStrategy: [
       "Revenue sharing with instructors",
       "Premium subscriptions",
       "Course marketplace fees",

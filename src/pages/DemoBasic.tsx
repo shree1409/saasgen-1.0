@@ -3,18 +3,18 @@ import GeneratedIdea from "./GeneratedIdea";
 
 const DemoBasic = () => {
   const demoIdea = {
-    title: "TaskFlow - Project Management Simplified",
+    websiteName: "TaskFlow - Project Management Simplified",
     description: "A streamlined project management tool for small teams",
-    features: [
+    keyFeatures: [
       "Task organization and tracking",
       "Team collaboration features",
       "Basic reporting dashboard",
       "File sharing capabilities"
     ],
-    tech_stack: "React, Node.js, MongoDB",
-    timeline_breakdown: "3-4 months development timeline",
-    market_potential: "Growing market for project management tools",
-    monetization_strategies: [
+    techStack: "React, Node.js, MongoDB",
+    timelineBreakdown: "3-4 months development timeline",
+    marketPotential: "Growing market for project management tools",
+    monetizationStrategy: [
       "Freemium model",
       "Monthly subscription plans",
       "Team-based pricing"

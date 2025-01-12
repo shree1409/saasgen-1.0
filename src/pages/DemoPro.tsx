@@ -3,9 +3,9 @@ import GeneratedIdea from "./GeneratedIdea";
 
 const DemoPro = () => {
   const demoIdea = {
-    title: "AI Analytics Suite - Business Intelligence Platform",
+    websiteName: "AI Analytics Suite - Business Intelligence Platform",
     description: "Advanced analytics platform powered by artificial intelligence",
-    features: [
+    keyFeatures: [
       "AI-powered data analysis",
       "Predictive modeling",
       "Custom dashboards",
@@ -15,10 +15,10 @@ const DemoPro = () => {
       "Automated reporting",
       "Data security features"
     ],
-    tech_stack: "Python, TensorFlow, React, Docker, Kubernetes",
-    timeline_breakdown: "12-15 months development timeline",
-    market_potential: "High-growth market in AI and analytics sector",
-    monetization_strategies: [
+    techStack: "Python, TensorFlow, React, Docker, Kubernetes",
+    timelineBreakdown: "12-15 months development timeline",
+    marketPotential: "High-growth market in AI and analytics sector",
+    monetizationStrategy: [
       "Enterprise licensing",
       "Custom solutions",
       "API access fees",
