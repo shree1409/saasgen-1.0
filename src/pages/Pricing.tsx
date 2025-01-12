@@ -6,9 +6,9 @@ import PricingCard from "@/components/pricing/PricingCard";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
 
 const Pricing = () => {
-  const { isLoading, handleSubscribe } = useSubscriptionManagement();
+  const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
 
-  const { data: prices } = useQuery({
+  const { data: prices, isLoading: pricesLoading } = useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -22,11 +22,10 @@ const Pricing = () => {
         throw error;
       }
       return data;
-    },
-    enabled: !isLoading,
+    }
   });
 
-  const getDescription = (price) => {
+  const getDescription = (price: any) => {
     switch (price.tier) {
       case 'pro':
         return "Everything in Advanced plus Market Analysis + Marketing Strategy Roadmap and Learning Resources";
@@ -37,12 +36,12 @@ const Pricing = () => {
     }
   };
 
-  if (isLoading) {
+  if (subscriptionLoading || pricesLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
-        <div className="container px-4 py-12 flex items-center justify-center">
-          <div className="animate-pulse">Loading...</div>
+        <div className="container pt-24 px-4 py-12 flex items-center justify-center">
+          <div className="animate-pulse text-lg">Loading pricing information...</div>
         </div>
       </div>
     );
@@ -51,7 +50,7 @@ const Pricing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
-      <div className="container px-4 py-12">
+      <div className="container pt-24 px-4 py-12">
         <PricingHeader />
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {prices?.map((price) => (
