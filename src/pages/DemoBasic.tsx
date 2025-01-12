@@ -3,16 +3,16 @@ import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoBasic = () => {
   const demoData = {
-    websiteName: "EcoSwap Marketplace",
-    description: "A sustainable marketplace platform where users can trade, sell, or swap eco-friendly products and services within their local community.",
+    websiteName: "Basic Website Idea",
+    description: "Get started with essential website features and a solid foundation. Perfect for launching your first online project.",
     keyFeatures: [
-      "User-friendly product listing and search",
-      "Secure in-app messaging system",
-      "Eco-impact scoring system",
-      "Local community groups and events",
-      "Verified seller program"
+      "User-friendly interface",
+      "Responsive design",
+      "Basic user authentication",
+      "Contact form integration",
+      "SEO optimization"
     ],
-    techStack: "React, Node.js, MongoDB, AWS S3",
+    techStack: "React, Node.js, MongoDB",
     subscription_tier: "basic" as const
   };
 

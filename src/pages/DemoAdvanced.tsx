@@ -3,23 +3,22 @@ import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoAdvanced = () => {
   const demoData = {
-    websiteName: "SkillShare Hub",
-    description: "A platform connecting skilled professionals with learners for personalized mentorship and skill development across various domains.",
+    websiteName: "Advanced Website Solution",
+    description: "Elevate your online presence with advanced features and detailed technical implementation guidance.",
     keyFeatures: [
-      "Advanced matching algorithm",
-      "Video conferencing integration",
-      "Progress tracking dashboard",
-      "Resource sharing system",
-      "Scheduling and calendar management"
+      "Advanced user management",
+      "Payment gateway integration",
+      "Real-time analytics",
+      "Custom API endpoints",
+      "Performance optimization"
     ],
     monetizationStrategy: [
-      "Premium membership tiers",
-      "Commission from session bookings",
-      "Sponsored mentor listings"
+      "Subscription-based model",
+      "Freemium features",
+      "Premium support packages"
     ],
-    techStack: "React, Node.js, PostgreSQL, WebRTC, Redis",
-    timelineBreakdown: "Month 1: Core platform development, Month 2: Video integration, Month 3: Payment systems",
-    marketPotential: "Growing online learning market with 15% CAGR",
+    techStack: "React, Node.js, PostgreSQL, Redis",
+    timelineBreakdown: "Month 1: Core features, Month 2: Advanced integrations, Month 3: Testing and optimization",
     subscription_tier: "advanced" as const
   };
 

@@ -3,23 +3,23 @@ import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoPro = () => {
   const demoData = {
-    websiteName: "HealthTech Analytics",
-    description: "An AI-powered healthcare analytics platform that helps medical professionals track patient outcomes and optimize treatment plans using machine learning.",
+    websiteName: "Professional Enterprise Solution",
+    description: "Comprehensive website solution with advanced features, marketing strategies, and learning resources for maximum success.",
     keyFeatures: [
-      "Real-time data analytics",
-      "Machine learning predictions",
-      "HIPAA-compliant storage",
-      "Interactive dashboards",
-      "Automated reporting system"
+      "Enterprise-grade security",
+      "Advanced analytics dashboard",
+      "Multi-tenant architecture",
+      "Automated scaling",
+      "Custom integrations"
     ],
     monetizationStrategy: [
-      "Enterprise licensing model",
-      "Per-user subscription pricing",
-      "Custom integration services"
+      "Enterprise licensing",
+      "White-label solutions",
+      "Custom development services"
     ],
-    techStack: "React, Python, TensorFlow, AWS, PostgreSQL",
-    timelineBreakdown: "Month 1: Core platform, Month 2: ML integration, Month 3: Security & Compliance",
-    marketPotential: "Healthcare analytics market growing at 24% CAGR",
+    techStack: "React, Node.js, PostgreSQL, Kubernetes",
+    timelineBreakdown: "Month 1: Architecture, Month 2: Core development, Month 3: Enterprise features",
+    marketPotential: "Enterprise solutions market growing at 15% CAGR, with high demand for scalable solutions",
     subscription_tier: "pro" as const
   };
 
