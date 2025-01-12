@@ -13,6 +13,9 @@ import Advanced from "./pages/Advanced";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
+import DemoBasic from "./pages/DemoBasic";
+import DemoAdvanced from "./pages/DemoAdvanced";
+import DemoPro from "./pages/DemoPro";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,10 +65,10 @@ const App = () => {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route 
-              path="/demo" 
-              element={<GeneratedIdea demoData={demoIdea} />} 
-            />
+            <Route path="/demo" element={<GeneratedIdea demoData={demoIdea} />} />
+            <Route path="/demo/basic" element={<DemoBasic />} />
+            <Route path="/demo/advanced" element={<DemoAdvanced />} />
+            <Route path="/demo/pro" element={<DemoPro />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>
