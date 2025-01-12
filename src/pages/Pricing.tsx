@@ -10,7 +10,7 @@ const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
   const { data: prices, isLoading: pricesLoading, error } = usePrices();
 
-  console.log('🎯 Pricing component render:', {
+  console.log('🎯 Pricing page render:', {
     prices,
     isLoading: subscriptionLoading || pricesLoading,
     error
@@ -27,10 +27,7 @@ const Pricing = () => {
     }
   };
 
-  const isLoading = subscriptionLoading || pricesLoading;
-
-  if (isLoading) {
-    console.log('⌛ Showing loading state');
+  if (subscriptionLoading || pricesLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
@@ -63,21 +60,20 @@ const Pricing = () => {
         <div className="container pt-24 px-4 py-12">
           <PricingHeader />
           <div className="text-center text-gray-500">
-            No pricing plans are currently available. Please check back later.
+            No pricing plans are currently available.
           </div>
         </div>
       </div>
     );
   }
 
-  console.log('💰 Rendering pricing cards with prices:', prices);
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
       <div className="container pt-24 px-4 py-12">
         <PricingHeader />
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {prices.map((price) => (
+          {Array.isArray(prices) && prices.map((price) => (
             <PricingCard
               key={price.id}
               price={price}

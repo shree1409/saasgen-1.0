@@ -15,7 +15,7 @@ interface PricingCardProps {
 const PricingCard = ({ price, onSubscribe, getDescription }: PricingCardProps) => {
   const navigate = useNavigate();
 
-  console.log('💳 Rendering PricingCard with price:', price);
+  console.log('💳 Rendering PricingCard:', price);
 
   const handleDemoClick = () => {
     console.log('🎮 Demo clicked for tier:', price.tier);

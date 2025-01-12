@@ -8,36 +8,33 @@ export const usePrices = () => {
   return useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
-      console.log('🔍 Starting price fetch...');
+      console.log('🔍 Fetching prices from Supabase...');
       
-      const { data: prices, error: fetchError } = await supabase
+      const { data: prices, error } = await supabase
         .from('prices')
         .select('*')
         .eq('active', true)
         .order('unit_amount');
       
-      console.log('📦 Raw prices response:', { prices, fetchError });
-
-      if (fetchError) {
-        console.error('❌ Error fetching prices:', fetchError);
+      if (error) {
+        console.error('❌ Error fetching prices:', error);
         toast({
           title: "Error",
-          description: "Failed to load pricing information. Please try again later.",
+          description: "Failed to load pricing information",
           variant: "destructive",
         });
-        throw fetchError;
+        throw error;
       }
 
       if (!prices || prices.length === 0) {
-        console.warn('⚠️ No active prices found in the database');
+        console.warn('⚠️ No active prices found');
         return [];
       }
 
       console.log('✅ Successfully fetched prices:', prices);
       return prices;
     },
-    retry: 1,
-    refetchOnWindowFocus: false,
+    retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
