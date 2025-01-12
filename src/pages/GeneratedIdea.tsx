@@ -33,6 +33,7 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
   const [subscription, setSubscription] = useState<string | null>(null);
 
   useEffect(() => {
+    // Only check subscription if not in demo mode
     if (!demoData) {
       const checkSubscription = async () => {
         const { data: { session } } = await supabase.auth.getSession();
@@ -113,7 +114,7 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
       </motion.div>
     );
 
-    // Show all content in demo mode
+    // Show all content in demo mode or for advanced/pro subscribers
     if (demoData || subscription === 'advanced' || subscription === 'pro') {
       sections.push(
         <motion.div key="marketing" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
@@ -125,6 +126,7 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
       );
     }
 
+    // Show learning resources in demo mode or for pro subscribers
     if (demoData || subscription === 'pro') {
       sections.push(
         <motion.div key="learning" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
