@@ -1,33 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { Info, List } from "lucide-react";
+import { Link } from "react-router-dom";
 
-interface NavigationProps {
-  session: any;
-  scrollToFeatures: () => void;
-}
-
-const Navigation = ({ session, scrollToFeatures }: NavigationProps) => {
-  const navigate = useNavigate();
-
+const Navigation = () => {
   return (
-    <nav className="hidden md:flex items-center gap-8">
-      <Button 
-        variant="ghost"
-        onClick={scrollToFeatures}
-        className="text-sm text-muted-foreground hover:text-primary flex items-center gap-2"
+    <nav className="hidden md:flex items-center space-x-6">
+      <Link
+        to="/"
+        className="text-sm font-medium transition-colors hover:text-primary"
       >
-        <List className="w-4 h-4" />
-        Features
-      </Button>
-      <Button 
-        variant="ghost"
-        onClick={() => navigate('/how-it-works')}
-        className="text-sm text-muted-foreground hover:text-primary flex items-center gap-2"
+        Home
+      </Link>
+      <Link
+        to="/pricing"
+        className="text-sm font-medium transition-colors hover:text-primary"
       >
-        <Info className="w-4 h-4" />
-        How it Works
-      </Button>
+        Pricing
+      </Link>
+      <Link
+        to="/generator"
+        className="text-sm font-medium transition-colors hover:text-primary"
+      >
+        Generator
+      </Link>
     </nav>
   );
 };
