@@ -5,15 +5,12 @@ import PricingSkeleton from "@/components/pricing/PricingSkeleton";
 import PricingError from "@/components/pricing/PricingError";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
 import { usePrices } from "@/hooks/usePrices";
-import { useEffect } from "react";
 
 const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
   const { data: prices, isLoading: pricesLoading, error } = usePrices();
 
-  useEffect(() => {
-    console.log('Current prices data:', prices);
-  }, [prices]);
+  console.log('Prices in component:', prices);
 
   const getDescription = (price: any) => {
     switch (price.tier.toLowerCase()) {
