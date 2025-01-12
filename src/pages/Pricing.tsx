@@ -4,6 +4,7 @@ import Header from "@/components/landing/Header";
 import PricingHeader from "@/components/pricing/PricingHeader";
 import PricingCard from "@/components/pricing/PricingCard";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
@@ -36,32 +37,43 @@ const Pricing = () => {
     }
   };
 
-  if (subscriptionLoading || pricesLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
-        <Header />
-        <div className="container pt-24 px-4 py-12 flex items-center justify-center">
-          <div className="animate-pulse text-lg">Loading pricing information...</div>
+  const LoadingSkeleton = () => (
+    <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="space-y-6">
+          <div className="rounded-lg border p-6 space-y-4">
+            <Skeleton className="h-8 w-24" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-12 w-32" />
+            <div className="space-y-2">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          </div>
         </div>
-      </div>
-    );
-  }
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
       <div className="container pt-24 px-4 py-12">
         <PricingHeader />
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {prices?.map((price) => (
-            <PricingCard
-              key={price.id}
-              price={price}
-              onSubscribe={handleSubscribe}
-              getDescription={getDescription}
-            />
-          ))}
-        </div>
+        {(subscriptionLoading || pricesLoading) ? (
+          <LoadingSkeleton />
+        ) : (
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {prices?.map((price) => (
+              <PricingCard
+                key={price.id}
+                price={price}
+                onSubscribe={handleSubscribe}
+                getDescription={getDescription}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
