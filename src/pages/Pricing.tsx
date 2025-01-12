@@ -34,7 +34,9 @@ const Pricing = () => {
       console.log('Fetched prices:', data);
       return data;
     },
-    retry: 3
+    retry: 3,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const getDescription = (price: any) => {
@@ -67,6 +69,7 @@ const Pricing = () => {
   );
 
   if (error) {
+    console.error('Pricing error:', error);
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
