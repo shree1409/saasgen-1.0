@@ -8,7 +8,7 @@ export const usePrices = () => {
   return useQuery({
     queryKey: ['prices'],
     queryFn: async () => {
-      console.log('🔍 Fetching prices from Supabase...');
+      console.log('🔍 Fetching prices...');
       
       const { data: prices, error } = await supabase
         .from('prices')
@@ -26,15 +26,17 @@ export const usePrices = () => {
         throw error;
       }
 
+      console.log('✅ Fetched prices:', prices);
+      
       if (!prices || prices.length === 0) {
-        console.warn('⚠️ No active prices found');
+        console.warn('⚠️ No prices found in database');
         return [];
       }
 
-      console.log('✅ Successfully fetched prices:', prices);
       return prices;
     },
-    retry: 2,
     staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnMount: true,
+    retry: 3,
   });
 };

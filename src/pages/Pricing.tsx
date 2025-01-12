@@ -5,16 +5,15 @@ import PricingSkeleton from "@/components/pricing/PricingSkeleton";
 import PricingError from "@/components/pricing/PricingError";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
 import { usePrices } from "@/hooks/usePrices";
+import { useEffect } from "react";
 
 const Pricing = () => {
   const { isLoading: subscriptionLoading, handleSubscribe } = useSubscriptionManagement();
   const { data: prices, isLoading: pricesLoading, error } = usePrices();
 
-  console.log('🎯 Pricing page render:', {
-    prices,
-    isLoading: subscriptionLoading || pricesLoading,
-    error
-  });
+  useEffect(() => {
+    console.log('Current prices data:', prices);
+  }, [prices]);
 
   const getDescription = (price: any) => {
     switch (price.tier.toLowerCase()) {
@@ -40,7 +39,7 @@ const Pricing = () => {
   }
 
   if (error) {
-    console.error('❌ Error in Pricing component:', error);
+    console.error('Error in Pricing component:', error);
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
         <Header />
@@ -52,35 +51,26 @@ const Pricing = () => {
     );
   }
 
-  if (!prices || prices.length === 0) {
-    console.warn('⚠️ No prices available');
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
-        <Header />
-        <div className="container pt-24 px-4 py-12">
-          <PricingHeader />
-          <div className="text-center text-gray-500">
-            No pricing plans are currently available.
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
       <div className="container pt-24 px-4 py-12">
         <PricingHeader />
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {Array.isArray(prices) && prices.map((price) => (
-            <PricingCard
-              key={price.id}
-              price={price}
-              onSubscribe={handleSubscribe}
-              getDescription={getDescription}
-            />
-          ))}
+          {Array.isArray(prices) && prices.length > 0 ? (
+            prices.map((price) => (
+              <PricingCard
+                key={price.id}
+                price={price}
+                onSubscribe={handleSubscribe}
+                getDescription={getDescription}
+              />
+            ))
+          ) : (
+            <div className="col-span-3 text-center text-gray-500">
+              No pricing plans are currently available. Please try again later.
+            </div>
+          )}
         </div>
       </div>
     </div>

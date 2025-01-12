@@ -15,15 +15,12 @@ interface PricingCardProps {
 const PricingCard = ({ price, onSubscribe, getDescription }: PricingCardProps) => {
   const navigate = useNavigate();
 
-  console.log('💳 Rendering PricingCard:', price);
-
   const handleDemoClick = () => {
-    console.log('🎮 Demo clicked for tier:', price.tier);
     navigate(`/demo-${price.tier.toLowerCase()}`);
   };
 
   return (
-    <Card className="hover:scale-105 transition-transform duration-300 bg-white/80 backdrop-blur-lg border-purple-100">
+    <Card className="hover:scale-105 transition-transform duration-300 bg-white/90 backdrop-blur-lg border-purple-100">
       <CardHeader>
         <CardTitle className="capitalize bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
           {price.tier}

@@ -1,7 +1,7 @@
 const PricingHeader = () => {
   return (
-    <div className="text-center mb-12">
-      <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+    <div className="text-center mb-12 px-4">
+      <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent pb-2">
         Simple, transparent pricing
       </h1>
       <p className="text-lg text-muted-foreground mt-4">
