@@ -36,7 +36,10 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
       {(demoData.subscription_tier === 'advanced' || demoData.subscription_tier === 'pro') && (
         <>
           <Card className="p-6">
-            <TechnicalImplementation techStack={demoData.techStack} timelineBreakdown={demoData.timelineBreakdown} />
+            <TechnicalImplementation 
+              techStack={demoData.techStack} 
+              timelineBreakdown={demoData.timelineBreakdown} 
+            />
           </Card>
 
           <Card className="p-6">
