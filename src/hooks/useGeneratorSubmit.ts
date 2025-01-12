@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { FormData } from "@/components/form/useFormState";
+import { FormData } from "@/components/form/FormValidation";
 
 export const useGeneratorSubmit = (setIsGenerating: (value: boolean) => void, setError: (value: string | null) => void) => {
   const navigate = useNavigate();
