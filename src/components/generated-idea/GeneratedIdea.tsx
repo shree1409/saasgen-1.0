@@ -12,9 +12,9 @@ interface GeneratedIdeaProps {
     description: string;
     keyFeatures: string[];
     techStack: string;
-    timelineBreakdown: string;
-    marketPotential: string;
-    monetizationStrategy: string[];
+    timelineBreakdown?: string;
+    marketPotential?: string;
+    monetizationStrategy?: string[];
     subscription_tier?: 'basic' | 'advanced' | 'pro';
   };
 }
@@ -38,23 +38,26 @@ const GeneratedIdea = ({ demoData }: GeneratedIdeaProps) => {
           <Card className="p-6">
             <TechnicalImplementation 
               techStack={demoData.techStack} 
-              timelineBreakdown={demoData.timelineBreakdown} 
+              timelineBreakdown={demoData.timelineBreakdown || ''} 
             />
           </Card>
 
           <Card className="p-6">
-            <MonetizationStrategy strategies={demoData.monetizationStrategy} />
+            <MonetizationStrategy strategies={demoData.monetizationStrategy || []} />
           </Card>
 
           <Card className="p-6">
-            <MarketingSection marketPotential={demoData.marketPotential} />
+            <MarketingSection marketPotential={demoData.marketPotential || ''} />
           </Card>
         </>
       )}
 
       {demoData.subscription_tier === 'pro' && (
         <Card className="p-6">
-          <LearningResources techStack={demoData.techStack} />
+          <LearningResources 
+            techStack={demoData.techStack}
+            features={demoData.keyFeatures}
+          />
         </Card>
       )}
     </div>

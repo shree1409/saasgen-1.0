@@ -6,6 +6,9 @@ import Generator from "@/pages/Generator";
 import Basic from "@/pages/Basic";
 import Advanced from "@/pages/Advanced";
 import Pro from "@/pages/Pro";
+import DemoBasic from "@/pages/DemoBasic";
+import DemoAdvanced from "@/pages/DemoAdvanced";
+import DemoPro from "@/pages/DemoPro";
 import Profile from "@/pages/Profile";
 import Dashboard from "@/pages/Dashboard";
 import Pricing from "@/pages/Pricing";
@@ -24,6 +27,9 @@ function App() {
         <Route path="/basic" element={<Basic />} />
         <Route path="/advanced" element={<Advanced />} />
         <Route path="/pro" element={<Pro />} />
+        <Route path="/demo-basic" element={<DemoBasic />} />
+        <Route path="/demo-advanced" element={<DemoAdvanced />} />
+        <Route path="/demo-pro" element={<DemoPro />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/pricing" element={<Pricing />} />

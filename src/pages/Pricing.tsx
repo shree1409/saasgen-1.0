@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useSubscriptionManagement } from "@/hooks/useSubscriptionManagement";
-import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
 
 const tiers = [
   {
@@ -10,11 +10,12 @@ const tiers = [
     priceId: "price_1QdiOkBNGIJ8hstK75BVXEvj",
     price: "$15",
     description: "Essential features for getting started",
+    demoPath: "/demo-basic",
     features: [
       "Generate basic website ideas",
-      "Access to fundamental features",
-      "Basic monetization strategies",
-      "Simple tech stack suggestions",
+      "Access to key features list",
+      "Basic tech stack suggestions",
+      "Simple project overview",
     ],
   },
   {
@@ -22,12 +23,13 @@ const tiers = [
     priceId: "price_1Qcwy0BNGIJ8hstKYmE68GcO",
     price: "$25",
     description: "Enhanced features for growing businesses",
+    demoPath: "/demo-advanced",
     features: [
       "Everything in Basic",
-      "Advanced website concepts",
-      "Detailed market analysis",
-      "Comprehensive tech recommendations",
-      "Priority support",
+      "Development timeline",
+      "Marketing strategies",
+      "Monetization suggestions",
+      "Market analysis",
     ],
   },
   {
@@ -35,20 +37,19 @@ const tiers = [
     priceId: "price_1QcwtBBNGIJ8hstK31w61Ihy",
     price: "$35",
     description: "Full access to all premium features",
+    demoPath: "/demo-pro",
     features: [
       "Everything in Advanced",
-      "Premium website templates",
-      "Custom branding options",
-      "Advanced analytics",
-      "Dedicated support",
+      "Learning resources",
+      "Video tutorials",
+      "Implementation guides",
+      "Priority support",
       "API access",
     ],
   },
 ];
 
 const Pricing = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
   const { isLoading, handleSubscribe } = useSubscriptionManagement();
 
   return (
@@ -86,13 +87,20 @@ const Pricing = () => {
                     </li>
                   ))}
                 </ul>
-                <Button
-                  className="w-full"
-                  onClick={() => handleSubscribe(tier.priceId)}
-                  disabled={isLoading}
-                >
-                  Get Started
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    className="w-full text-white"
+                    onClick={() => handleSubscribe(tier.priceId)}
+                    disabled={isLoading}
+                  >
+                    Get Started
+                  </Button>
+                  <Link to={tier.demoPath}>
+                    <Button variant="outline" className="w-full">
+                      View Demo
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
