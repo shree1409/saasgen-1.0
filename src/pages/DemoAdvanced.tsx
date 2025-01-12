@@ -1,5 +1,5 @@
 import Header from "@/components/landing/Header";
-import GeneratedIdea from "./GeneratedIdea";
+import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoAdvanced = () => {
   const demoIdea = {
@@ -26,11 +26,11 @@ const DemoAdvanced = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
-      <main className="flex-1">
+      <div className="container mx-auto px-4 py-8">
         <GeneratedIdea demoData={demoIdea} />
-      </main>
+      </div>
     </div>
   );
 };

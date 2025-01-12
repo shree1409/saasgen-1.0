@@ -1,5 +1,5 @@
 import Header from "@/components/landing/Header";
-import GeneratedIdea from "./GeneratedIdea";
+import GeneratedIdea from "@/components/generated-idea/GeneratedIdea";
 
 const DemoPro = () => {
   const demoIdea = {
@@ -9,9 +9,8 @@ const DemoPro = () => {
       "AI-powered data analysis",
       "Predictive modeling",
       "Custom dashboards",
-      "Real-time monitoring",
       "Integration capabilities",
-      "Advanced visualization tools",
+      "Real-time monitoring",
       "Automated reporting",
       "Data security features"
     ],
@@ -23,17 +22,17 @@ const DemoPro = () => {
       "Custom solutions",
       "API access fees",
       "Consulting services",
-      "Industry-specific packages"
+      "Premium support plans"
     ],
     subscription_tier: "pro"
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen bg-gradient-to-b from-white to-secondary/20">
       <Header />
-      <main className="flex-1">
+      <div className="container mx-auto px-4 py-8">
         <GeneratedIdea demoData={demoIdea} />
-      </main>
+      </div>
     </div>
   );
 };
