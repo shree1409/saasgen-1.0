@@ -55,11 +55,10 @@ const Header = () => {
         <nav className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div 
-              className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" 
+              className="flex items-center cursor-pointer hover:opacity-80 transition-opacity" 
               onClick={() => navigate('/')}
             >
               <Logo />
-              <span className="font-semibold text-lg">saasgen</span>
             </div>
             
             <div className="flex items-center gap-4">
