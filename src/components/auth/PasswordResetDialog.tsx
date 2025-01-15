@@ -20,12 +20,22 @@ const PasswordResetDialog = ({ open, onOpenChange }: PasswordResetDialogProps) =
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleResetPassword = async () => {
-    if (!email || !newPassword) {
+    if (!email || !newPassword || !confirmPassword) {
       toast({
         title: "Error",
-        description: "Please enter both email and new password.",
+        description: "Please fill in all fields.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match.",
         variant: "destructive",
       });
       return;
@@ -45,6 +55,7 @@ const PasswordResetDialog = ({ open, onOpenChange }: PasswordResetDialogProps) =
       });
       onOpenChange(false);
       setNewPassword("");
+      setConfirmPassword("");
       setEmail("");
     } catch (error: any) {
       console.error('Reset password error:', error);
@@ -62,7 +73,7 @@ const PasswordResetDialog = ({ open, onOpenChange }: PasswordResetDialogProps) =
         <DialogHeader>
           <DialogTitle>Reset Password</DialogTitle>
           <DialogDescription>
-            Enter your email and new password to update your credentials.
+            Enter your email and new password below.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
@@ -77,6 +88,12 @@ const PasswordResetDialog = ({ open, onOpenChange }: PasswordResetDialogProps) =
             placeholder="Enter new password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Confirm new password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <Button onClick={handleResetPassword} className="w-full">
             Update Password
