@@ -4,12 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import AuthForm from "@/components/auth/AuthForm";
-import PasswordResetDialog from "@/components/auth/PasswordResetDialog";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -86,22 +84,9 @@ const SignIn = () => {
 
           <div className="bg-card rounded-lg shadow-lg p-6">
             <AuthForm />
-            <div className="mt-4 text-center">
-              <button
-                onClick={() => setResetPasswordOpen(true)}
-                className="text-sm text-primary hover:underline"
-              >
-                Forgot your password?
-              </button>
-            </div>
           </div>
         </div>
       </div>
-
-      <PasswordResetDialog 
-        open={resetPasswordOpen}
-        onOpenChange={setResetPasswordOpen}
-      />
     </div>
   );
 };
