@@ -21,6 +21,7 @@ const SignIn = () => {
   const { toast } = useToast();
   const [resetPasswordOpen, setResetPasswordOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -61,7 +62,7 @@ const SignIn = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth event:', event);
       if (event === 'SIGNED_IN' && session) {
-        setErrorMessage(""); // Clear any error messages on successful sign in
+        setErrorMessage("");
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -69,11 +70,6 @@ const SignIn = () => {
         navigate('/dashboard');
       } else if (event === 'SIGNED_OUT') {
         navigate('/sign-in');
-      } else if (event === 'PASSWORD_RECOVERY') {
-        toast({
-          title: "Password Recovery",
-          description: "Check your email for the password reset link.",
-        });
       } else if (event === 'USER_UPDATED') {
         const { error } = await supabase.auth.getSession();
         if (error) {
@@ -88,32 +84,34 @@ const SignIn = () => {
   }, [navigate, toast]);
 
   const handleResetPassword = async () => {
-    if (!email) {
+    if (!email || !newPassword) {
       toast({
         title: "Error",
-        description: "Please enter your email address.",
+        description: "Please enter both email and new password.",
         variant: "destructive",
       });
       return;
     }
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+      const { error } = await supabase.auth.updateUser({
+        email: email,
+        password: newPassword
       });
 
       if (error) throw error;
 
       toast({
-        title: "Password Reset Email Sent",
-        description: "Check your email for the password reset link.",
+        title: "Password Updated",
+        description: "Your password has been successfully updated. Please sign in with your new password.",
       });
       setResetPasswordOpen(false);
+      setNewPassword("");
     } catch (error: any) {
       console.error('Reset password error:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to send reset password email",
+        description: error.message || "Failed to update password",
         variant: "destructive",
       });
     }
@@ -186,7 +184,7 @@ const SignIn = () => {
           <DialogHeader>
             <DialogTitle>Reset Password</DialogTitle>
             <DialogDescription>
-              Enter your email address and we'll send you a link to reset your password.
+              Enter your email and new password to update your credentials.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -196,8 +194,14 @@ const SignIn = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            <Input
+              type="password"
+              placeholder="Enter new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
             <Button onClick={handleResetPassword} className="w-full">
-              Send Reset Link
+              Update Password
             </Button>
           </div>
         </DialogContent>
