@@ -27,6 +27,8 @@ const AuthForm = () => {
       theme="light"
       providers={[]}
       redirectTo={`${window.location.origin}/dashboard`}
+      showLinks={false}
+      view="sign_in"
     />
   );
 };
