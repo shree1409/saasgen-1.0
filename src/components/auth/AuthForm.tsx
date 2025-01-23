@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Key, Lock, LogIn, RefreshCw } from "lucide-react";
 
 const AuthForm = () => {
   const [email, setEmail] = useState("");
@@ -64,6 +65,18 @@ const AuthForm = () => {
 
     setLoading(true);
     try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Please sign in first to change your password",
+        });
+        setIsChangingPassword(false);
+        return;
+      }
+
       const { error } = await supabase.auth.updateUser({ 
         password: newPassword 
       });
@@ -124,10 +137,17 @@ const AuthForm = () => {
           <div className="space-y-4">
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? (
+                "Signing in..."
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Sign in
+                </>
+              )}
             </Button>
             <Button
               type="button"
@@ -135,6 +155,7 @@ const AuthForm = () => {
               className="w-full"
               onClick={() => setIsChangingPassword(true)}
             >
+              <Key className="w-4 h-4 mr-2" />
               Change Password
             </Button>
           </div>
@@ -166,10 +187,17 @@ const AuthForm = () => {
           <div className="space-y-4">
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-primary hover:bg-primary/90"
               disabled={loading}
             >
-              {loading ? "Changing Password..." : "Change Password"}
+              {loading ? (
+                "Changing Password..."
+              ) : (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Change Password
+                </>
+              )}
             </Button>
             <Button
               type="button"
@@ -177,6 +205,7 @@ const AuthForm = () => {
               className="w-full"
               onClick={() => setIsChangingPassword(false)}
             >
+              <Lock className="w-4 h-4 mr-2" />
               Back to Sign In
             </Button>
           </div>
