@@ -65,27 +65,31 @@ const AuthForm = () => {
 
     setLoading(true);
     try {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      
-      if (sessionError || !session) {
+      // First, sign in with current credentials
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
         toast({
           variant: "destructive",
           title: "Error",
-          description: "Please sign in first to change your password",
+          description: "Please verify your current credentials",
         });
-        setIsChangingPassword(false);
         return;
       }
 
-      const { error } = await supabase.auth.updateUser({ 
+      // Then update the password
+      const { error: updateError } = await supabase.auth.updateUser({ 
         password: newPassword 
       });
 
-      if (error) {
+      if (updateError) {
         toast({
           variant: "destructive",
           title: "Error changing password",
-          description: error.message,
+          description: updateError.message,
         });
       } else {
         toast({
@@ -95,6 +99,7 @@ const AuthForm = () => {
         setIsChangingPassword(false);
         setNewPassword("");
         setConfirmPassword("");
+        setPassword("");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -162,6 +167,28 @@ const AuthForm = () => {
         </form>
       ) : (
         <form onSubmit={handlePasswordChange} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="currentPassword">Current Password</Label>
+            <Input
+              id="currentPassword"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter current password"
+              required
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="newPassword">New Password</Label>
             <Input
