@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
 import { Lock, RefreshCw } from "lucide-react";
+import AuthButton from "./AuthButton";
+import AuthFormField from "./AuthFormField";
 
 interface PasswordChangeFormProps {
   onBackToSignIn: () => void;
@@ -31,7 +30,6 @@ const PasswordChangeForm = ({ onBackToSignIn }: PasswordChangeFormProps) => {
 
     setLoading(true);
     try {
-      // First, sign in with current credentials
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -46,7 +44,6 @@ const PasswordChangeForm = ({ onBackToSignIn }: PasswordChangeFormProps) => {
         return;
       }
 
-      // Then update the password
       const { error: updateError } = await supabase.auth.updateUser({ 
         password: newPassword 
       });
@@ -81,74 +78,57 @@ const PasswordChangeForm = ({ onBackToSignIn }: PasswordChangeFormProps) => {
 
   return (
     <form onSubmit={handlePasswordChange} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="currentPassword">Current Password</Label>
-        <Input
-          id="currentPassword"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter current password"
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="newPassword">New Password</Label>
-        <Input
-          id="newPassword"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="Enter new password"
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirm New Password</Label>
-        <Input
-          id="confirmPassword"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Confirm new password"
-          required
-        />
-      </div>
+      <AuthFormField
+        id="email"
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        required
+      />
+      <AuthFormField
+        id="currentPassword"
+        label="Current Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Enter current password"
+        required
+      />
+      <AuthFormField
+        id="newPassword"
+        label="New Password"
+        type="password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+        placeholder="Enter new password"
+        required
+      />
+      <AuthFormField
+        id="confirmPassword"
+        label="Confirm New Password"
+        type="password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder="Confirm new password"
+        required
+      />
       <div className="space-y-4">
-        <Button
+        <AuthButton
           type="submit"
-          className="w-full bg-primary text-white hover:bg-primary/90"
-          disabled={loading}
+          loading={loading}
+          icon={RefreshCw}
         >
-          {loading ? (
-            "Changing Password..."
-          ) : (
-            <>
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Change Password
-            </>
-          )}
-        </Button>
-        <Button
-          type="button"
+          Change Password
+        </AuthButton>
+        <AuthButton
           variant="outline"
-          className="w-full"
           onClick={onBackToSignIn}
+          icon={Lock}
         >
-          <Lock className="w-4 h-4 mr-2" />
           Back to Sign In
-        </Button>
+        </AuthButton>
       </div>
     </form>
   );

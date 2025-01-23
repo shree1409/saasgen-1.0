@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
 import { Key, LogIn } from "lucide-react";
+import AuthButton from "./AuthButton";
+import AuthFormField from "./AuthFormField";
 
 interface SignInFormProps {
   onChangePasswordClick: () => void;
@@ -55,52 +54,39 @@ const SignInForm = ({ onChangePasswordClick }: SignInFormProps) => {
 
   return (
     <form onSubmit={handleSignIn} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-          required
-        />
-      </div>
+      <AuthFormField
+        id="email"
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        required
+      />
+      <AuthFormField
+        id="password"
+        label="Password"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Enter your password"
+        required
+      />
       <div className="space-y-4">
-        <Button
+        <AuthButton
           type="submit"
-          className="w-full bg-primary text-white hover:bg-primary/90"
-          disabled={loading}
+          loading={loading}
+          icon={LogIn}
         >
-          {loading ? (
-            "Signing in..."
-          ) : (
-            <>
-              <LogIn className="w-4 h-4 mr-2" />
-              Sign in
-            </>
-          )}
-        </Button>
-        <Button
-          type="button"
+          Sign in
+        </AuthButton>
+        <AuthButton
           variant="outline"
-          className="w-full"
           onClick={onChangePasswordClick}
+          icon={Key}
         >
-          <Key className="w-4 h-4 mr-2" />
           Change Password
-        </Button>
+        </AuthButton>
       </div>
     </form>
   );
