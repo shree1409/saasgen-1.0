@@ -80,7 +80,7 @@ const SignInForm = ({ onChangePasswordClick }: SignInFormProps) => {
       <div className="space-y-4">
         <Button
           type="submit"
-          className="w-full bg-primary hover:bg-primary/90"
+          className="w-full bg-primary text-white hover:bg-primary/90"
           disabled={loading}
         >
           {loading ? (
