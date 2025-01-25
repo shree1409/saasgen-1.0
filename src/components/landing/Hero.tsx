@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import FuturisticGraphic from "./FuturisticGraphic";
 
 const Hero = () => {
   const [idea, setIdea] = useState("");
@@ -12,6 +13,9 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-[#1A1F2C] to-[#2D1A3D] overflow-hidden">
+      {/* Futuristic background */}
+      <FuturisticGraphic />
+      
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Floating orbs */}
@@ -39,29 +43,6 @@ const Hero = () => {
           }}
           className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-pink-500/10 blur-3xl"
         />
-
-        {/* Animated lines */}
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ 
-              x: 0, 
-              opacity: [0.1, 0.3, 0.1],
-              y: [0, 10, 0]
-            }}
-            transition={{
-              duration: 3,
-              delay: i * 0.2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className={`absolute left-0 w-[200px] h-[1px] bg-gradient-to-r from-purple-500/30 to-transparent`}
-            style={{
-              top: `${20 + (i * 15)}%`,
-            }}
-          />
-        ))}
 
         {/* Animated dots */}
         {[...Array(20)].map((_, i) => (
