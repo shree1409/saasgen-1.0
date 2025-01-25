@@ -50,7 +50,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-sm border-b border-gray-200">
+    <header className="fixed top-0 z-50 w-full bg-transparent backdrop-blur-sm">
       <div className="container mx-auto">
         <nav className="px-4 py-4">
           <div className="flex items-center justify-between">
