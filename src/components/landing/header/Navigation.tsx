@@ -11,14 +11,14 @@ const Navigation = ({ session, scrollToFeatures }: NavigationProps) => {
     <nav className="hidden md:flex items-center space-x-6">
       <Link
         to="/pricing"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
       >
         Pricing
       </Link>
       {scrollToFeatures && (
         <button
           onClick={scrollToFeatures}
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+          className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
         >
           Features
         </button>
@@ -26,7 +26,7 @@ const Navigation = ({ session, scrollToFeatures }: NavigationProps) => {
       {session ? (
         <Link
           to="/dashboard"
-          className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+          className="text-sm font-medium text-gray-300 transition-colors hover:text-white"
         >
           Dashboard
         </Link>

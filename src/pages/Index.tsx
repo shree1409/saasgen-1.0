@@ -5,14 +5,12 @@ import Hero from "@/components/landing/Hero";
 
 const Index = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-[#1A1F2C]">
       <Header />
       <main className="flex-1">
-        <div className="bg-gradient-to-b from-white to-secondary/20">
-          <Hero />
-          <Features />
-          <Benefits />
-        </div>
+        <Hero />
+        <Benefits />
+        <Features />
       </main>
     </div>
   );

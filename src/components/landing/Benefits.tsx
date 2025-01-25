@@ -27,7 +27,7 @@ const benefits = [
 const Benefits = () => {
   return (
     <motion.section 
-      className="mb-24"
+      className="py-24 bg-[#1A1F2C]"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -40,27 +40,29 @@ const Benefits = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-3xl font-bold mb-4">Why Choose SaasGen?</h2>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+        <h2 className="text-4xl font-bold mb-4 text-white">Why Choose SaasGen?</h2>
+        <p className="text-gray-400 max-w-2xl mx-auto">
           Our AI-powered platform helps entrepreneurs and creators build successful SaaS businesses
         </p>
       </motion.div>
 
-      <div className="grid md:grid-cols-4 gap-8">
-        {benefits.map((benefit, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="glass-panel rounded-xl p-6 hover-scale"
-          >
-            <benefit.icon className="w-12 h-12 text-primary mb-4" />
-            <h3 className="text-xl font-semibold mb-2">{benefit.title}</h3>
-            <p className="text-muted-foreground">{benefit.description}</p>
-          </motion.div>
-        ))}
+      <div className="container mx-auto px-4">
+        <div className="grid md:grid-cols-4 gap-8">
+          {benefits.map((benefit, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="p-6 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+            >
+              <benefit.icon className="w-12 h-12 text-purple-400 mb-4" />
+              <h3 className="text-xl font-semibold mb-2 text-white">{benefit.title}</h3>
+              <p className="text-gray-400">{benefit.description}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </motion.section>
   );
